@@ -1,0 +1,11 @@
+## Interface: 20505, 20506
+## Title: |cFFFFFFFFArena|r|cFFFF8C33UI|r
+## Notes: Arena interface settings
+## Author: Mageiden
+## Version: 0.1.0
+## SavedVariables: ArenaUIDB
+## DefaultState: enabled
+
+Core.lua
+Frame.lua
+Tabs.lua
