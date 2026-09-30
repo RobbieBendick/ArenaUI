@@ -48,8 +48,8 @@ function NS:SyncDrawFrameHeight()
 end
 
 function NS:SelectTab(id)
-    if id == "macros" and self.activeTab == "macros" and self.macrosResetToClassList then
-        self.macrosResetToClassList()
+    if id == "guides" and self.activeTab == "guides" and self.classesResetToClassList then
+        self.classesResetToClassList()
     end
     self.activeTab = id
     self:SyncDrawFrameHeight()

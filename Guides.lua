@@ -1,132 +1,302 @@
 local _, NS = ...
 
--- Shared across every class except those in NS.NO_SHARED_MACROS.
-NS.SHARED_MACROS = {
-    { name = "Arena 1", body = "/target arena1" },
-    { name = "Arena 2", body = "/target arena2" },
-    { name = "Arena 3", body = "/target arena3" },
-    { name = "Focus Arena 1", body = "/focus arena1" },
-    { name = "Party 1", body = "/target party1" },
+-- Shared guide loader. Expansion packs (GuidesTBC.lua, and later GuidesWrath.lua)
+-- call RegisterGuide, then ActivateGuide picks the pack for this client.
+-- Copy GuidesTBC.lua for another expansion and list the new file after this one in the toc.
+
+NS.GUIDES = {}
+NS.GUIDE_LIST = {}
+
+NS.SKILL_LABELS = {
+    [1] = "Easy",
+    [2] = "Moderate",
+    [3] = "Intermediate",
+    [4] = "Hard",
+    [5] = "Very Hard",
 }
 
--- Class tokens that use only CLASS_MACROS (no shared list).
-NS.NO_SHARED_MACROS = {
-    WARRIOR = true,
-    PALADIN = true,
-    ROGUE = true,
+NS.META_LABELS = {
+    [1] = "Weak",
+    [2] = "Off Meta",
+    [3] = "Solid",
+    [4] = "Strong",
+    [5] = "S Tier",
 }
 
-NS.CLASS_MACROS = {
-    WARRIOR = {
-        { name = "Charge", body = "#showtooltip Charge\n/cast Battle Stance\n/cast Charge" },
-        { name = "Focus Charge", body = "#showtooltip Charge\n/cast Battle Stance\n/cast [@focus] Charge" },
-        { name = "Intercept", body = "#showtooltip Intercept\n/cast Berserker Stance\n/cast Intercept" },
-        { name = "Focus Intercept", body = "#showtooltip Intercept\n/cast Berserker Stance\n/cast [@focus] Intercept" },
-        { name = "Disarm", body = "#showtooltip Disarm\n/cast Defensive Stance\n/cast Disarm" },
-        { name = "Focus Disarm", body = "#showtooltip Disarm\n/cast Defensive Stance\n/cast [@focus] Disarm" },
-        { name = "Focus Int Shout", body = "#showtooltip Intimidating Shout\n/cast [@focus] Intimidating Shout" },
-        { name = "Hamstring", body = "#showtooltip Hamstring\n/startattack\n/cast Hamstring" },
-        { name = "Berserker Rage", body = "#showtooltip Berserker Rage\n/startattack\n/cast Berserker Rage" },
-        {
-            name = "Spell Reflect",
-            body = "#showtooltip Spell Reflection\n/cast Defensive Stance\n/equip Your One-Hand Weapon\n/equip Your Shield\n/cast Spell Reflection",
-        },
-    },
-    PALADIN = {
-        { name = "Focus HoJ", body = "#showtooltip Hammer of Justice\n/cast [@focus] Hammer of Justice" },
-        { name = "Arena 1", body = "#showtooltip Hammer of Justice\n/cast [@arena1] Hammer of Justice" },
-        { name = "Arena 2", body = "#showtooltip Hammer of Justice\n/cast [@arena2] Hammer of Justice" },
-        { name = "Arena 3", body = "#showtooltip Hammer of Justice\n/cast [@arena3] Hammer of Justice" },
-        { name = "Party 1 Cleanse", body = "#showtooltip Cleanse\n/cast [@party1] Cleanse" },
-        { name = "Party 2 Cleanse", body = "#showtooltip Cleanse\n/cast [@party2] Cleanse" },
-        { name = "Player Cleanse", body = "#showtooltip Cleanse\n/cast [@player] Cleanse" },
-        { name = "Party 1 Freedom", body = "#showtooltip Blessing of Freedom\n/cast [@party1] Blessing of Freedom" },
-        { name = "Party 2 Freedom", body = "#showtooltip Blessing of Freedom\n/cast [@party2] Blessing of Freedom" },
-        { name = "Player Freedom", body = "#showtooltip Blessing of Freedom\n/cast [@player] Blessing of Freedom" },
-        { name = "P1 Sacrifice", body = "#showtooltip Blessing of Sacrifice\n/cast [@party1] Blessing of Sacrifice" },
-        { name = "P2 Sacrifice", body = "#showtooltip Blessing of Sacrifice\n/cast [@party2] Blessing of Sacrifice" },
-        { name = "Party 1 BoP", body = "#showtooltip Blessing of Protection\n/cast [@party1] Blessing of Protection" },
-        { name = "Party 2 BoP", body = "#showtooltip Blessing of Protection\n/cast [@party2] Blessing of Protection" },
-        { name = "Player BoP", body = "#showtooltip Blessing of Protection\n/cast [@player] Blessing of Protection" },
-    },
-    HUNTER = {
-    },
-    ROGUE = {
-        { name = "Sap Arena 1", body = "#showtooltip Sap\n/cast [@arena1] Sap" },
-        { name = "Sap Arena 2", body = "#showtooltip Sap\n/cast [@arena2] Sap" },
-        { name = "Sap Arena 3", body = "#showtooltip Sap\n/cast [@arena3] Sap" },
-        {
-            name = "Step CS Arena 1",
-            body = "#showtooltip Cheap Shot\n/cast [@arena1] Shadowstep\n/cast [@arena1] Premeditation\n/cast [@arena1] Cheap Shot",
-            spellID = 36554,
-        },
-        {
-            name = "Step CS Arena 2",
-            body = "#showtooltip Cheap Shot\n/cast [@arena2] Shadowstep\n/cast [@arena2] Premeditation\n/cast [@arena2] Cheap Shot",
-            spellID = 36554,
-        },
-        {
-            name = "Step CS Arena 3",
-            body = "#showtooltip Cheap Shot\n/cast [@arena3] Shadowstep\n/cast [@arena3] Premeditation\n/cast [@arena3] Cheap Shot",
-            spellID = 36554,
-        },
-        { name = "Blind Arena 1", body = "#showtooltip Blind\n/cast [@arena1] Blind" },
-        { name = "Blind Arena 2", body = "#showtooltip Blind\n/cast [@arena2] Blind" },
-        { name = "Blind Arena 3", body = "#showtooltip Blind\n/cast [@arena3] Blind" },
-        { name = "Focus Blind", body = "#showtooltip Blind\n/cast [@focus] Blind" },
-        { name = "Focus Kick", body = "#showtooltip Kick\n/cast [@focus] Kick" },
-        { name = "Focus Kidney", body = "#showtooltip Kidney Shot\n/cast [@focus] Kidney Shot" },
-        { name = "Focus Deadly", body = "#showtooltip Deadly Throw\n/cast [@focus] Deadly Throw" },
-        { name = "Premed Cheap Shot", body = "#showtooltip Cheap Shot\n/cast Premeditation\n/cast Cheap Shot", spellID = 14183 },
-        { name = "Premed Ambush", body = "#showtooltip Ambush\n/cast Premeditation\n/cast Ambush", spellID = 14183 },
-        { name = "Premed Garrote", body = "#showtooltip Garrote\n/cast Premeditation\n/cast Garrote", spellID = 14183 },
-        { name = "Wound Poison OH", body = "#showtooltip\n/equipslot 17 Your Second Best Offhand Weapon Name", itemID = 10918 },
-        { name = "Crip Poison OH", body = "#showtooltip\n/equipslot 17 Your Best Offhand Weapon Name", itemID = 3775 },
-    },
-    PRIEST = {
-    },
-    SHAMAN = {
-    },
-    MAGE = {
-    },
-    WARLOCK = {
-    },
-    DRUID = {
-    },
-}
+function NS:RegisterGuide(guide)
+    if not guide or not guide.id then
+        return
+    end
+    self.GUIDES[guide.id] = guide
+    for index, existing in ipairs(self.GUIDE_LIST) do
+        if existing.id == guide.id then
+            self.GUIDE_LIST[index] = guide
+            return
+        end
+    end
+    self.GUIDE_LIST[#self.GUIDE_LIST + 1] = guide
+end
 
--- Macro entries: { name, body, spellID?, itemID?, icon? }
--- spellID = Wowhead spell=ID  → spell icon (no collision with items)
--- itemID  = Wowhead item=ID   → item icon (no collision with spells)
--- icon    = optional texture name/path only (not numeric IDs)
+function NS:ApplyGuide(guide)
+    if not guide then
+        return
+    end
+    self.activeGuide = guide.id
+    self.ARENA_SEASONS = guide.seasons or {}
+    self.RACES = guide.races or {}
+    self.CLASS_SPECS = guide.specs or {}
+    self.CLASS_MACROS = guide.classMacros or {}
+    self.SHARED_MACROS = guide.sharedMacros or {}
+    self.NO_SHARED_MACROS = guide.noSharedMacros or {}
+    self.MACRO_SPELL_ICON_IDS = guide.macroSpellIcons or {}
+    self.STARTER_MACROS = self.SHARED_MACROS
+    if guide.skillLabels then
+        self.SKILL_LABELS = guide.skillLabels
+    end
+    if guide.metaLabels then
+        self.META_LABELS = guide.metaLabels
+    end
+end
 
-NS.MACRO_SPELL_ICON_IDS = {
-    ["charge"] = 100,
-    ["battle stance"] = 2457,
-    ["berserker stance"] = 2458,
-    ["defensive stance"] = 71,
-    ["intercept"] = 20252,
-    ["disarm"] = 676,
-    ["intimidating shout"] = 5246,
-    ["hamstring"] = 1715,
-    ["berserker rage"] = 18499,
-    ["spell reflection"] = 23920,
-    ["hammer of justice"] = 853,
-    ["cleanse"] = 4987,
-    ["blessing of freedom"] = 1044,
-    ["blessing of sacrifice"] = 6940,
-    ["blessing of protection"] = 1022,
-    ["sap"] = 6770,
-    ["shadowstep"] = 36554,
-    ["premeditation"] = 14183,
-    ["cheap shot"] = 1833,
-    ["blind"] = 2094,
-    ["kick"] = 1766,
-    ["kidney shot"] = 408,
-    ["deadly throw"] = 26679,
-    ["ambush"] = 8676,
-    ["garrote"] = 703,
-}
+function NS:ActivateGuide()
+    local project = WOW_PROJECT_ID
+    local _, _, _, tocVersion = GetBuildInfo()
+    local interfaceVersion = tonumber(tocVersion) or 0
+    local chosen
+    for _, guide in ipairs(self.GUIDE_LIST) do
+        if project and guide.project and guide.project == project then
+            chosen = guide
+            break
+        end
+    end
+    if not chosen then
+        for _, guide in ipairs(self.GUIDE_LIST) do
+            local minVersion = guide.interfaceMin
+            local maxVersion = guide.interfaceMax or minVersion
+            if minVersion and interfaceVersion >= minVersion and interfaceVersion <= maxVersion then
+                chosen = guide
+                break
+            end
+        end
+    end
+    if not chosen then
+        chosen = self.GUIDES.TBC or self.GUIDE_LIST[1]
+    end
+    self:ApplyGuide(chosen)
+end
+
+function NS:GetArenaSeason()
+    local season = ArenaUIDB and ArenaUIDB.arenaSeason
+    if type(season) ~= "number" or season < 1 or season > #(self.ARENA_SEASONS or {}) then
+        return 1
+    end
+    return season
+end
+
+function NS:GetArenaSeasonName()
+    local seasons = self.ARENA_SEASONS or {}
+    return seasons[self:GetArenaSeason()] or seasons[1] or "Season 1"
+end
+
+function NS:SetArenaSeason(season)
+    season = tonumber(season)
+    if not season or season < 1 or season > #(self.ARENA_SEASONS or {}) then
+        return
+    end
+    ArenaUIDB = ArenaUIDB or {}
+    ArenaUIDB.arenaSeason = season
+    if self.RefreshArenaSeason then
+        self:RefreshArenaSeason()
+    end
+end
+
+function NS:GetSpecMeta(spec)
+    if not spec then
+        return 1
+    end
+    local meta = spec.meta
+    local season = self:GetArenaSeason()
+    if type(meta) == "table" then
+        return meta[season] or meta[1] or 1
+    end
+    return meta or 1
+end
+
+function NS:GetSeasonRating(values)
+    local season = self:GetArenaSeason()
+    if type(values) == "table" then
+        return values[season] or values[1] or 1
+    end
+    if type(values) == "number" then
+        return values
+    end
+    return 1
+end
+
+function NS:IsCompRecommended(comp)
+    local recommended = comp and comp.recommended
+    if not recommended then
+        return false
+    end
+    if recommended == true then
+        return true
+    end
+    if type(recommended) ~= "table" then
+        return false
+    end
+    local season = self:GetArenaSeason()
+    local seasonCount = #(self.ARENA_SEASONS or {})
+    if seasonCount > 0 and #recommended == seasonCount then
+        return not not recommended[season]
+    end
+    for _, value in ipairs(recommended) do
+        if value == season then
+            return true
+        end
+    end
+    return false
+end
+
+function NS:GetSpecSkillFloor(spec)
+    if not spec then
+        return 1
+    end
+    return self:GetSeasonRating(spec.skillFloor or spec.skill)
+end
+
+function NS:GetSpecSkillCeiling(spec)
+    if not spec then
+        return 1
+    end
+    return self:GetSeasonRating(spec.skillCeiling or spec.skillFloor or spec.skill)
+end
+
+function NS:GetClassSpecs(token)
+    local specs = (self.CLASS_SPECS and self.CLASS_SPECS[token]) or {}
+    local list = {}
+    for index, spec in ipairs(specs) do
+        if not spec.exclude then
+            list[#list + 1] = { spec = spec, index = index }
+        end
+    end
+    table.sort(list, function(a, b)
+        local metaA = self:GetSpecMeta(a.spec)
+        local metaB = self:GetSpecMeta(b.spec)
+        if metaA ~= metaB then
+            return metaA > metaB
+        end
+        return a.index < b.index
+    end)
+    local sorted = {}
+    for index, entry in ipairs(list) do
+        sorted[index] = entry.spec
+    end
+    return sorted
+end
+
+function NS:GetRace(name)
+    if not name then
+        return nil
+    end
+    local race = self.RACES and self.RACES[name]
+    if not race then
+        return nil
+    end
+    return race, name
+end
+
+function NS:GetRaceRacials(raceName, classToken)
+    local race = self:GetRace(raceName)
+    if not race then
+        return {}
+    end
+    local racials = {}
+    for _, racial in ipairs(race.racials or {}) do
+        if not racial.classes or (classToken and racial.classes[classToken]) then
+            racials[#racials + 1] = racial
+        end
+    end
+    return racials
+end
+
+-- Specs store races as { alliance = "Gnome", horde = "Undead" }.
+-- This resolves those names through NS.RACES into display cards.
+function NS:GetSpecRaces(spec, classToken)
+    local races = spec and spec.races
+    if not races then
+        return {}
+    end
+
+    local picks = {}
+    if races.alliance or races.horde then
+        if races.alliance then
+            picks[#picks + 1] = { name = races.alliance, recommended = true }
+        end
+        if races.horde then
+            picks[#picks + 1] = { name = races.horde, recommended = true }
+        end
+    else
+        for _, entry in ipairs(races) do
+            if entry.recommended then
+                picks[#picks + 1] = entry
+            end
+        end
+    end
+
+    local list = {}
+    for _, pick in ipairs(picks) do
+        local raceName = pick.name
+        local race = self:GetRace(raceName)
+        if race then
+            list[#list + 1] = {
+                name = raceName,
+                faction = race.faction or pick.faction,
+                recommended = true,
+                racials = pick.racials or self:GetRaceRacials(raceName, classToken),
+            }
+        elseif raceName then
+            list[#list + 1] = {
+                name = raceName,
+                faction = pick.faction,
+                recommended = true,
+                racials = pick.racials or {},
+            }
+        end
+    end
+    return list
+end
+
+function NS:MacroMatchesSpec(macro, specID)
+    if not specID or not macro.specs then
+        return true
+    end
+    for _, id in ipairs(macro.specs) do
+        if id == specID then
+            return true
+        end
+    end
+    return false
+end
+
+function NS:GetClassMacros(token, specID)
+    local list = {}
+    if not (self.NO_SHARED_MACROS and self.NO_SHARED_MACROS[token]) then
+        for _, macro in ipairs(self.SHARED_MACROS or {}) do
+            if self:MacroMatchesSpec(macro, specID) then
+                list[#list + 1] = macro
+            end
+        end
+    end
+    local classList = self.CLASS_MACROS and self.CLASS_MACROS[token]
+    if classList then
+        for _, macro in ipairs(classList) do
+            if self:MacroMatchesSpec(macro, specID) then
+                list[#list + 1] = macro
+            end
+        end
+    end
+    return list
+end
 
 local MACRO_FALLBACK_ICON = 134400
 
@@ -286,7 +456,6 @@ function NS:SpellIconFromReference(ref)
         return self:SpellIconFromSpellID(value)
     end
     if kind == "auto" then
-        -- Bare numbers: item first, then spell (avoids item IDs matching unrelated spells).
         return self:ItemIconFromItemID(value) or self:SpellIconFromSpellID(value)
     end
     if type(ref) ~= "string" or ref == "" then
@@ -367,7 +536,6 @@ end
 
 function NS:GetMacroIcon(macro)
     macro = macro or {}
-    -- Explicit IDs first so they never collide with the other type.
     if macro.spellID then
         local resolved = self:SpellIconFromSpellID(macro.spellID)
         if resolved then
@@ -463,21 +631,3 @@ function NS:SetMacroIconTexture(textureFrame, macro)
     textureFrame:SetTexture(MACRO_FALLBACK_ICON)
     textureFrame:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 end
-
-function NS:GetClassMacros(token)
-    local list = {}
-    if not (self.NO_SHARED_MACROS and self.NO_SHARED_MACROS[token]) then
-        for _, macro in ipairs(self.SHARED_MACROS or {}) do
-            list[#list + 1] = macro
-        end
-    end
-    local classList = self.CLASS_MACROS and self.CLASS_MACROS[token]
-    if classList then
-        for _, macro in ipairs(classList) do
-            list[#list + 1] = macro
-        end
-    end
-    return list
-end
-
-NS.STARTER_MACROS = NS.SHARED_MACROS

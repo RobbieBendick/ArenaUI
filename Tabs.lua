@@ -168,16 +168,125 @@ NS.CLASSES = {
     { token = "DRUID", name = "Druid" },
 }
 
-local function BuildMacrosPage(page)
+local function BuildClassesPage(page)
     local accent = NS.COLOR.accent
     local muted = NS.COLOR.muted
 
+    local seasonBar = CreateFrame("Frame", nil, page)
+    seasonBar:SetPoint("TOPLEFT", page, "TOPLEFT", 0, 0)
+    seasonBar:SetPoint("TOPRIGHT", page, "TOPRIGHT", 0, 0)
+    seasonBar:SetHeight(26)
+
+    local seasonButton = CreateFrame("Button", nil, seasonBar, "BackdropTemplate")
+    seasonButton:SetSize(108, 22)
+    seasonButton:SetPoint("RIGHT", seasonBar, "RIGHT", 0, 0)
+    NS:ApplyBoxBackdrop(seasonButton, 0.35, 0.35, 0.35, 1)
+    local seasonButtonText = seasonButton:CreateFontString(nil, "OVERLAY")
+    NS:ApplyFont(seasonButtonText, 11)
+    seasonButtonText:SetPoint("LEFT", seasonButton, "LEFT", 8, 0)
+    seasonButtonText:SetJustifyH("LEFT")
+    seasonButtonText:SetTextColor(0.92, 0.92, 0.92)
+    seasonButtonText:SetText(NS:GetArenaSeasonName())
+    local seasonArrow = seasonButton:CreateFontString(nil, "OVERLAY")
+    NS:ApplyFont(seasonArrow, 11)
+    seasonArrow:SetPoint("RIGHT", seasonButton, "RIGHT", -8, 0)
+    seasonArrow:SetText("v")
+    seasonArrow:SetTextColor(muted[1], muted[2], muted[3])
+
+    local seasonLabel = seasonBar:CreateFontString(nil, "OVERLAY")
+    NS:ApplyFont(seasonLabel, 11)
+    seasonLabel:SetPoint("RIGHT", seasonButton, "LEFT", -8, 0)
+    seasonLabel:SetText("Meta")
+    seasonLabel:SetTextColor(muted[1], muted[2], muted[3])
+
+    local seasonCatcher = CreateFrame("Button", nil, page)
+    seasonCatcher:SetAllPoints(page)
+    seasonCatcher:Hide()
+    seasonCatcher:SetFrameLevel(seasonBar:GetFrameLevel() + 5)
+
+    local seasonMenu = CreateFrame("Frame", nil, page, "BackdropTemplate")
+    seasonMenu:SetPoint("TOPRIGHT", seasonButton, "BOTTOMRIGHT", 0, -2)
+    seasonMenu:SetSize(108, 94)
+    NS:ApplyBoxBackdrop(seasonMenu, 0.35, 0.35, 0.35, 1)
+    seasonMenu:SetFrameLevel(seasonCatcher:GetFrameLevel() + 5)
+    seasonMenu:Hide()
+    seasonBar:SetFrameLevel(seasonCatcher:GetFrameLevel() + 6)
+
+    local seasonItems = {}
+    for seasonIndex = 1, #NS.ARENA_SEASONS do
+        local item = CreateFrame("Button", nil, seasonMenu)
+        item:SetHeight(22)
+        item:SetPoint("TOPLEFT", seasonMenu, "TOPLEFT", 4, -4 - (seasonIndex - 1) * 22)
+        item:SetPoint("TOPRIGHT", seasonMenu, "TOPRIGHT", -4, -4 - (seasonIndex - 1) * 22)
+        local itemText = item:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(itemText, 11)
+        itemText:SetPoint("LEFT", item, "LEFT", 6, 0)
+        itemText:SetText(NS.ARENA_SEASONS[seasonIndex])
+        item.seasonIndex = seasonIndex
+        item.text = itemText
+        item:SetScript("OnEnter", function()
+            itemText:SetTextColor(accent[1], accent[2], accent[3])
+        end)
+        item:SetScript("OnLeave", function()
+            if item.seasonIndex == NS:GetArenaSeason() then
+                itemText:SetTextColor(accent[1], accent[2], accent[3])
+            else
+                itemText:SetTextColor(0.92, 0.92, 0.92)
+            end
+        end)
+        seasonItems[seasonIndex] = item
+    end
+
+    local function PaintSeasonMenu()
+        seasonButtonText:SetText(NS:GetArenaSeasonName())
+        for index, item in ipairs(seasonItems) do
+            if index == NS:GetArenaSeason() then
+                item.text:SetTextColor(accent[1], accent[2], accent[3])
+            else
+                item.text:SetTextColor(0.92, 0.92, 0.92)
+            end
+        end
+    end
+
+    local function CloseSeasonMenu()
+        seasonMenu:Hide()
+        seasonCatcher:Hide()
+    end
+
+    for _, item in ipairs(seasonItems) do
+        item:SetScript("OnClick", function()
+            CloseSeasonMenu()
+            NS:SetArenaSeason(item.seasonIndex)
+        end)
+    end
+
+    seasonCatcher:SetScript("OnClick", CloseSeasonMenu)
+    seasonButton:SetScript("OnClick", function()
+        if seasonMenu:IsShown() then
+            CloseSeasonMenu()
+        else
+            PaintSeasonMenu()
+            seasonCatcher:Show()
+            seasonMenu:Show()
+        end
+    end)
+    seasonButton:SetScript("OnEnter", function()
+        seasonButtonText:SetTextColor(accent[1], accent[2], accent[3])
+        seasonButton:SetBackdropBorderColor(accent[1], accent[2], accent[3], 1)
+    end)
+    seasonButton:SetScript("OnLeave", function()
+        seasonButtonText:SetTextColor(0.92, 0.92, 0.92)
+        seasonButton:SetBackdropBorderColor(0.35, 0.35, 0.35, 1)
+    end)
+    page:HookScript("OnHide", CloseSeasonMenu)
+
     local list = CreateFrame("Frame", nil, page)
-    list:SetAllPoints(page)
+    list:SetPoint("TOPLEFT", seasonBar, "BOTTOMLEFT", 0, -6)
+    list:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", 0, 0)
 
     local nav = CreateFrame("Frame", nil, page)
-    nav:SetPoint("TOPLEFT", page, "TOPLEFT", 0, 0)
-    nav:SetPoint("TOPRIGHT", page, "TOPRIGHT", 0, 0)
+    nav:SetPoint("TOPLEFT", seasonBar, "BOTTOMLEFT", 0, -6)
+    nav:SetPoint("TOPRIGHT", seasonBar, "BOTTOMRIGHT", 0, -6)
     nav:SetHeight(54)
     nav:Hide()
 
@@ -202,7 +311,7 @@ local function BuildMacrosPage(page)
     ApplyItalic(crumbMacrosText, 12)
     crumbMacrosText:SetAllPoints()
     crumbMacrosText:SetJustifyH("LEFT")
-    crumbMacrosText:SetText("Macros")
+    crumbMacrosText:SetText("Guides")
     crumbMacrosText:SetTextColor(1, 1, 1)
     local crumbWidth = crumbMacrosText:GetStringWidth()
     if not crumbWidth or crumbWidth < 8 then
@@ -241,11 +350,48 @@ local function BuildMacrosPage(page)
     crumbIconRing:SetTexture("Interface\\Common\\WhiteIconFrame")
     crumbIconRing:SetVertexColor(1, 1, 1, 0.55)
 
-    local crumbClass = nav:CreateFontString(nil, "OVERLAY")
-    ApplyItalic(crumbClass, 12)
+    local crumbClass = CreateFrame("Button", nil, nav)
+    crumbClass:SetHeight(22)
     crumbClass:SetPoint("LEFT", crumbIcon, "RIGHT", 5, 0)
-    crumbClass:SetJustifyH("LEFT")
-    crumbClass:SetTextColor(1, 1, 1)
+    crumbClass:RegisterForClicks("AnyUp")
+    local crumbClassText = crumbClass:CreateFontString(nil, "OVERLAY")
+    ApplyItalic(crumbClassText, 12)
+    crumbClassText:SetAllPoints()
+    crumbClassText:SetJustifyH("LEFT")
+    crumbClassText:SetTextColor(1, 1, 1)
+    crumbClass:SetScript("OnEnter", function()
+        crumbClassText:SetTextColor(accent[1], accent[2], accent[3])
+    end)
+    crumbClass:SetScript("OnLeave", function()
+        crumbClassText:SetTextColor(crumbClass.r or 1, crumbClass.g or 1, crumbClass.b or 1)
+    end)
+
+    local specSeparator = nav:CreateFontString(nil, "OVERLAY")
+    ApplyItalic(specSeparator, 12)
+    specSeparator:SetPoint("LEFT", crumbClass, "RIGHT", 2, 0)
+    specSeparator:SetText(">")
+    specSeparator:SetTextColor(muted[1], muted[2], muted[3])
+    specSeparator:Hide()
+
+    local crumbSpecIcon = nav:CreateTexture(nil, "ARTWORK")
+    crumbSpecIcon:SetSize(14, 14)
+    crumbSpecIcon:SetPoint("LEFT", specSeparator, "RIGHT", 5, 0)
+    crumbSpecIcon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+    crumbSpecIcon:Hide()
+
+    local crumbSpecIconRing = nav:CreateTexture(nil, "OVERLAY")
+    crumbSpecIconRing:SetSize(16, 16)
+    crumbSpecIconRing:SetPoint("CENTER", crumbSpecIcon, "CENTER", 0, 0)
+    crumbSpecIconRing:SetTexture("Interface\\Common\\WhiteIconFrame")
+    crumbSpecIconRing:SetVertexColor(1, 1, 1, 0.55)
+    crumbSpecIconRing:Hide()
+
+    local crumbSpec = nav:CreateFontString(nil, "OVERLAY")
+    ApplyItalic(crumbSpec, 12)
+    crumbSpec:SetPoint("LEFT", crumbSpecIcon, "RIGHT", 5, 0)
+    crumbSpec:SetJustifyH("LEFT")
+    crumbSpec:SetTextColor(1, 1, 1)
+    crumbSpec:Hide()
 
     local back = CreateFrame("Button", nil, nav)
     back:SetSize(22, 22)
@@ -271,6 +417,14 @@ local function BuildMacrosPage(page)
         backRing:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
     end)
 
+    local specList = CreateFrame("Frame", nil, page)
+    specList:SetPoint("TOPLEFT", nav, "BOTTOMLEFT", 0, -8)
+    specList:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", 0, 0)
+    specList:Hide()
+
+    local specScroll, specChild = NS:CreateScrollArea(specList)
+    local specRows = {}
+
     local detail = CreateFrame("Frame", nil, page)
     detail:SetPoint("TOPLEFT", nav, "BOTTOMLEFT", 0, -8)
     detail:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", 0, 0)
@@ -278,19 +432,500 @@ local function BuildMacrosPage(page)
 
     local detailScroll, detailChild = NS:CreateScrollArea(detail)
     local blocks = {}
+    local renderingSpec = false
+    local view = "classes"
+    local currentClass
+    local currentSpec
 
-    local function ShowList()
-        detail:Hide()
-        nav:Hide()
-        list:Show()
-        if listScroll then
-            listScroll:SetVerticalScroll(0)
-            NS:UpdateScroll(listScroll)
+    local function CreateStatCard(parent)
+        local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        NS:ApplyBoxBackdrop(card, 0.28, 0.28, 0.28, 0.9)
+        card:SetBackdropColor(0.08, 0.08, 0.08, 0.55)
+        card:SetHeight(64)
+
+        local bar = card:CreateTexture(nil, "ARTWORK")
+        bar:SetColorTexture(accent[1], accent[2], accent[3], 0.95)
+        bar:SetWidth(2)
+        bar:SetPoint("TOPLEFT", card, "TOPLEFT", 1, -1)
+        bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
+
+        local caption = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(caption, 10)
+        caption:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -8)
+        caption:SetPoint("TOPRIGHT", card, "TOPRIGHT", -8, -8)
+        caption:SetJustifyH("LEFT")
+        caption:SetTextColor(muted[1], muted[2], muted[3])
+
+        local value = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(value, 14, "THINOUTLINE")
+        value:SetPoint("TOPLEFT", caption, "BOTTOMLEFT", 0, -2)
+        value:SetJustifyH("LEFT")
+        value:SetTextColor(1, 1, 1)
+
+        local pips = {}
+        for index = 1, 5 do
+            local pip = card:CreateTexture(nil, "OVERLAY")
+            pip:SetSize(8, 8)
+            pip:SetPoint("TOPLEFT", value, "BOTTOMLEFT", (index - 1) * 12, -6)
+            pips[index] = pip
+        end
+
+        function card:SetStat(captionText, rating, valueText)
+            caption:SetText(captionText or "")
+            value:SetText(valueText or "")
+            rating = tonumber(rating) or 0
+            for index = 1, 5 do
+                if index <= rating then
+                    pips[index]:SetColorTexture(accent[1], accent[2], accent[3], 1)
+                else
+                    pips[index]:SetColorTexture(1, 1, 1, 0.16)
+                end
+            end
+        end
+
+        return card
+    end
+
+    local skillFloorCard = CreateStatCard(detailChild)
+    local skillCeilingCard = CreateStatCard(detailChild)
+    local metaCard = CreateStatCard(detailChild)
+    local raceHeader = NS:CreateHeader(detailChild, "Best Race")
+    local statHeader = NS:CreateHeader(detailChild, "Stat Priority")
+    local compHeader = NS:CreateHeader(detailChild, "Compositions")
+    local macroHeader = NS:CreateHeader(detailChild, "Macros")
+
+    local function CreateGuideLine(parent, text, r, g, b)
+        local line = parent:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(line, 12)
+        line:SetJustifyH("LEFT")
+        line:SetJustifyV("TOP")
+        line:SetText(text or "")
+        line:SetTextColor(r or 0.92, g or 0.92, b or 0.92)
+        return line
+    end
+
+    local RACE_ICON = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races"
+    local RACE_PORTRAITS = {
+        Human = { 0, 0.125, 0, 0.25 },
+        Dwarf = { 0.125, 0.25, 0, 0.25 },
+        Gnome = { 0.25, 0.375, 0, 0.25 },
+        ["Night Elf"] = { 0.375, 0.5, 0, 0.25 },
+        Draenei = { 0.5, 0.625, 0, 0.25 },
+        Tauren = { 0, 0.125, 0.25, 0.5 },
+        Undead = { 0.125, 0.25, 0.25, 0.5 },
+        Troll = { 0.25, 0.375, 0.25, 0.5 },
+        Orc = { 0.375, 0.5, 0.25, 0.5 },
+        ["Blood Elf"] = { 0.5, 0.625, 0.25, 0.5 },
+    }
+
+    local FACTION_ROWS = {
+        alliance = {
+            label = "Alliance",
+            icon = "Interface\\TargetingFrame\\UI-PVP-Alliance",
+            r = 0.45, g = 0.70, b = 1,
+        },
+        horde = {
+            label = "Horde",
+            icon = "Interface\\TargetingFrame\\UI-PVP-Horde",
+            r = 1, g = 0.35, b = 0.28,
+        },
+    }
+
+    local function MaskPortrait(texture)
+        if texture.CreateMaskTexture and texture.AddMaskTexture then
+            local ok, mask = pcall(texture.CreateMaskTexture, texture)
+            if ok and mask then
+                mask:SetAllPoints(texture)
+                mask:SetTexture("Interface\\CharacterFrame\\TempPortraitAlphaMask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+                texture:AddMaskTexture(mask)
+            end
         end
     end
 
-    local function RenderMacros(classInfo)
-        local macros = classInfo.macros or NS:GetClassMacros(classInfo.token)
+    local function CreateRaceCard(parent)
+        local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        NS:ApplyBoxBackdrop(card, 0.32, 0.32, 0.32, 0.9)
+        card:SetBackdropColor(0.07, 0.07, 0.07, 0.72)
+
+        local bar = card:CreateTexture(nil, "ARTWORK")
+        bar:SetWidth(3)
+        bar:SetPoint("TOPLEFT", card, "TOPLEFT", 1, -1)
+        bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
+
+        local portrait = card:CreateTexture(nil, "ARTWORK")
+        portrait:SetSize(32, 32)
+        portrait:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -10)
+        portrait:SetTexture(RACE_ICON)
+        MaskPortrait(portrait)
+
+        local nameText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(nameText, 13)
+        nameText:SetPoint("TOPLEFT", portrait, "TOPRIGHT", 8, -1)
+        nameText:SetJustifyH("LEFT")
+        nameText:SetTextColor(0.95, 0.95, 0.95)
+
+        local recommended = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(recommended, 10)
+        recommended:SetPoint("TOPLEFT", nameText, "BOTTOMLEFT", 0, -2)
+        recommended:SetJustifyH("LEFT")
+        recommended:SetText("Recommended")
+        recommended:SetTextColor(accent[1], accent[2], accent[3])
+
+        local factionText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(factionText, 11)
+        factionText:SetPoint("TOPRIGHT", card, "TOPRIGHT", -10, -14)
+        factionText:SetJustifyH("RIGHT")
+
+        local factionIcon = card:CreateTexture(nil, "ARTWORK")
+        factionIcon:SetSize(18, 18)
+        factionIcon:SetPoint("RIGHT", factionText, "LEFT", -2, -1)
+        factionIcon:SetTexCoord(0.12, 0.88, 0.08, 0.84)
+
+        local racials = {}
+        for index = 1, 5 do
+            local icon = card:CreateTexture(nil, "ARTWORK")
+            icon:SetSize(18, 18)
+            icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+            local title = card:CreateFontString(nil, "OVERLAY")
+            NS:ApplyFont(title, 11)
+            title:SetJustifyH("LEFT")
+            title:SetTextColor(0.92, 0.92, 0.92)
+            local note = card:CreateFontString(nil, "OVERLAY")
+            NS:ApplyFont(note, 10)
+            note:SetJustifyH("LEFT")
+            note:SetJustifyV("TOP")
+            note:SetTextColor(muted[1], muted[2], muted[3])
+            racials[index] = { icon = icon, title = title, note = note }
+        end
+
+        function card:Apply(entry, width)
+            card:SetWidth(width)
+            local info = FACTION_ROWS[entry.faction] or FACTION_ROWS.alliance
+            bar:SetVertexColor(info.r, info.g, info.b, 0.95)
+            nameText:SetText(entry.name or "")
+            if entry.recommended then
+                recommended:Show()
+            else
+                recommended:Hide()
+            end
+            factionText:SetText(info.label)
+            factionText:SetTextColor(info.r, info.g, info.b)
+            factionIcon:SetTexture(info.icon)
+            factionText:ClearAllPoints()
+            factionIcon:ClearAllPoints()
+            local compact = width < 280
+            if compact then
+                local anchor = entry.recommended and recommended or nameText
+                factionIcon:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -3)
+                factionText:SetPoint("LEFT", factionIcon, "RIGHT", 0, 1)
+                nameText:SetWidth(math.max(width - 62, 40))
+            else
+                factionText:SetPoint("TOPRIGHT", card, "TOPRIGHT", -10, -12)
+                factionIcon:SetPoint("RIGHT", factionText, "LEFT", -1, -1)
+                nameText:SetWidth(math.max(width - 130, 40))
+            end
+            local coords = RACE_PORTRAITS[entry.name]
+            portrait:SetTexture(RACE_ICON)
+            if coords then
+                portrait:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
+            else
+                portrait:SetTexCoord(0, 1, 0, 1)
+            end
+
+            local y = 48
+            local portraitLeft, portraitSize, iconSize = 14, 32, 18
+            local rowLeft = portraitLeft + math.floor((portraitSize - iconSize) / 2)
+            local textLeft = rowLeft + iconSize + 6
+            local textWidth = width - textLeft - 14
+            for index, racial in ipairs(entry.racials or {}) do
+                local row = racials[index]
+                if row then
+                    row.icon:Show()
+                    row.icon:ClearAllPoints()
+                    row.icon:SetPoint("TOPLEFT", card, "TOPLEFT", rowLeft, -y)
+                    local iconName = racial.icon
+                    if iconName and (iconName:find("\\") or iconName:find("/")) then
+                        row.icon:SetTexture(iconName)
+                    else
+                        row.icon:SetTexture("Interface\\Icons\\" .. (iconName or "INV_Misc_QuestionMark"))
+                    end
+                    row.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+                    row.title:Show()
+                    row.title:ClearAllPoints()
+                    row.title:SetPoint("TOPLEFT", card, "TOPLEFT", textLeft, -y + 2)
+                    row.title:SetWidth(textWidth)
+                    row.title:SetText(racial.name or "")
+                    local block = 20
+                    if racial.note and racial.note ~= "" then
+                        row.note:Show()
+                        row.note:ClearAllPoints()
+                        row.note:SetPoint("TOPLEFT", card, "TOPLEFT", textLeft, -y - 16)
+                        row.note:SetWidth(textWidth)
+                        row.note:SetText(racial.note)
+                        local noteHeight = row.note:GetStringHeight()
+                        if not noteHeight or noteHeight < 12 then
+                            noteHeight = 12
+                        end
+                        block = 16 + noteHeight
+                        if block < 20 then
+                            block = 20
+                        end
+                    else
+                        row.note:Hide()
+                    end
+                    y = y + block + 8
+                end
+            end
+            for index = #(entry.racials or {}) + 1, #racials do
+                racials[index].icon:Hide()
+                racials[index].title:Hide()
+                racials[index].note:Hide()
+            end
+            if #(entry.racials or {}) == 0 then
+                y = width < 280 and 78 or 52
+            else
+                y = y + 6
+            end
+            card:SetHeight(y)
+            return y
+        end
+
+        return card
+    end
+
+    local CLASS_TOKENS = {
+        Warrior = "WARRIOR",
+        Paladin = "PALADIN",
+        Hunter = "HUNTER",
+        Rogue = "ROGUE",
+        Priest = "PRIEST",
+        Shaman = "SHAMAN",
+        Mage = "MAGE",
+        Warlock = "WARLOCK",
+        Druid = "DRUID",
+    }
+
+    local function FindPartnerSpec(partner)
+        local className = partner:match("(%S+)$")
+        local token = className and CLASS_TOKENS[className]
+        if not token then
+            return nil
+        end
+        local specName = partner:sub(1, #partner - #className):match("^%s*(.-)%s*$")
+        for _, spec in ipairs((NS.CLASS_SPECS and NS.CLASS_SPECS[token]) or {}) do
+            if spec.name == specName then
+                return spec
+            end
+        end
+    end
+
+    local function CreateCompCard(parent)
+        local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        NS:ApplyBoxBackdrop(card, 0.32, 0.32, 0.32, 0.9)
+        card:SetBackdropColor(0.07, 0.07, 0.07, 0.72)
+
+        local bar = card:CreateTexture(nil, "ARTWORK")
+        bar:SetWidth(3)
+        bar:SetPoint("TOPLEFT", card, "TOPLEFT", 1, -1)
+        bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
+        bar:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
+
+        local title = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(title, 13)
+        title:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -8)
+        title:SetJustifyH("LEFT")
+        title:SetTextColor(0.96, 0.96, 0.96)
+
+        local recommendedText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(recommendedText, 10)
+        recommendedText:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -1)
+        recommendedText:SetJustifyH("LEFT")
+        recommendedText:SetText("Recommended")
+        recommendedText:SetTextColor(accent[1], accent[2], accent[3])
+
+        local ratingText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(ratingText, 11)
+        ratingText:SetJustifyH("RIGHT")
+        ratingText:SetTextColor(0.92, 0.92, 0.92)
+
+        local ratingPips = {}
+        for pipIndex = 1, 5 do
+            local pip = card:CreateTexture(nil, "OVERLAY")
+            pip:SetSize(7, 7)
+            ratingPips[pipIndex] = pip
+        end
+
+        local members = {}
+        for index = 1, 4 do
+            local icon = card:CreateTexture(nil, "ARTWORK")
+            icon:SetSize(18, 18)
+            icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+            local iconRing = card:CreateTexture(nil, "OVERLAY")
+            iconRing:SetTexture("Interface\\Buttons\\UI-Quickslot2")
+            iconRing:SetSize(28, 28)
+            local label = card:CreateFontString(nil, "OVERLAY")
+            NS:ApplyFont(label, 11)
+            label:SetJustifyH("LEFT")
+            label:SetJustifyV("MIDDLE")
+            members[index] = { icon = icon, ring = iconRing, label = label }
+        end
+
+        local function PlaceMember(member, text, token, iconPath, x, y)
+            member.icon:Show()
+            member.ring:Show()
+            member.label:Show()
+            member.icon:ClearAllPoints()
+            member.icon:SetPoint("TOPLEFT", card, "TOPLEFT", x, y)
+            if iconPath then
+                if iconPath:find("\\") or iconPath:find("/") then
+                    member.icon:SetTexture(iconPath)
+                else
+                    member.icon:SetTexture("Interface\\Icons\\" .. iconPath)
+                end
+                member.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+            else
+                member.icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
+                local coords = CLASS_ICON_TCOORDS and token and CLASS_ICON_TCOORDS[token]
+                if coords then
+                    member.icon:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
+                else
+                    member.icon:SetTexCoord(0, 1, 0, 1)
+                    member.icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+                end
+            end
+            member.ring:ClearAllPoints()
+            member.ring:SetPoint("CENTER", member.icon, "CENTER", 0, 0)
+            local classColor = RAID_CLASS_COLORS and token and RAID_CLASS_COLORS[token]
+            if classColor then
+                member.ring:SetVertexColor(classColor.r, classColor.g, classColor.b, 0.9)
+                member.label:SetTextColor(classColor.r, classColor.g, classColor.b)
+            else
+                member.ring:SetVertexColor(1, 1, 1, 0.45)
+                member.label:SetTextColor(0.92, 0.92, 0.92)
+            end
+            member.label:ClearAllPoints()
+            member.label:SetPoint("LEFT", member.icon, "RIGHT", 6, 0)
+            member.label:SetText(text or "")
+        end
+
+        function card:Apply(comp, spec, classInfo, width)
+            card:SetWidth(width)
+            title:SetText(comp.name or "Composition")
+            local specColor = spec and spec.color
+            if specColor then
+                bar:SetVertexColor(specColor[1], specColor[2], specColor[3], 0.95)
+            else
+                bar:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
+            end
+            local recommended = NS:IsCompRecommended(comp)
+            if recommended then
+                card:SetBackdropBorderColor(accent[1], accent[2], accent[3], 1)
+                recommendedText:Show()
+            else
+                card:SetBackdropBorderColor(0.32, 0.32, 0.32, 0.9)
+                recommendedText:Hide()
+            end
+
+            local memberTop = recommended and -44 or -30
+            if comp.meta then
+                local rating = NS:GetSeasonRating(comp.meta)
+                ratingText:Show()
+                ratingText:SetText(NS.META_LABELS[rating] or "")
+                for index, pip in ipairs(ratingPips) do
+                    pip:Show()
+                    pip:ClearAllPoints()
+                    pip:SetPoint("TOPRIGHT", card, "TOPRIGHT", -12 - (5 - index) * 10, -10)
+                    if index <= rating then
+                        pip:SetColorTexture(accent[1], accent[2], accent[3], 1)
+                    else
+                        pip:SetColorTexture(1, 1, 1, 0.16)
+                    end
+                end
+                ratingText:ClearAllPoints()
+                ratingText:SetPoint("RIGHT", ratingPips[1], "LEFT", -6, 0)
+                title:SetWidth(math.max(width - 160, 40))
+            else
+                ratingText:Hide()
+                for _, pip in ipairs(ratingPips) do
+                    pip:Hide()
+                end
+                title:SetWidth(math.max(width - 28, 40))
+            end
+
+            local chips = {
+                {
+                    text = spec and spec.name or (classInfo and classInfo.name) or "",
+                    token = classInfo and classInfo.token,
+                    icon = spec and spec.icon,
+                },
+            }
+            local partners = comp.partners
+            if comp.members then
+                local selfName = (spec and spec.name or "") .. " " .. (classInfo and classInfo.name or "")
+                local skippedSelf = false
+                partners = {}
+                for _, member in ipairs(comp.members) do
+                    if not skippedSelf and member == selfName then
+                        skippedSelf = true
+                    else
+                        partners[#partners + 1] = member
+                    end
+                end
+            end
+            for _, partner in ipairs(partners or {}) do
+                local className = partner:match("(%S+)$")
+                local partnerSpec = FindPartnerSpec(partner)
+                chips[#chips + 1] = {
+                    text = partner,
+                    token = CLASS_TOKENS[className],
+                    icon = partnerSpec and partnerSpec.icon,
+                }
+            end
+
+            local count = math.min(#chips, #members)
+            local columns = count > 1 and 2 or 1
+            local rows = math.ceil(count / columns)
+            local chipWidth = math.floor((width - 28 - (columns - 1) * 8) / columns)
+            for index = 1, count do
+                local chip = chips[index]
+                local col = (index - 1) % columns
+                local row = math.floor((index - 1) / columns)
+                PlaceMember(members[index], chip.text, chip.token, chip.icon, 14 + col * (chipWidth + 8), memberTop - row * 24)
+                members[index].label:SetWidth(math.max(chipWidth - 30, 40))
+            end
+            for index = count + 1, #members do
+                members[index].icon:Hide()
+                members[index].ring:Hide()
+                members[index].label:Hide()
+            end
+            local height = 40 + (-30 - memberTop) + rows * 24
+            card:SetHeight(height)
+            return height
+        end
+
+        return card
+    end
+
+    local raceCards = {}
+    local compCards = {}
+    local raceEmpty = CreateGuideLine(detailChild, "No race selected yet.", muted[1], muted[2], muted[3])
+    local statText = CreateGuideLine(detailChild)
+    local statEmpty = CreateGuideLine(detailChild, "No stat priority selected yet.", muted[1], muted[2], muted[3])
+
+    local comp2Label = CreateGuideLine(detailChild, "2s", accent[1], accent[2], accent[3])
+    local comp3Label = CreateGuideLine(detailChild, "3s", accent[1], accent[2], accent[3])
+    local comp2Empty = CreateGuideLine(detailChild, "No 2s selected yet.", muted[1], muted[2], muted[3])
+    local comp3Empty = CreateGuideLine(detailChild, "No 3s selected yet.", muted[1], muted[2], muted[3])
+
+    local macroEmpty = detailChild:CreateFontString(nil, "OVERLAY")
+    NS:ApplyFont(macroEmpty, 12)
+    macroEmpty:SetJustifyH("LEFT")
+    macroEmpty:SetText("No macros for this spec yet.")
+    macroEmpty:SetTextColor(muted[1], muted[2], muted[3])
+
+    local listScroll, listChild = NS:CreateScrollArea(list)
+
+    local function ContentWidth()
         local width = detailChild:GetWidth()
         if not width or width < 80 then
             width = detailScroll:GetWidth()
@@ -298,8 +933,321 @@ local function BuildMacrosPage(page)
         if not width or width < 80 then
             width = 420
         end
+        return width
+    end
 
-        local y = -4
+    local function SetClassCrumb(classInfo)
+        crumbClassText:SetText(classInfo.name)
+        local width = crumbClassText:GetStringWidth()
+        if not width or width < 8 then
+            width = strlen(classInfo.name or "") * 7
+        end
+        crumbClass:SetWidth(width + 2)
+        crumbIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
+        local coords = CLASS_ICON_TCOORDS and CLASS_ICON_TCOORDS[classInfo.token]
+        if coords then
+            crumbIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
+        else
+            crumbIcon:SetTexCoord(0, 1, 0, 1)
+        end
+        local classColor = RAID_CLASS_COLORS and RAID_CLASS_COLORS[classInfo.token]
+        if classColor then
+            crumbClass.r, crumbClass.g, crumbClass.b = classColor.r, classColor.g, classColor.b
+            crumbIconRing:SetVertexColor(classColor.r, classColor.g, classColor.b, 0.85)
+        else
+            crumbClass.r, crumbClass.g, crumbClass.b = 1, 1, 1
+            crumbIconRing:SetVertexColor(1, 1, 1, 0.55)
+        end
+        crumbClassText:SetTextColor(crumbClass.r, crumbClass.g, crumbClass.b)
+    end
+
+    local function ShowList()
+        view = "classes"
+        currentSpec = nil
+        detail:Hide()
+        specList:Hide()
+        nav:Hide()
+        list:Show()
+        page.scroll = listScroll
+        listScroll:SetVerticalScroll(0)
+        NS:UpdateScroll(listScroll)
+    end
+
+    local ShowSpec
+
+    local function RenderSpecList(classInfo)
+        local specs = NS:GetClassSpecs(classInfo.token)
+        local y = -8
+        for index, spec in ipairs(specs) do
+            local row = specRows[index]
+            if not row then
+                row = NS:CreateSpecRow(specChild)
+                specRows[index] = row
+            end
+            row:Show()
+            NS:SetSpecRow(row, classInfo, spec, y, function(clicked)
+                ShowSpec(classInfo, clicked)
+            end)
+            y = y - 60
+        end
+        for index = #specs + 1, #specRows do
+            specRows[index]:Hide()
+        end
+        specChild.contentHeight = -y + 8
+        specChild:SetHeight(math.max(specChild.contentHeight, 1))
+        NS:UpdateScroll(specScroll)
+    end
+
+    local function ShowSpecs(classInfo)
+        if not classInfo then
+            return
+        end
+        view = "specs"
+        currentClass = classInfo
+        currentSpec = nil
+        list:Hide()
+        detail:Hide()
+        nav:Show()
+        specList:Show()
+        specSeparator:Hide()
+        crumbSpecIcon:Hide()
+        crumbSpecIconRing:Hide()
+        crumbSpec:Hide()
+        SetClassCrumb(classInfo)
+        page.scroll = specScroll
+        specScroll:SetVerticalScroll(0)
+        RenderSpecList(classInfo)
+    end
+
+    local function AcquireRaceCard(index)
+        local card = raceCards[index]
+        if not card then
+            card = CreateRaceCard(detailChild)
+            raceCards[index] = card
+        end
+        card:Show()
+        return card
+    end
+
+    local function AcquireCompCard(index)
+        local card = compCards[index]
+        if not card then
+            card = CreateCompCard(detailChild)
+            compCards[index] = card
+        end
+        card:Show()
+        return card
+    end
+
+    local function RenderSpec(classInfo, spec)
+        if renderingSpec then
+            return
+        end
+        renderingSpec = true
+
+        local width = ContentWidth()
+        local gap = 8
+        local cardWidth = math.floor((width - gap * 2 - 4) / 3)
+        if cardWidth < 80 then
+            cardWidth = 80
+        end
+
+        skillFloorCard:ClearAllPoints()
+        skillFloorCard:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, -4)
+        skillFloorCard:SetWidth(cardWidth)
+        skillCeilingCard:ClearAllPoints()
+        skillCeilingCard:SetPoint("TOPLEFT", skillFloorCard, "TOPRIGHT", gap, 0)
+        skillCeilingCard:SetWidth(cardWidth)
+        metaCard:ClearAllPoints()
+        metaCard:SetPoint("TOPLEFT", skillCeilingCard, "TOPRIGHT", gap, 0)
+        metaCard:SetWidth(cardWidth)
+        local floorRating = NS:GetSpecSkillFloor(spec)
+        local ceilingRating = NS:GetSpecSkillCeiling(spec)
+        skillFloorCard:SetStat("Skill Floor", floorRating, NS.SKILL_LABELS[floorRating] or "Unknown")
+        skillCeilingCard:SetStat("Skill Ceiling", ceilingRating, NS.SKILL_LABELS[ceilingRating] or "Unknown")
+        local metaRating = NS:GetSpecMeta(spec)
+        metaCard:SetStat("Meta", metaRating, NS.META_LABELS[metaRating] or "Unknown")
+
+        local function PlaceHeader(header, y)
+            header:ClearAllPoints()
+            header:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+            header:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -4, y)
+            return y - 26
+        end
+
+        local function PlaceLine(line, text, y)
+            line:Show()
+            line:SetText(text or "")
+            line:ClearAllPoints()
+            line:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 8, y)
+            line:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -8, y)
+            local lineHeight = line:GetStringHeight()
+            if not lineHeight or lineHeight < 14 then
+                lineHeight = 14
+            end
+            return y - lineHeight - 4
+        end
+
+        local y = -4 - 64 - 18
+        y = PlaceHeader(raceHeader, y)
+        local raceList = NS:GetSpecRaces(spec, classInfo and classInfo.token)
+        local richRaces = false
+        for _, entry in ipairs(raceList) do
+            if entry.racials and #entry.racials > 0 then
+                richRaces = true
+                break
+            end
+        end
+        if #raceList == 0 then
+            for _, card in ipairs(raceCards) do
+                card:Hide()
+            end
+            y = PlaceLine(raceEmpty, "No race selected yet.", y)
+        else
+            raceEmpty:Hide()
+            local sideBySide = not richRaces and #raceList == 2
+            local raceWidth = sideBySide and math.floor((width - 8) / 2) or width
+            local rowHeight = 0
+            for index, entry in ipairs(raceList) do
+                local card = AcquireRaceCard(index)
+                local height = card:Apply(entry, raceWidth)
+                card:ClearAllPoints()
+                if sideBySide then
+                    local x = (index - 1) * (raceWidth + 8)
+                    card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", x, y)
+                    if height > rowHeight then
+                        rowHeight = height
+                    end
+                else
+                    card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+                    y = y - height - 8
+                end
+            end
+            if sideBySide then
+                y = y - rowHeight - 8
+            end
+        end
+        for index = #raceList + 1, #raceCards do
+            raceCards[index]:Hide()
+        end
+
+        y = y - 12
+        y = PlaceHeader(statHeader, y)
+        local stats = spec.stats
+        if stats and #stats > 0 then
+            statEmpty:Hide()
+            y = PlaceLine(statText, table.concat(stats, "  >  "), y)
+        else
+            statText:Hide()
+            y = PlaceLine(statEmpty, "No stat priority selected yet.", y)
+        end
+
+        y = y - 12
+        y = PlaceHeader(compHeader, y)
+
+        local function SortRecommended(list)
+            local recommended, rest = {}, {}
+            for _, comp in ipairs(list) do
+                if NS:IsCompRecommended(comp) then
+                    recommended[#recommended + 1] = comp
+                else
+                    rest[#rest + 1] = comp
+                end
+            end
+            for _, comp in ipairs(rest) do
+                recommended[#recommended + 1] = comp
+            end
+            return recommended
+        end
+
+        local function ResolveComp(entry)
+            if type(entry) ~= "table" then
+                return entry
+            end
+            local shared = entry.comp or entry[1]
+            if not entry.members and not entry.partners and type(shared) == "table" and (shared.members or shared.partners or shared.name) then
+                return {
+                    name = shared.name,
+                    meta = shared.meta,
+                    members = shared.members,
+                    partners = shared.partners,
+                    recommended = entry.recommended,
+                }
+            end
+            return entry
+        end
+
+        local function ResolveList(list)
+            local resolved = {}
+            for index, entry in ipairs(list or {}) do
+                resolved[index] = ResolveComp(entry)
+            end
+            return resolved
+        end
+
+        local function CompositionLists(compositions)
+            compositions = compositions or {}
+            local twos, threes
+            if compositions["2s"] or compositions["3s"] then
+                twos = ResolveList(compositions["2s"])
+                threes = ResolveList(compositions["3s"])
+            else
+                twos, threes = {}, {}
+                for _, comp in ipairs(compositions) do
+                    if #(comp.partners or {}) <= 1 then
+                        twos[#twos + 1] = comp
+                    else
+                        threes[#threes + 1] = comp
+                    end
+                end
+            end
+            return SortRecommended(twos), SortRecommended(threes)
+        end
+
+        local function DrawCompGroup(titleLine, title, list, emptyLine, emptyText, y, cardIndex)
+            y = PlaceLine(titleLine, title, y)
+            if #list == 0 then
+                y = PlaceLine(emptyLine, emptyText, y)
+                return y, cardIndex
+            end
+            emptyLine:Hide()
+            for _, comp in ipairs(list) do
+                cardIndex = cardIndex + 1
+                local card = AcquireCompCard(cardIndex)
+                local height = card:Apply(comp, spec, classInfo, width)
+                card:ClearAllPoints()
+                card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+                y = y - height - 8
+            end
+            return y, cardIndex
+        end
+
+        local twos, threes = CompositionLists(spec.compositions)
+        local cardIndex
+        y, cardIndex = DrawCompGroup(comp2Label, "2s", twos, comp2Empty, "No 2s selected yet.", y, 0)
+        y = y - 8
+        y, cardIndex = DrawCompGroup(comp3Label, "3s", threes, comp3Empty, "No 3s selected yet.", y, cardIndex)
+        for index = cardIndex + 1, #compCards do
+            compCards[index]:Hide()
+        end
+
+        y = y - 12
+        macroHeader:ClearAllPoints()
+        macroHeader:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+        macroHeader:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -4, y)
+        y = y - 26
+
+        local macros = NS:GetClassMacros(classInfo.token, spec.id)
+        if #macros == 0 then
+            macroEmpty:Show()
+            macroEmpty:ClearAllPoints()
+            macroEmpty:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 8, y)
+            macroEmpty:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -8, y)
+            y = y - 22
+        else
+            macroEmpty:Hide()
+        end
+
         for index, macro in ipairs(macros) do
             local block = blocks[index]
             if not block or not block.iconTexture then
@@ -313,7 +1261,6 @@ local function BuildMacrosPage(page)
             block:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -4, y)
             y = y - block:GetHeight() - 8
         end
-
         for index = #macros + 1, #blocks do
             blocks[index]:Hide()
         end
@@ -321,64 +1268,93 @@ local function BuildMacrosPage(page)
         detailChild.contentHeight = -y + 8
         detailChild:SetHeight(math.max(detailChild.contentHeight, 1))
         NS:UpdateScroll(detailScroll)
+        renderingSpec = false
     end
 
-    local function ShowClass(classInfo)
+    ShowSpec = function(classInfo, spec)
+        view = "spec"
+        currentClass = classInfo
+        currentSpec = spec
         list:Hide()
+        specList:Hide()
         nav:Show()
         detail:Show()
-        crumbClass:SetText(classInfo.name)
-        crumbIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
-        local coords = CLASS_ICON_TCOORDS and CLASS_ICON_TCOORDS[classInfo.token]
-        if coords then
-            crumbIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
+        SetClassCrumb(classInfo)
+        specSeparator:Show()
+        crumbSpecIcon:Show()
+        crumbSpecIconRing:Show()
+        crumbSpec:Show()
+        crumbSpec:SetText(spec.name)
+        local specIcon = spec.icon or "INV_Misc_QuestionMark"
+        if specIcon:find("\\") or specIcon:find("/") then
+            crumbSpecIcon:SetTexture(specIcon)
         else
-            crumbIcon:SetTexCoord(0, 1, 0, 1)
+            crumbSpecIcon:SetTexture("Interface\\Icons\\" .. specIcon)
         end
-        local classColor = RAID_CLASS_COLORS and RAID_CLASS_COLORS[classInfo.token]
-        if classColor then
-            crumbClass:SetTextColor(classColor.r, classColor.g, classColor.b)
-            crumbIconRing:SetVertexColor(classColor.r, classColor.g, classColor.b, 0.85)
+        crumbSpecIcon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+        crumbSpec:SetTextColor(1, 1, 1)
+        local specColor = spec.color
+        if specColor then
+            crumbSpecIconRing:SetVertexColor(specColor[1], specColor[2], specColor[3], 0.85)
         else
-            crumbClass:SetTextColor(1, 1, 1)
-            crumbIconRing:SetVertexColor(1, 1, 1, 0.55)
+            crumbSpecIconRing:SetVertexColor(1, 1, 1, 0.55)
         end
+        page.scroll = detailScroll
         detailScroll:SetVerticalScroll(0)
-        RenderMacros(classInfo)
+        RenderSpec(classInfo, spec)
         if C_Timer and C_Timer.After then
             C_Timer.After(0, function()
-                RenderMacros(classInfo)
-            end)
-            C_Timer.After(1, function()
-                if detail:IsShown() then
-                    RenderMacros(classInfo)
+                if view == "spec" and currentSpec == spec then
+                    RenderSpec(classInfo, spec)
                 end
             end)
         end
     end
 
-    back:SetScript("OnClick", ShowList)
+    back:SetScript("OnClick", function()
+        if view == "spec" then
+            ShowSpecs(currentClass)
+        else
+            ShowList()
+        end
+    end)
     crumbMacros:SetScript("OnClick", ShowList)
+    crumbClass:SetScript("OnClick", function()
+        if currentClass then
+            ShowSpecs(currentClass)
+        end
+    end)
 
-    local listScroll, listChild = NS:CreateScrollArea(list)
     page.ResetToClassList = ShowList
-    NS.macrosResetToClassList = ShowList
+    NS.classesResetToClassList = ShowList
     local y = -8
     for _, classInfo in ipairs(NS.CLASSES) do
-        NS:CreateClassRow(listChild, classInfo, y, ShowClass)
+        NS:CreateClassRow(listChild, classInfo, y, ShowSpecs)
         y = y - 48
     end
     listChild.contentHeight = -y + 8
     listChild:SetHeight(listChild.contentHeight)
+    page.scroll = listScroll
 
-    local function RefreshList()
-        NS:UpdateScroll(listScroll)
+    function NS:RefreshArenaSeason()
+        PaintSeasonMenu()
+        if view == "spec" and currentClass and currentSpec then
+            RenderSpec(currentClass, currentSpec)
+        elseif view == "specs" and currentClass then
+            RenderSpecList(currentClass)
+        end
     end
 
     page:HookScript("OnShow", function()
-        RefreshList()
-        if C_Timer and C_Timer.After then
-            C_Timer.After(0, RefreshList)
+        if view == "spec" and currentClass and currentSpec then
+            page.scroll = detailScroll
+            RenderSpec(currentClass, currentSpec)
+        elseif view == "specs" and currentClass then
+            page.scroll = specScroll
+            NS:UpdateScroll(specScroll)
+        else
+            page.scroll = listScroll
+            NS:UpdateScroll(listScroll)
         end
     end)
 end
@@ -1040,6 +2016,7 @@ local function BuildDrawPage(page)
         dot.size = thickness
         dot.nx = relX / width
         dot.ny = relY / height
+        dot.r, dot.g, dot.b, dot.a = color[1], color[2], color[3], opacity / 100
         dot:SetPoint("CENTER", layer, "BOTTOMLEFT", relX, relY)
         layer.dots[#layer.dots + 1] = dot
         if layer.currentStroke then
@@ -1084,7 +2061,7 @@ local function BuildDrawPage(page)
         end
     end
 
-    local function CreateNote(layer, relX, relY, width, height)
+    local function CreateNote(layer, relX, relY, width, height, text, silent)
         local noteW, noteH = 118, 32
         local x = math.max(noteW / 2, math.min(width - noteW / 2, relX))
         local y = math.max(noteH / 2, math.min(height - noteH / 2, relY))
@@ -1133,6 +2110,13 @@ local function BuildDrawPage(page)
         end)
 
         layer.notes[#layer.notes + 1] = note
+        if text and text ~= "" then
+            edit:SetText(text)
+            ResizeNote(note)
+        end
+        if silent then
+            return note
+        end
         PushHistory(layer, { kind = "note", note = note })
         edit:SetFocus()
         if C_Timer and C_Timer.After then
@@ -1142,6 +2126,37 @@ local function BuildDrawPage(page)
                 end
             end)
         end
+        return note
+    end
+
+    local function CreatePin(layer, nx, ny, token, silent)
+        local pin = CreateFrame("Frame", nil, layer)
+        pin:SetSize(PIN_SIZE, PIN_SIZE)
+        pin.token = token
+        pin:EnableMouse(false)
+        pin.nx = nx
+        pin.ny = ny
+        local drawW, drawH = layer:GetWidth(), layer:GetHeight()
+        pin:SetPoint("CENTER", layer, "BOTTOMLEFT", (nx or 0) * (drawW or 0), (ny or 0) * (drawH or 0))
+
+        local ring = pin:CreateTexture(nil, "BACKGROUND")
+        ring:SetSize(PIN_SIZE, PIN_SIZE)
+        ring:SetPoint("CENTER", pin, "CENTER", 0, 0)
+        local r, g, b = ClassColor(token)
+        ring:SetColorTexture(r, g, b, 1)
+        MaskCircle(ring)
+
+        local icon = pin:CreateTexture(nil, "ARTWORK")
+        icon:SetSize(PIN_SIZE - 4, PIN_SIZE - 4)
+        icon:SetPoint("CENTER", pin, "CENTER", 0, 0)
+        SetClassIcon(icon, token)
+        MaskCircle(icon)
+
+        layer.pins[#layer.pins + 1] = pin
+        if not silent then
+            PushHistory(layer, { kind = "pin", pin = pin })
+        end
+        return pin
     end
 
     canvas:SetScript("OnMouseDown", function(self, button)
@@ -1152,31 +2167,9 @@ local function BuildDrawPage(page)
         if toolIndex == 4 and pinToken then
             local relX, relY, width, height = PointerOn(layer)
             if relX and relX >= 0 and relY >= 0 and relX <= width and relY <= height then
-                local pin = CreateFrame("Frame", nil, layer)
-                pin:SetSize(PIN_SIZE, PIN_SIZE)
-                pin.token = pinToken
-                pin:EnableMouse(false)
                 local x = math.max(PIN_SIZE / 2, math.min(width - PIN_SIZE / 2, relX))
                 local y = math.max(PIN_SIZE / 2, math.min(height - PIN_SIZE / 2, relY))
-                pin.nx = x / width
-                pin.ny = y / height
-                pin:SetPoint("CENTER", layer, "BOTTOMLEFT", x, y)
-
-                local ring = pin:CreateTexture(nil, "BACKGROUND")
-                ring:SetSize(PIN_SIZE, PIN_SIZE)
-                ring:SetPoint("CENTER", pin, "CENTER", 0, 0)
-                local r, g, b = ClassColor(pinToken)
-                ring:SetColorTexture(r, g, b, 1)
-                MaskCircle(ring)
-
-                local icon = pin:CreateTexture(nil, "ARTWORK")
-                icon:SetSize(PIN_SIZE - 4, PIN_SIZE - 4)
-                icon:SetPoint("CENTER", pin, "CENTER", 0, 0)
-                SetClassIcon(icon, pinToken)
-                MaskCircle(icon)
-
-                layer.pins[#layer.pins + 1] = pin
-                PushHistory(layer, { kind = "pin", pin = pin })
+                CreatePin(layer, x / width, y / height, pinToken)
             end
             return
         end
@@ -1412,6 +2405,7 @@ local function BuildDrawPage(page)
     redoButton:SetScript("OnClick", Redo)
     AttachTooltip(redoButton, "Redo", "Redo the last undone action.")
 
+    local shareButton
     local function PlaceActionButtons()
         local anchor = toolRow.buttons[#toolRow.buttons]
         if not anchor then
@@ -1425,8 +2419,388 @@ local function BuildDrawPage(page)
         clearButton:SetPoint("LEFT", redoButton, "RIGHT", 4, 0)
         clearPinsButton:ClearAllPoints()
         clearPinsButton:SetPoint("LEFT", clearButton, "RIGHT", 4, 0)
+        shareButton:ClearAllPoints()
+        shareButton:SetPoint("LEFT", clearPinsButton, "RIGHT", 4, 0)
     end
+
+    local classTokens = {}
+    for _, classInfo in ipairs(NS.CLASSES) do
+        classTokens[classInfo.token] = true
+    end
+
+    local function RoundUnit(value, scale)
+        local n = math.floor((value or 0) * scale + 0.5)
+        if n < 0 then
+            n = 0
+        elseif n > scale then
+            n = scale
+        end
+        return n
+    end
+
+    local function EscapeNote(text)
+        return (text or ""):gsub("\\", "\\\\"):gsub("\n", "\\n")
+    end
+
+    local function UnescapeNote(text)
+        local out = {}
+        local i = 1
+        while i <= string.len(text) do
+            local ch = string.sub(text, i, i)
+            if ch == "\\" and i < string.len(text) then
+                local nxt = string.sub(text, i + 1, i + 1)
+                if nxt == "n" then
+                    out[#out + 1] = "\n"
+                else
+                    out[#out + 1] = nxt
+                end
+                i = i + 2
+            else
+                out[#out + 1] = ch
+                i = i + 1
+            end
+        end
+        return table.concat(out)
+    end
+
+    local function ShareLib()
+        if LibStub then
+            return LibStub("LibDeflate", true)
+        end
+    end
+
+    local function ExportText(layer)
+        local lines = { "AUI1", "M " .. (MAPS[mapIndex].name or "") }
+        for _, dot in ipairs(layer.dots) do
+            local r, g, b, a = dot.r, dot.g, dot.b, dot.a
+            if not r and dot.GetVertexColor then
+                r, g, b, a = dot:GetVertexColor()
+            end
+            lines[#lines + 1] = string.format(
+                "D%d,%d,%d,%d,%d,%d,%d",
+                RoundUnit(dot.nx, 10000),
+                RoundUnit(dot.ny, 10000),
+                math.max(1, math.min(40, math.floor((dot.size or 6) + 0.5))),
+                RoundUnit(r, 255),
+                RoundUnit(g, 255),
+                RoundUnit(b, 255),
+                RoundUnit(a, 100)
+            )
+        end
+        for _, note in ipairs(layer.notes) do
+            lines[#lines + 1] = string.format(
+                "N%d,%d,%s",
+                RoundUnit(note.nx, 10000),
+                RoundUnit(note.ny, 10000),
+                EscapeNote(note.edit:GetText())
+            )
+        end
+        for _, pin in ipairs(layer.pins) do
+            if pin.token and classTokens[pin.token] then
+                lines[#lines + 1] = string.format(
+                    "P%d,%d,%s",
+                    RoundUnit(pin.nx, 10000),
+                    RoundUnit(pin.ny, 10000),
+                    pin.token
+                )
+            end
+        end
+        local plain = table.concat(lines, "\n")
+        local lib = ShareLib()
+        if lib then
+            local compressed = lib:CompressDeflate(plain, { level = 5 })
+            local encoded = compressed and lib:EncodeForPrint(compressed)
+            if encoded then
+                return "AUI1!" .. encoded, #layer.dots, #layer.notes, #layer.pins
+            end
+        end
+        return plain, #layer.dots, #layer.notes, #layer.pins
+    end
+
+    local function DecodeShare(raw)
+        if type(raw) ~= "string" then
+            return nil, "Could not read that drawing."
+        end
+        raw = raw:gsub("\r\n", "\n"):gsub("\r", "\n")
+        raw = raw:match("^%s*(.-)%s*$") or ""
+        if raw:sub(1, 5) == "AUI1!" then
+            local lib = ShareLib()
+            if not lib then
+                return nil, "Could not read a compressed drawing."
+            end
+            local decoded = lib:DecodeForPrint((raw:sub(6):gsub("%s+", "")))
+            local plain = decoded and lib:DecompressDeflate(decoded)
+            if type(plain) ~= "string" or plain:sub(1, 4) ~= "AUI1" then
+                return nil, "Could not read that drawing."
+            end
+            return plain
+        end
+        if raw:sub(1, 4) ~= "AUI1" then
+            return nil, "Could not read that drawing."
+        end
+        return raw
+    end
+
+    local function ParseShare(plain)
+        local data = { dots = {}, notes = {}, pins = {} }
+        for line in plain:gmatch("[^\n]+") do
+            if line:sub(1, 2) == "M " then
+                data.map = line:sub(3)
+            else
+                local nx, ny, size, r, g, b, a = line:match("^D(%d+),(%d+),(%d+),(%d+),(%d+),(%d+),(%d+)$")
+                if nx then
+                    data.dots[#data.dots + 1] = {
+                        nx = tonumber(nx) / 10000,
+                        ny = tonumber(ny) / 10000,
+                        size = math.max(1, math.min(40, tonumber(size) or 6)),
+                        r = math.max(0, math.min(255, tonumber(r) or 255)) / 255,
+                        g = math.max(0, math.min(255, tonumber(g) or 255)) / 255,
+                        b = math.max(0, math.min(255, tonumber(b) or 255)) / 255,
+                        a = math.max(0, math.min(100, tonumber(a) or 100)) / 100,
+                    }
+                else
+                    local noteX, noteY, text = line:match("^N(%d+),(%d+),(.*)$")
+                    if noteX then
+                        data.notes[#data.notes + 1] = {
+                            nx = tonumber(noteX) / 10000,
+                            ny = tonumber(noteY) / 10000,
+                            text = string.sub(UnescapeNote(text or ""), 1, 100),
+                        }
+                    else
+                        local pinX, pinY, token = line:match("^P(%d+),(%d+),(%u+)$")
+                        if pinX and classTokens[token] then
+                            data.pins[#data.pins + 1] = {
+                                nx = tonumber(pinX) / 10000,
+                                ny = tonumber(pinY) / 10000,
+                                token = token,
+                            }
+                        end
+                    end
+                end
+            end
+        end
+        return data
+    end
+
+    local function PlaceDot(layer, dot)
+        local mark = layer:CreateTexture(nil, "OVERLAY")
+        mark:SetSize(dot.size, dot.size)
+        mark:SetColorTexture(dot.r, dot.g, dot.b, dot.a)
+        mark.size = dot.size
+        mark.nx = dot.nx
+        mark.ny = dot.ny
+        mark.r, mark.g, mark.b, mark.a = dot.r, dot.g, dot.b, dot.a
+        local drawW, drawH = layer:GetWidth(), layer:GetHeight()
+        mark:SetPoint("CENTER", layer, "BOTTOMLEFT", dot.nx * (drawW or 0), dot.ny * (drawH or 0))
+        layer.dots[#layer.dots + 1] = mark
+    end
+
+    local function WipeLayer(layer)
+        for i = #layer.dots, 1, -1 do
+            layer.dots[i]:Hide()
+        end
+        for i = #layer.notes, 1, -1 do
+            layer.notes[i].edit:ClearFocus()
+            layer.notes[i]:Hide()
+        end
+        for i = #layer.pins, 1, -1 do
+            layer.pins[i]:Hide()
+        end
+        layer.dots = {}
+        layer.notes = {}
+        layer.pins = {}
+        layer.history = {}
+        layer.redo = {}
+        layer.currentStroke = nil
+        layer.currentErase = nil
+        layer.lastX = nil
+        layer.lastY = nil
+    end
+
+    local function ApplyShare(data)
+        local index = mapIndex
+        if data.map then
+            for i, map in ipairs(MAPS) do
+                if map.name == data.map then
+                    index = i
+                    break
+                end
+            end
+        end
+        if index ~= mapIndex then
+            ShowMap(index)
+        else
+            FitCanvas()
+        end
+        local layer = layers[index]
+        WipeLayer(layer)
+        local drawW, drawH = layer:GetWidth(), layer:GetHeight()
+        if not drawW or drawW < 2 or not drawH or drawH < 2 then
+            drawW, drawH = 2, 2
+        end
+        for _, dot in ipairs(data.dots) do
+            PlaceDot(layer, dot)
+        end
+        for _, note in ipairs(data.notes) do
+            CreateNote(layer, note.nx * (drawW or 0), note.ny * (drawH or 0), drawW or 1, drawH or 1, note.text, true)
+        end
+        for _, pin in ipairs(data.pins) do
+            CreatePin(layer, pin.nx, pin.ny, pin.token, true)
+        end
+        FitCanvas()
+        return MAPS[index].name
+    end
+
+    local shareDialog = CreateFrame("Frame", "ArenaUIDrawShare", UIParent, "BackdropTemplate")
+    shareDialog:SetSize(440, 300)
+    shareDialog:SetPoint("CENTER")
+    shareDialog:SetFrameStrata("DIALOG")
+    shareDialog:SetToplevel(true)
+    shareDialog:EnableMouse(true)
+    shareDialog:SetClampedToScreen(true)
+    NS:ApplyPanelBackdrop(shareDialog)
+    shareDialog:Hide()
+    if not shareDialog.addedToSpecial then
+        tinsert(UISpecialFrames, "ArenaUIDrawShare")
+        shareDialog.addedToSpecial = true
+    end
+
+    local shareTitle = shareDialog:CreateFontString(nil, "OVERLAY")
+    NS:ApplyFont(shareTitle, 16)
+    shareTitle:SetPoint("TOPLEFT", shareDialog, "TOPLEFT", 16, -14)
+    shareTitle:SetText("Share drawing")
+    shareTitle:SetTextColor(0.95, 0.95, 0.95)
+
+    local shareStatus = shareDialog:CreateFontString(nil, "OVERLAY")
+    NS:ApplyFont(shareStatus, 11)
+    shareStatus:SetPoint("TOPLEFT", shareTitle, "BOTTOMLEFT", 0, -4)
+    shareStatus:SetPoint("RIGHT", shareDialog, "RIGHT", -16, 0)
+    shareStatus:SetJustifyH("LEFT")
+    shareStatus:SetTextColor(NS.COLOR.muted[1], NS.COLOR.muted[2], NS.COLOR.muted[3])
+
+    local function SetShareStatus(text, ok)
+        shareStatus:SetText(text or "")
+        if ok == true then
+            shareStatus:SetTextColor(NS.COLOR.accent[1], NS.COLOR.accent[2], NS.COLOR.accent[3])
+        elseif ok == false then
+            shareStatus:SetTextColor(0.95, 0.35, 0.30)
+        else
+            shareStatus:SetTextColor(NS.COLOR.muted[1], NS.COLOR.muted[2], NS.COLOR.muted[3])
+        end
+    end
+
+    local shareBox = CreateFrame("Frame", nil, shareDialog, "BackdropTemplate")
+    NS:ApplyBoxBackdrop(shareBox, 0.35, 0.35, 0.35, 1)
+    shareBox:SetPoint("TOPLEFT", shareDialog, "TOPLEFT", 16, -58)
+    shareBox:SetPoint("TOPRIGHT", shareDialog, "TOPRIGHT", -16, -58)
+    shareBox:SetHeight(180)
+
+    local shareScroll = CreateFrame("ScrollFrame", nil, shareBox)
+    shareScroll:SetPoint("TOPLEFT", shareBox, "TOPLEFT", 6, -6)
+    shareScroll:SetPoint("BOTTOMRIGHT", shareBox, "BOTTOMRIGHT", -6, 6)
+    shareScroll:EnableMouseWheel(true)
+    shareScroll:SetScript("OnMouseWheel", function(self, delta)
+        local nextScroll = self:GetVerticalScroll() - delta * 18
+        local maxScroll = self:GetVerticalScrollRange() or 0
+        if nextScroll < 0 then
+            nextScroll = 0
+        elseif nextScroll > maxScroll then
+            nextScroll = maxScroll
+        end
+        self:SetVerticalScroll(nextScroll)
+    end)
+
+    local shareEdit = CreateFrame("EditBox", nil, shareScroll)
+    shareEdit:SetMultiLine(true)
+    shareEdit:SetAutoFocus(false)
+    shareEdit:SetFont(NS:FontPath(), 11, "")
+    shareEdit:SetTextColor(0.92, 0.92, 0.92)
+    shareEdit:SetWidth(396)
+    shareEdit:SetHeight(160)
+    shareEdit:SetMaxLetters(500000)
+    shareEdit:SetScript("OnEscapePressed", function(self)
+        self:ClearFocus()
+    end)
+    shareScroll:SetScrollChild(shareEdit)
+    shareScroll:SetScript("OnSizeChanged", function(self)
+        shareEdit:SetWidth(math.max(40, self:GetWidth() or 40))
+    end)
+
+    local function FillExport()
+        local text, dots, notes, pins = ExportText(layers[mapIndex])
+        shareEdit:SetText(text)
+        shareEdit:SetFocus()
+        shareEdit:HighlightText()
+        shareScroll:SetVerticalScroll(0)
+        local mapName = MAPS[mapIndex].name
+        if dots == 0 and notes == 0 and pins == 0 then
+            SetShareStatus(mapName .. " is empty. Importing this text clears that map.")
+        else
+            SetShareStatus("Select the text and copy it. This is the " .. mapName .. " drawing.", true)
+        end
+    end
+
+    local function DialogButton(parent, text, width)
+        local button = CreateFrame("Button", nil, parent, "BackdropTemplate")
+        NS:ApplyBoxBackdrop(button, 0.4, 0.4, 0.4, 1)
+        button:SetSize(width, 24)
+        local label = button:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(label, 12)
+        label:SetPoint("CENTER")
+        label:SetText(text)
+        label:SetTextColor(0.92, 0.92, 0.92)
+        button:SetScript("OnEnter", function()
+            local accent = NS.COLOR.accent
+            button:SetBackdropBorderColor(accent[1], accent[2], accent[3], 1)
+        end)
+        button:SetScript("OnLeave", function()
+            button:SetBackdropBorderColor(0.4, 0.4, 0.4, 1)
+        end)
+        return button
+    end
+
+    local exportButton = DialogButton(shareDialog, "Export", 88)
+    exportButton:SetPoint("BOTTOMLEFT", shareDialog, "BOTTOMLEFT", 16, 16)
+    exportButton:SetScript("OnClick", FillExport)
+
+    local importButton = DialogButton(shareDialog, "Import", 88)
+    importButton:SetPoint("LEFT", exportButton, "RIGHT", 8, 0)
+    importButton:SetScript("OnClick", function()
+        local plain, err = DecodeShare(shareEdit:GetText())
+        if not plain then
+            SetShareStatus(err, false)
+            return
+        end
+        local mapName = ApplyShare(ParseShare(plain))
+        SetShareStatus("Imported onto " .. mapName .. ".", true)
+    end)
+
+    local closeShare = DialogButton(shareDialog, "Close", 88)
+    closeShare:SetPoint("BOTTOMRIGHT", shareDialog, "BOTTOMRIGHT", -16, 16)
+    closeShare:SetScript("OnClick", function()
+        shareEdit:ClearFocus()
+        shareDialog:Hide()
+    end)
+
+    shareButton = CreateFrame("Button", nil, toolRow, "BackdropTemplate")
+    ApplyToolBox(shareButton)
+    shareButton:SetSize(46, 22)
+    local shareLabel = shareButton:CreateFontString(nil, "OVERLAY")
+    NS:ApplyFont(shareLabel, 11)
+    shareLabel:SetPoint("CENTER", shareButton, "CENTER", 0, 0)
+    shareLabel:SetText("Share")
+    shareLabel:SetTextColor(0.9, 0.9, 0.9)
+    shareButton:SetScript("OnClick", function()
+        shareDialog:Show()
+        FillExport()
+    end)
+    AttachTooltip(shareButton, "Share", "Import or export this map.")
     PlaceActionButtons()
+    if NS.frame then
+        NS.frame:HookScript("OnHide", function()
+            shareDialog:Hide()
+        end)
+    end
 
     mapRow.onSelect = ShowMap
     for _, button in ipairs(classButtons) do
@@ -1492,7 +2866,7 @@ local function BuildProfilesPage(page)
 end
 
 NS:RegisterTab("addon", "Addons", BuildAddonPage)
-NS:RegisterTab("macros", "Macros", BuildMacrosPage)
+NS:RegisterTab("guides", "Guides", BuildClassesPage)
 NS:RegisterTab("draw", "Draw", BuildDrawPage)
 NS:RegisterTab("profiles", "Profiles", BuildProfilesPage)
 

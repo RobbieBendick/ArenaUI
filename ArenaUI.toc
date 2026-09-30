@@ -11,7 +11,8 @@ VendoredLinks.lua
 VendoredNS.lua
 DetailsCompat.lua
 embed\Metadata.lua
-Macros.lua
+Guides.lua
+GuidesTBC.lua
 Core.lua
 Frame.lua
 Tabs.lua

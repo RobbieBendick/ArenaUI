@@ -837,6 +837,145 @@ function NS:CreateClassRow(parent, classInfo, y, onClick)
     return row
 end
 
+function NS:CreateSpecRow(parent)
+    local muted = self.COLOR.muted
+    local row = CreateFrame("Button", nil, parent)
+    row:SetHeight(56)
+    row:RegisterForClicks("LeftButtonUp")
+    row:EnableMouseWheel(true)
+
+    local bg = row:CreateTexture(nil, "BACKGROUND")
+    bg:SetAllPoints(row)
+    bg:SetTexture("Interface\\Buttons\\WHITE8X8")
+
+    local bar = row:CreateTexture(nil, "ARTWORK")
+    bar:SetWidth(3)
+    bar:SetPoint("TOPLEFT", row, "TOPLEFT", 0, -1)
+    bar:SetPoint("BOTTOMLEFT", row, "BOTTOMLEFT", 0, 1)
+
+    local icon = row:CreateTexture(nil, "ARTWORK")
+    icon:SetSize(28, 28)
+    icon:SetPoint("LEFT", row, "LEFT", 12, 0)
+    icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
+    local iconEdge = row:CreateTexture(nil, "BORDER")
+    iconEdge:SetColorTexture(0, 0, 0, 0.9)
+    iconEdge:SetPoint("TOPLEFT", icon, "TOPLEFT", -1, 1)
+    iconEdge:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 1, -1)
+
+    local title = row:CreateFontString(nil, "OVERLAY")
+    self:ApplyFont(title, 14, "THINOUTLINE")
+    title:SetPoint("LEFT", icon, "RIGHT", 10, 8)
+    title:SetPoint("RIGHT", row, "RIGHT", -96, 8)
+    title:SetJustifyH("LEFT")
+    title:SetJustifyV("MIDDLE")
+
+    local skill = row:CreateFontString(nil, "OVERLAY")
+    self:ApplyFont(skill, 11)
+    skill:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -2)
+    skill:SetWidth(180)
+    skill:SetJustifyH("LEFT")
+    skill:SetWordWrap(false)
+    skill:SetTextColor(muted[1], muted[2], muted[3])
+
+    local meta = row:CreateFontString(nil, "OVERLAY")
+    self:ApplyFont(meta, 11)
+    meta:SetPoint("BOTTOMRIGHT", row, "BOTTOMRIGHT", -12, 24)
+    meta:SetJustifyH("RIGHT")
+
+    local pips = {}
+    for index = 1, 5 do
+        local pip = row:CreateTexture(nil, "OVERLAY")
+        pip:SetSize(8, 8)
+        pip:SetPoint("BOTTOMRIGHT", row, "BOTTOMRIGHT", -12 - (5 - index) * 12, 10)
+        pips[index] = pip
+    end
+
+    row.bg = bg
+    row.bar = bar
+    row.icon = icon
+    row.title = title
+    row.skill = skill
+    row.meta = meta
+    row.pips = pips
+
+    row:SetScript("OnMouseWheel", function(_, delta)
+        if parent.scroll then
+            self:ScrollBy(parent.scroll, delta)
+        end
+    end)
+
+    return row
+end
+
+function NS:SetSpecRow(row, classInfo, spec, y, onClick)
+    local color = spec.color
+    local cr, cg, cb = 0.90, 0.55, 0.20
+    if color then
+        cr, cg, cb = color[1], color[2], color[3]
+    end
+
+    local function PaintRowBg(hovered)
+        local aLeft = hovered and 0.28 or 0.16
+        local aRight = hovered and 0.04 or 0.0
+        row.bg:SetColorTexture(1, 1, 1, 1)
+        if row.bg.SetGradient and CreateColor then
+            row.bg:SetGradient("HORIZONTAL", CreateColor(cr, cg, cb, aLeft), CreateColor(cr, cg, cb, aRight))
+        elseif row.bg.SetGradientAlpha then
+            row.bg:SetGradientAlpha("HORIZONTAL", cr, cg, cb, aLeft, cr, cg, cb, aRight)
+        else
+            row.bg:SetColorTexture(cr, cg, cb, aLeft * 0.55)
+        end
+    end
+
+    local icon = spec.icon or "INV_Misc_QuestionMark"
+    if icon:find("\\") or icon:find("/") then
+        row.icon:SetTexture(icon)
+    else
+        row.icon:SetTexture("Interface\\Icons\\" .. icon)
+    end
+    row.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
+    row.bar:SetColorTexture(cr, cg, cb, 0.95)
+    row.title:SetText(spec.name)
+    row.title:SetTextColor(cr, cg, cb)
+    local metaRating = self:GetSpecMeta(spec)
+    local floorLabel = self.SKILL_LABELS[self:GetSpecSkillFloor(spec)] or ""
+    local ceilingLabel = self.SKILL_LABELS[self:GetSpecSkillCeiling(spec)] or ""
+    if floorLabel == ceilingLabel then
+        row.skill:SetText(floorLabel)
+    else
+        row.skill:SetText(floorLabel .. " – " .. ceilingLabel)
+    end
+    row.meta:SetText(self.META_LABELS[metaRating] or "")
+    row.meta:SetTextColor(cr, cg, cb)
+
+    local rating = tonumber(metaRating) or 0
+    for index = 1, 5 do
+        if index <= rating then
+            row.pips[index]:SetColorTexture(cr, cg, cb, 1)
+        else
+            row.pips[index]:SetColorTexture(1, 1, 1, 0.16)
+        end
+    end
+    PaintRowBg(false)
+
+    row:ClearAllPoints()
+    row:SetPoint("TOPLEFT", row:GetParent(), "TOPLEFT", 0, y)
+    row:SetPoint("TOPRIGHT", row:GetParent(), "TOPRIGHT", -4, y)
+    row:SetScript("OnClick", function()
+        if onClick then
+            onClick(spec)
+        end
+    end)
+    row:SetScript("OnEnter", function()
+        PaintRowBg(true)
+    end)
+    row:SetScript("OnLeave", function()
+        PaintRowBg(false)
+    end)
+end
+
 function NS:CreateMacroBlock(parent)
     local accent = self.COLOR.accent
     local block = CreateFrame("Frame", nil, parent, "BackdropTemplate")
