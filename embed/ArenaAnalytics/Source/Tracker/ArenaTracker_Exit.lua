@@ -1,0 +1,280 @@
+if ArenaUI_VendoredSkip and ArenaUI_VendoredSkip["ArenaAnalytics"] then return end
+ArenaUI_LoadingVendored = "ArenaAnalytics"
+local __aui_chunk = function(...)
+local _, ArenaAnalytics = ... -- Namespace
+local ArenaTracker = ArenaAnalytics.ArenaTracker;
+
+-- Local module aliases
+local AAmatch = ArenaAnalytics.AAmatch;
+local Constants = ArenaAnalytics.Constants;
+local API = ArenaAnalytics.API;
+local Helpers = ArenaAnalytics.Helpers;
+local Inspection = ArenaAnalytics.Inspection;
+local Sessions = ArenaAnalytics.Sessions;
+local Debug = ArenaAnalytics.Debug;
+local ArenaRatedInfo = ArenaAnalytics.ArenaRatedInfo;
+local ArenaMatch = ArenaAnalytics.ArenaMatch;
+local Filters = ArenaAnalytics.Filters;
+local Import = ArenaAnalytics.Import;
+
+-------------------------------------------------------------------------
+-- ArenaTracker subsection
+-- Responsible for dealing with exiting an arena, including early leave.
+-------------------------------------------------------------------------
+
+local currentArena = {};
+function ArenaTracker:InitializeSubmodule_Exit()
+    currentArena = ArenaAnalyticsTransientDB.currentArena;
+end
+
+local function CheckRequiresRatingFix()
+	if(type(currentArena.seasonPlayed) ~= "number" or currentArena.seasonPlayed == 0) then
+		Debug:Log("CheckRequiresRatingFix: No season played stored on currentArena. Skipping fixup check.");
+		return nil;
+	end
+
+	-- We'll never be able to fix rating without knowing the bracket
+	if(not currentArena.bracketIndex) then
+		return false;
+	end
+
+	-- Missing current season played value, assume we'll get it later to validate
+	local seasonPlayed = API:GetSeasonPlayed(currentArena.bracketIndex);
+	if(not seasonPlayed) then
+		Debug:Log("CheckRequiresRatingFix: Missing current season played for bracket:", currentArena.bracketIndex);
+		return true;
+	end
+
+	if(seasonPlayed < currentArena.seasonPlayed) then
+		if(seasonPlayed + 1 < currentArena.seasonPlayed) then
+			Debug:LogError("Tracked post-match seasonPlayed is more than one higher than current season played.");
+			return false;
+		end
+
+		-- Rating has updated, no longer needed to store transient SeasonPlayed for fixup.
+		return true;
+	end
+
+	-- Don't schedule rating fix
+	Debug:Log("CheckRequiresRatingFix passed, no fix required.");
+	return false;
+end
+
+
+local function TryMarkPlayerFirstDeath()
+	if(ArenaTracker:IsShuffle()) then
+		return;
+	end
+
+	if(type(currentArena.players) ~= "table") then
+		return;
+	end
+
+	-- Get first death
+	local firstDeath = ArenaTracker:GetFirstDeathFromCurrentArena();
+	ArenaTracker:CommitDeaths();
+
+	-- Find matching player
+	for _,player in ipairs(currentArena.players) do
+		if(player.name == firstDeath) then
+			player.isFirstDeath = true;
+		end
+	end
+end
+
+
+local function TryComputeSpecs()
+	if(not API.legacySpecs) then
+		return;
+	end
+
+	if(type(currentArena.players) ~= "table") then
+		return;
+	end
+
+	for _,player in ipairs(currentArena.players) do
+		ArenaTracker:ComputeSpec(player);
+	end
+end
+
+
+local function TryAssignRating()
+	if(not ArenaTracker:IsRated()) then
+		return;
+	end
+
+	local newRating, oldRating = ArenaRatedInfo:GetBracketRating(currentArena.bracketIndex, currentArena.seasonPlayed);
+	Debug:LogGreen("TryAssignRating:", newRating, oldRating, currentArena.oldRating);
+
+	if(API:IsOffSeason()) then
+		newRating = oldRating;
+		oldRating = tonumber(currentArena.oldRating);
+	end
+
+	if(newRating) then
+		currentArena.partyRating = newRating;
+		currentArena.partyRatingDelta = oldRating and newRating - oldRating or nil;
+
+		Debug:Log("Setting party rating:", currentArena.partyRating, "Delta:", currentArena.partyRatingDelta);
+	else
+		-- Use old rating, presumably temporary
+		currentArena.partyRating = oldRating;
+		currentArena.requireRatingFix = true;
+	end
+
+	if(API:IsOffSeason()) then
+		currentArena.requireRatingFix = nil;
+	else
+		currentArena.requireRatingFix = currentArena.requireRatingFix or CheckRequiresRatingFix() or nil;
+	end
+
+	Debug:LogPurple("Requires rating fix:", currentArena.requireRatingFix, "New rating:", newRating, "Old rating:", oldRating, "season played:", currentArena.seasonPlayed);
+end
+
+
+local function TryComputeDuration()
+	-- Calculate arena duration
+	if(ArenaTracker:IsShuffle()) then
+		currentArena.duration = 0;
+
+		if(currentArena.committedRounds) then
+			for _,round in ipairs(currentArena.committedRounds) do
+				if(round) then
+					currentArena.duration = currentArena.duration + (tonumber(round.duration) or 0);
+				end
+			end
+		end
+
+		Debug:Log("Shuffle combined duration:", currentArena.duration);
+	elseif(currentArena.hasStartTime and Helpers:IsPositiveNumber(currentArena.startTime)) then
+		currentArena.endTime = tonumber(currentArena.endTime) or time();
+		if(currentArena.startTime < currentArena.endTime) then
+			currentArena.duration = currentArena.endTime - currentArena.startTime;
+		end
+	else
+		currentArena.duration = nil;
+	end
+
+	Debug:Log("Duration for new arena:", currentArena.duration, currentArena.hasStartTime, currentArena.hasRealStartTime, currentArena.startTime, currentArena.endTime);
+end
+
+
+local function ComputeShuffleOutcome()
+	if(ArenaTracker:IsShuffle()) then
+		local winsCache = currentArena.shuffleWinsCache or {};
+
+		local trackedRoundCount = currentArena.committedRounds and #currentArena.committedRounds or 0;
+
+		local cachedRoundCount = math.floor((winsCache.total or 0) / 3);
+		local total = max(cachedRoundCount, trackedRoundCount);
+		local wins = winsCache.wins or 0;
+
+		-- Calculate outcomes from cache
+		local outcome = {};
+		outcome.total = total;
+		outcome.wins = wins;
+		outcome.losses = cachedRoundCount - wins;
+
+		if(total > cachedRoundCount) then
+			outcome.draws = total - cachedRoundCount;
+		end
+		return outcome;
+	end
+end
+
+-- Player left an arena (Zone changed to non-arena with valid arena data)
+function ArenaTracker:HandleArenaExit()
+	if(not ArenaTracker:IsTrackingArena(true)) then
+		Debug:Log("Attempted handling exit while not tracking arena.");
+		return;
+	end
+
+	-- Stores raw arena to reuse for testing
+	Debug:TryStoreRawArena(currentArena);
+
+	if(currentArena.isHandlingExit) then
+		return;
+	end
+	currentArena.isHandlingExit = true;
+
+	assert(currentArena.size);
+	assert(currentArena.mapId);
+
+	Debug:LogGreen("HandleArenaExit!     ", API:GetSeasonPlayed(currentArena.bracketIndex), currentArena.seasonPlayed);
+
+	if(Inspection and Inspection.Clear) then
+		Inspection:Clear();
+	end
+
+	local isShuffle = ArenaTracker:IsShuffle();
+
+	if(not currentArena.endedProperly) then
+		currentArena.ended = true;
+
+		currentArena.outcome = 0;
+
+		Debug:Log("Detected early leave. Has valid current arena: ", currentArena.mapId);
+	end
+
+	-- Solo Shuffle
+	if(isShuffle) then
+		ArenaTracker:HandleRoundEnd();
+		ArenaTracker:UpdateRoundEnemyTeams();
+
+		-- Experimental
+		ArenaTracker:ResolveShuffleOutcomes();
+
+		ComputeShuffleOutcome();
+	end
+
+	currentArena.hasStartTime = Helpers:IsPositiveNumber(currentArena.startTime);
+	currentArena.startTime = tonumber(currentArena.startTime) or time();
+	currentArena.endTime = tonumber(currentArena.endTime) or time();
+
+	if(ArenaTracker:IsRated()) then
+		TryAssignRating();
+	end
+
+	if(not ArenaTracker:IsShuffle()) then
+		TryMarkPlayerFirstDeath();
+	end
+
+	TryComputeSpecs();
+	TryComputeDuration();
+
+	ArenaTracker:Save(currentArena);
+end
+end
+local __aui_frames = ArenaUI_EmbedFrames and ArenaUI_EmbedFrames["ArenaAnalytics"]
+local __aui_templates = ArenaUI_EmbedTemplates and ArenaUI_EmbedTemplates["ArenaAnalytics"]
+local function __aui_template(template)
+  if type(template) ~= "string" or not __aui_templates then return template end
+  if not template:find("[,%s]") then return __aui_templates[template] or template end
+  local out, n = {}, 0
+  for part in template:gmatch("[^,%s]+") do
+    n = n + 1
+    out[n] = __aui_templates[part] or part
+  end
+  return table.concat(out, ", ")
+end
+setfenv(__aui_chunk, setmetatable({
+  CreateFrame = function(frameType, frameName, parent, template, ...)
+    local frame = _G.CreateFrame(frameType, frameName, parent, __aui_template(template), ...)
+    if frame and ArenaUI_TrackVendoredFrame then ArenaUI_TrackVendoredFrame("ArenaAnalytics", frame) end
+    return frame
+  end,
+}, {
+  __index = function(_, key)
+    if __aui_frames and __aui_frames[key] then
+      local frame = _G[__aui_frames[key]]
+      if frame ~= nil then return frame end
+    end
+    return _G[key]
+  end,
+  __newindex = function(_, key, value)
+    rawset(_G, key, value)
+  end,
+}))
+local __aui_ok, __aui_err = pcall(__aui_chunk, "ArenaAnalytics", ArenaUI_VendoredNS["ArenaAnalytics"])
+ArenaUI_LoadingVendored = nil
+if not __aui_ok then geterrorhandler()(__aui_err) end

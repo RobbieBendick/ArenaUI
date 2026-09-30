@@ -1,4 +1,4 @@
-## Interface: 11509
+## Interface: 11509
 # WOW_INTERFACE_TARGETS: vanilla
 ## Title: WeakAuras Model Paths
 ## Author: The WeakAuras Team

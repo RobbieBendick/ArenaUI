@@ -1,4 +1,4 @@
-## Interface: 40402
+## Interface: 40402
 # WOW_INTERFACE_TARGETS: cata
 ## Title: WeakAuras Templates
 ## Author: The WeakAuras Team

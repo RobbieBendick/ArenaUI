@@ -1713,10 +1713,14 @@ end
 SLASH_OmniBar1 = "/ob"
 SLASH_OmniBar2 = "/omnibar"
 SlashCmdList.OmniBar = function()
-	if Settings and Settings.OpenToCategory then
-		Settings.OpenToCategory(addonName)
-	else
-		InterfaceOptionsFrame_OpenToCategory(addonName)
-		InterfaceOptionsFrame_OpenToCategory(addonName)
+	-- This client rejects a category name in OpenToCategory. Open the Ace window instead.
+	local dialog = LibStub and LibStub("AceConfigDialog-3.0", true)
+	if dialog and dialog.Open then
+		dialog:Open("OmniBar")
+		return
+	end
+	if InterfaceOptionsFrame_OpenToCategory then
+		InterfaceOptionsFrame_OpenToCategory("OmniBar")
+		InterfaceOptionsFrame_OpenToCategory("OmniBar")
 	end
 end

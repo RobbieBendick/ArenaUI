@@ -1,4 +1,4 @@
-## Interface: 20506
+## Interface: 20506
 # WOW_INTERFACE_TARGETS: tbc-test, tbc
 ## Title: WeakAuras Archive
 ## Author: The WeakAuras Team

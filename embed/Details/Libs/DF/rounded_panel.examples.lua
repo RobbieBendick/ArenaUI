@@ -1,0 +1,66 @@
+if ArenaUI_VendoredSkip and ArenaUI_VendoredSkip["Details"] then return end
+ArenaUI_LoadingVendored = "Details"
+local __aui_chunk = function(...)
+
+--Details Framework Examples for the frame.lua file
+--create a frame with rounded corners
+
+local detailsFramework = DetailsFramework
+local parent = UIParent
+
+--example of how to create a frame with rounded corners
+--frame name for the example
+local name = "RoundedCornerFrameExample"
+
+--default options
+local optionsTable = {
+    use_titlebar = true, --default false | if true creates a title bar for the frame
+    use_scalebar = true, --default false | if true creates a scale bar for the frame
+    title = "Test", --default "" | title shown in the title bar
+    scale = 1,
+    width = 800, --default 200
+    height = 600, --default 200
+    roundness = 8, --default 0 | how rounded are the corner, 0 means very rounded, 15 means no rounded
+    color = {.1, .1, .1, 1},
+    border_color = {.2, .2, .2, .5},
+    corner_texture = [[Interface\CHARACTERFRAME\TempPortraitAlphaMaskSmall]],
+}
+
+--create the frame and set it's position
+---@type df_roundedpanel
+local frame = _G[name] or detailsFramework:CreateRoundedPanel(parent, name, optionsTable)
+frame:SetPoint("center", parent, "center", 0, 0)
+end
+local __aui_frames = ArenaUI_EmbedFrames and ArenaUI_EmbedFrames["Details"]
+local __aui_templates = ArenaUI_EmbedTemplates and ArenaUI_EmbedTemplates["Details"]
+local function __aui_template(template)
+  if type(template) ~= "string" or not __aui_templates then return template end
+  if not template:find("[,%s]") then return __aui_templates[template] or template end
+  local out, n = {}, 0
+  for part in template:gmatch("[^,%s]+") do
+    n = n + 1
+    out[n] = __aui_templates[part] or part
+  end
+  return table.concat(out, ", ")
+end
+setfenv(__aui_chunk, setmetatable({
+  CreateFrame = function(frameType, frameName, parent, template, ...)
+    local frame = _G.CreateFrame(frameType, frameName, parent, __aui_template(template), ...)
+    if frame and ArenaUI_TrackVendoredFrame then ArenaUI_TrackVendoredFrame("Details", frame) end
+    return frame
+  end,
+}, {
+  __index = function(_, key)
+    if __aui_frames and __aui_frames[key] then
+      local frame = _G[__aui_frames[key]]
+      if frame ~= nil then return frame end
+    end
+    return _G[key]
+  end,
+  __newindex = function(_, key, value)
+    rawset(_G, key, value)
+  end,
+}))
+local __aui_ok, __aui_err = pcall(__aui_chunk, "Details", ArenaUI_VendoredNS["Details"])
+ArenaUI_LoadingVendored = nil
+if not __aui_ok then geterrorhandler()(__aui_err) end

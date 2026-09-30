@@ -1,4 +1,4 @@
-﻿## Title: Gladdy |cFFFF0000 game client not supported|r
+## Title: Gladdy |cFFFF0000 game client not supported|r
 ## Version: 2.725-Release
 ## IconTexture: 236641
 ## Notes: The most powerful arena AddOn for WoW Classic

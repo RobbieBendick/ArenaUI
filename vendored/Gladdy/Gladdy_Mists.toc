@@ -1,4 +1,4 @@
-﻿## Interface: 50504
+## Interface: 50504
 ## Title: Gladdy - |cFF1ADB04MoP|r
 ## Version: 2.725-Release
 ## IconTexture: 135993

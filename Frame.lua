@@ -48,6 +48,9 @@ function NS:SyncDrawFrameHeight()
 end
 
 function NS:SelectTab(id)
+    if id == "macros" and self.activeTab == "macros" and self.macrosResetToClassList then
+        self.macrosResetToClassList()
+    end
     self.activeTab = id
     self:SyncDrawFrameHeight()
     self:RefreshTabs()
@@ -91,7 +94,7 @@ function NS:CreateMainFrame()
     local subtitle = header:CreateFontString(nil, "OVERLAY")
     self:ApplyFont(subtitle, 12)
     subtitle:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 2, -2)
-    subtitle:SetText("Arena interface")
+    subtitle:SetText("All-In-One Arena interface")
     subtitle:SetTextColor(self.COLOR.muted[1], self.COLOR.muted[2], self.COLOR.muted[3])
 
     local close = CreateFrame("Button", nil, header)
@@ -247,3 +250,83 @@ SLASH_ARENAUI2 = "/arenaui"
 SlashCmdList.ARENAUI = function()
     NS:Toggle()
 end
+
+local function minimapAngle()
+    ArenaUIDB = ArenaUIDB or {}
+    if type(ArenaUIDB.minimapAngle) ~= "number" then
+        ArenaUIDB.minimapAngle = 225
+    end
+    return ArenaUIDB.minimapAngle
+end
+
+local function placeMinimapButton(button, angle)
+    local radius = (Minimap:GetWidth() / 2) + 5
+    button:ClearAllPoints()
+    button:SetPoint("CENTER", Minimap, "CENTER", radius * cos(angle), radius * sin(angle))
+end
+
+function NS:CreateMinimapButton()
+    if self.minimapButton then
+        return self.minimapButton
+    end
+
+    local button = CreateFrame("Button", "ArenaUIMinimapButton", Minimap)
+    button:SetSize(31, 31)
+    button:SetFrameStrata("MEDIUM")
+    button:SetFrameLevel(8)
+    button:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    button:RegisterForDrag("LeftButton")
+    button:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
+
+    local icon = button:CreateTexture(nil, "BACKGROUND")
+    icon:SetSize(20, 20)
+    icon:SetPoint("CENTER", 2, -1)
+    icon:SetColorTexture(0.08, 0.08, 0.08, 0.95)
+
+    local letter = button:CreateFontString(nil, "OVERLAY")
+    self:ApplyFont(letter, 13, "OUTLINE")
+    letter:SetPoint("CENTER", 2, 1)
+    letter:SetText("A")
+    local accent = self.COLOR.accent
+    letter:SetTextColor(accent[1], accent[2], accent[3])
+
+    local border = button:CreateTexture(nil, "OVERLAY")
+    border:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
+    border:SetSize(54, 54)
+    border:SetPoint("TOPLEFT")
+
+    placeMinimapButton(button, minimapAngle())
+
+    button:SetScript("OnDragStart", function(self)
+        self:SetScript("OnUpdate", function()
+            local scale = UIParent:GetEffectiveScale() or 1
+            local cursorX, cursorY = GetCursorPosition()
+            cursorX, cursorY = cursorX / scale, cursorY / scale
+            local centerX, centerY = Minimap:GetCenter()
+            local angle = math.deg(math.atan2(cursorY - centerY, cursorX - centerX))
+            ArenaUIDB.minimapAngle = angle
+            placeMinimapButton(self, angle)
+        end)
+    end)
+    button:SetScript("OnDragStop", function(self)
+        self:SetScript("OnUpdate", nil)
+        placeMinimapButton(self, minimapAngle())
+    end)
+    button:SetScript("OnClick", function()
+        NS:Toggle()
+    end)
+    button:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+        GameTooltip:AddLine("ArenaUI", accent[1], accent[2], accent[3])
+        GameTooltip:AddLine("Left-click to open. Drag to move.", 1, 1, 1)
+        GameTooltip:Show()
+    end)
+    button:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
+
+    self.minimapButton = button
+    return button
+end
+
+NS:CreateMinimapButton()

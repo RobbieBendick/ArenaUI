@@ -1,0 +1,14 @@
+ArenaUI_VendoredLinks = {
+    Gladdy = true,
+    OmniBar = true,
+    OmniCD = true,
+    ArenaAnalytics = true,
+    Diminish = true,
+    Diminish_Options = true,
+    Details = true,
+    WeakAuras = true,
+    WeakAurasOptions = true,
+    WeakAurasModelPaths = true,
+    WeakAurasTemplates = true,
+    WeakAurasArchive = true,
+}

@@ -105,21 +105,175 @@ function NS:IsAddonLoaded(name)
     return IsAddOnLoaded(name) and true or false
 end
 
+function NS:RealIsAddonLoaded(name)
+    if self._realIsAddOnLoaded then
+        return self._realIsAddOnLoaded(name) and true or false
+    end
+    if IsAddOnLoaded then
+        return IsAddOnLoaded(name) and true or false
+    end
+    return self:IsAddonLoaded(name)
+end
+
+function NS:GetAddonVersion(name)
+    local version
+    if C_AddOns and C_AddOns.GetAddOnMetadata then
+        local ok, result = pcall(C_AddOns.GetAddOnMetadata, name, "Version")
+        if ok then
+            version = result
+        end
+    elseif GetAddOnMetadata then
+        local ok, result = pcall(GetAddOnMetadata, name, "Version")
+        if ok then
+            version = result
+        end
+    end
+    if (not version or version == "") and ArenaUI_VendoredMeta and ArenaUI_VendoredMeta[name] then
+        version = ArenaUI_VendoredMeta[name].Version
+    end
+    if type(version) == "string" and version ~= "" then
+        return version
+    end
+end
+
 function NS:IsVendoredCopy(name)
-    if not self:AddonExists(name) then
+    return ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and true or false
+end
+
+function NS:StandaloneSupportsClient(name)
+    local title
+    local getMeta = NS.RealGetAddOnMetadata
+    if getMeta then
+        title = getMeta(name, "Title")
+    elseif C_AddOns and C_AddOns.GetAddOnMetadata then
+        title = C_AddOns.GetAddOnMetadata(name, "Title")
+    elseif GetAddOnMetadata then
+        title = GetAddOnMetadata(name, "Title")
+    end
+    if type(title) == "string" and title:lower():find("not supported", 1, true) then
         return false
     end
-    local meta
-    if C_AddOns.GetAddOnMetadata then
-        meta = C_AddOns.GetAddOnMetadata(name, "X-ArenaUI-Vendored")
-    elseif GetAddOnMetadata then
-        meta = GetAddOnMetadata(name, "X-ArenaUI-Vendored")
+    return true
+end
+
+function NS:StandaloneIsOn(name)
+    return self:AddonExists(name) and self:IsAddonEnabled(name) and self:StandaloneSupportsClient(name)
+end
+
+-- True once the real addon folder has finished loading this session.
+function NS:StandaloneLoaded(name)
+    return self:HasStandalone(name) and self:RealIsAddonLoaded(name)
+end
+
+-- ArenaUI's copy should only run after login proves the original is not loaded.
+function NS:ShouldRunVendored(name)
+    if not self:IsVendoredCopy(name) then
+        return false
     end
-    return tostring(meta) == "1"
+    if not self:ModuleEnabled(name) then
+        return false
+    end
+    if self:StandaloneLoaded(name) then
+        return false
+    end
+    if self:StandaloneIsOn(name) then
+        return false
+    end
+    return true
+end
+
+function NS:RunsFromArenaUI(name)
+    return self:IsVendoredCopy(name) and not self:StandaloneIsOn(name) and not self:StandaloneLoaded(name)
 end
 
 function NS:UsesStandalone(name)
-    return self:AddonExists(name) and not self:IsVendoredCopy(name) and (self:IsAddonEnabled(name) or self:IsAddonLoaded(name))
+    -- Prefer real load state; fall back to enable flags for pre-login UI.
+    return self:StandaloneLoaded(name) or self:StandaloneIsOn(name)
+end
+
+function NS:ModuleEnabled(name)
+    local modules = ArenaUIDB and ArenaUIDB.modules
+    if not modules or modules[name] == nil then
+        return true
+    end
+    return modules[name] and true or false
+end
+
+function NS:SetModuleEnabled(name, enabled)
+    ArenaUIDB = ArenaUIDB or {}
+    ArenaUIDB.modules = ArenaUIDB.modules or {}
+    ArenaUIDB.modules[name] = enabled and true or false
+    self:ApplyVendoredModule(name)
+end
+
+-- Standalone wins. If the real addon is enabled, ArenaUI's copy stays off.
+local VENDORED_HOSTS = {
+    "Gladdy",
+    "OmniBar",
+    "OmniCD",
+    "ArenaAnalytics",
+    "Diminish",
+    "Details",
+    "WeakAuras",
+}
+
+function NS:YieldVendoredToStandalone(name)
+    if not self:IsVendoredCopy(name) or not self:StandaloneIsOn(name) then
+        return
+    end
+    ArenaUIDB = ArenaUIDB or {}
+    ArenaUIDB.modules = ArenaUIDB.modules or {}
+    if ArenaUIDB.modules[name] == false then
+        return
+    end
+    ArenaUIDB.modules[name] = false
+    print("|cFFFF8C33ArenaUI|r " .. name .. " standalone is enabled, so ArenaUI's copy is off.")
+end
+
+function NS:YieldVendoredModules()
+    for i = 1, #VENDORED_HOSTS do
+        self:YieldVendoredToStandalone(VENDORED_HOSTS[i])
+    end
+end
+
+function NS:ApplyVendoredModule(name)
+    self:YieldVendoredToStandalone(name)
+    local ace = LibStub and LibStub("AceAddon-3.0", true)
+    local host = ace and ace:GetAddon("ArenaUIModules", true)
+    local module = host and host:GetModule(name, true)
+    if not module then
+        return
+    end
+    if not self:ShouldRunVendored(name) then
+        -- Original is loaded/enabled, or the ArenaUI toggle is off.
+        if module.IsEnabled and module:IsEnabled() then
+            module:Disable()
+        else
+            -- Ace never calls OnDisable if the module was not enabled this session.
+            -- Vendored addons still create minimap buttons during load.
+            if module.SetEnabledState then
+                module:SetEnabledState(false)
+            end
+            if module.OnDisable then
+                module:OnDisable()
+            end
+        end
+        return
+    end
+    local already = module.IsEnabled and module:IsEnabled()
+    module:Enable()
+    -- Ace skips OnEnable when already enabled; force resume if still suspended.
+    if already and (module.suspended or module.didDisable) then
+        if module.ResumeDetails then
+            module:ResumeDetails()
+        elseif module.ResumeWeakAuras then
+            module:ResumeWeakAuras()
+        end
+    end
+end
+
+function NS:HasStandalone(name)
+    return self:AddonExists(name) and self:StandaloneSupportsClient(name)
 end
 
 function NS:SetAddonEnabled(name, enabled)
@@ -141,7 +295,7 @@ function NS:SetAddonGroupEnabled(addon, enabled)
 end
 
 function NS:EachAddon(callback)
-    for _, category in ipairs(self.CATEGORIES or {}) do
+    for _, category in ipairs(self.ADDON_CATEGORIES or {}) do
         for _, addon in ipairs(category.addons) do
             callback(addon)
         end
@@ -162,10 +316,27 @@ function NS:AddonWantsEnabled(addon)
     return self:IsAddonEnabled(addon.name)
 end
 
+function NS:AddonIsActive(addon)
+    return self:IsAddonLoaded(addon.name)
+end
+
+function NS:AddonNeedsReload(addon)
+    -- ArenaUI copies toggle live via Ace modules; no reload.
+    if self:RunsFromArenaUI(addon.name) then
+        return false
+    end
+    if not self:AddonExists(addon.name) then
+        return false
+    end
+    local wants = self:AddonWantsEnabled(addon)
+    local loaded = self:RealIsAddonLoaded(addon.name)
+    return wants ~= loaded
+end
+
 function NS:AddonsNeedReload()
     local dirty = false
     self:EachAddon(function(addon)
-        if self:AddonWantsEnabled(addon) ~= self:IsAddonLoaded(addon.name) then
+        if self:AddonNeedsReload(addon) then
             dirty = true
         end
     end)
@@ -176,7 +347,11 @@ function NS:UpdateReloadButton()
     if not self.reloadButton then
         return
     end
-    self.reloadButton:SetShown(self:AddonsNeedReload())
+    if self:AddonsNeedReload() then
+        self.reloadButton:Show()
+    else
+        self.reloadButton:Hide()
+    end
 end
 
 function NS:GetOption(categoryKey, optionKey)
@@ -395,8 +570,10 @@ end
 
 function NS:CreateAddonRow(parent, addon, y, onToggle)
     local accent = self.COLOR.accent
-    local installed = self:AddonExists(addon.name)
-    local enabled = installed and (self:IsAddonEnabled(addon.name) or self:IsAddonLoaded(addon.name))
+    local inside = self:RunsFromArenaUI(addon.name)
+    local installed = inside or self:AddonExists(addon.name)
+    local enabled = inside and self:ModuleEnabled(addon.name)
+        or (not inside and installed and self:AddonWantsEnabled(addon))
 
     local row = CreateFrame("Button", nil, parent)
     row:SetHeight(78)
@@ -432,13 +609,8 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
     versionText:SetPoint("LEFT", title, "RIGHT", 8, 0)
     versionText:SetJustifyH("LEFT")
     versionText:SetTextColor(0.55, 0.55, 0.55)
-    local addonVersion
-    if C_AddOns and C_AddOns.GetAddOnMetadata then
-        addonVersion = C_AddOns.GetAddOnMetadata(addon.name, "Version")
-    elseif GetAddOnMetadata then
-        addonVersion = GetAddOnMetadata(addon.name, "Version")
-    end
-    if installed and addonVersion and addonVersion ~= "" then
+    local addonVersion = self:GetAddonVersion(addon.name)
+    if installed and addonVersion then
         versionText:SetText(addonVersion)
     else
         versionText:SetText("")
@@ -481,7 +653,6 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
     stateText:SetPoint("RIGHT", toggle, "LEFT", -8, 0)
 
     local function Paint()
-        local loaded = installed and self:IsAddonLoaded(addon.name)
         if not installed and not enabled then
             fill:Hide()
             self:ApplyBoxBackdrop(toggle, 0.25, 0.25, 0.25, 1)
@@ -500,13 +671,17 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
             self:ApplyBoxBackdrop(toggle, accent[1], accent[2], accent[3], 1)
             stateText:SetText("Enabled")
             stateText:SetTextColor(1, 1, 1)
-            if loaded and self:UsesStandalone(addon.name) then
-                note:SetText("Using your existing addon")
+            if inside then
+                note:SetText("Running from ArenaUI")
                 note:SetTextColor(accent[1], accent[2], accent[3])
                 note:Show()
-            elseif not loaded then
+            elseif self:AddonNeedsReload(addon) then
                 note:SetText("Reload required")
                 note:SetTextColor(1, 0.78, 0.35)
+                note:Show()
+            elseif self:UsesStandalone(addon.name) then
+                note:SetText("Using your existing addon")
+                note:SetTextColor(accent[1], accent[2], accent[3])
                 note:Show()
             else
                 note:Hide()
@@ -516,7 +691,7 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
             self:ApplyBoxBackdrop(toggle, 0.35, 0.35, 0.35, 1)
             stateText:SetText("Disabled")
             stateText:SetTextColor(self.COLOR.off[1], self.COLOR.off[2], self.COLOR.off[3])
-            if loaded then
+            if not inside and self:AddonNeedsReload(addon) then
                 note:SetText("Reload required")
                 note:SetTextColor(1, 0.78, 0.35)
                 note:Show()
@@ -530,11 +705,13 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
 
     row:SetScript("OnClick", function()
         enabled = not enabled
-        if installed then
+        if inside then
+            self:SetModuleEnabled(addon.name, enabled)
+        elseif installed then
             self:SetAddonGroupEnabled(addon, enabled)
+            self.addonDesired = self.addonDesired or {}
+            self.addonDesired[addon.name] = enabled
         end
-        self.addonDesired = self.addonDesired or {}
-        self.addonDesired[addon.name] = enabled
         Paint()
         if onToggle then
             onToggle()
@@ -545,16 +722,19 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
         bg:SetColorTexture(accent[1], accent[2], accent[3], 0.08)
         GameTooltip:SetOwner(row, "ANCHOR_RIGHT")
         GameTooltip:AddLine(addon.title, 1, 1, 1)
-        local loaded = installed and self:IsAddonLoaded(addon.name)
-        if enabled and not loaded then
-            GameTooltip:AddLine("Reload required to enable this addon.", 1, 0.78, 0.35, true)
-        elseif not enabled and loaded then
-            GameTooltip:AddLine("Reload required to disable this addon.", 1, 0.78, 0.35, true)
+        if enabled and inside then
+            GameTooltip:AddLine("Running from ArenaUI.", accent[1], accent[2], accent[3], true)
+        elseif not inside and self:AddonNeedsReload(addon) then
+            if enabled then
+                GameTooltip:AddLine("Reload required to enable this addon.", 1, 0.78, 0.35, true)
+            else
+                GameTooltip:AddLine("Reload required to disable this addon.", 1, 0.78, 0.35, true)
+            end
         elseif enabled and self:UsesStandalone(addon.name) then
             GameTooltip:AddLine("Using your existing addon.", accent[1], accent[2], accent[3], true)
-        elseif installed then
+        elseif not enabled and installed and not self:IsVendoredCopy(addon.name) then
             GameTooltip:AddLine("Already installed. Enable it to use your copy.", 0.8, 0.8, 0.8, true)
-        else
+        elseif not installed then
             GameTooltip:AddLine("Not installed.", 0.8, 0.8, 0.8, true)
         end
         GameTooltip:Show()
@@ -577,20 +757,39 @@ end
 function NS:CreateClassRow(parent, classInfo, y, onClick)
     local accent = self.COLOR.accent
     local row = CreateFrame("Button", nil, parent)
-    row:SetHeight(68)
+    row:SetHeight(44)
     row:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, y)
     row:SetPoint("TOPRIGHT", parent, "TOPRIGHT", -4, y)
     row:RegisterForClicks("LeftButtonUp")
     row:EnableMouseWheel(true)
 
+    local classColor = RAID_CLASS_COLORS and RAID_CLASS_COLORS[classInfo.token]
+    local cr, cg, cb = 0.55, 0.55, 0.55
+    if classColor then
+        cr, cg, cb = classColor.r, classColor.g, classColor.b
+    end
+
     local bg = row:CreateTexture(nil, "BACKGROUND")
-    bg:SetColorTexture(1, 1, 1, 0.04)
-    bg:SetPoint("TOPLEFT", row, "TOPLEFT", 0, 0)
-    bg:SetPoint("BOTTOMRIGHT", row, "BOTTOMRIGHT", 0, -8)
+    bg:SetAllPoints(row)
+    bg:SetTexture("Interface\\Buttons\\WHITE8X8")
+
+    local function PaintRowBg(hovered)
+        local aLeft = hovered and 0.22 or 0.14
+        local aRight = hovered and 0.02 or 0.0
+        bg:SetColorTexture(1, 1, 1, 1)
+        if bg.SetGradient and CreateColor then
+            bg:SetGradient("HORIZONTAL", CreateColor(cr, cg, cb, aLeft), CreateColor(cr, cg, cb, aRight))
+        elseif bg.SetGradientAlpha then
+            bg:SetGradientAlpha("HORIZONTAL", cr, cg, cb, aLeft, cr, cg, cb, aRight)
+        else
+            bg:SetColorTexture(cr, cg, cb, aLeft * 0.55)
+        end
+    end
+    PaintRowBg(false)
 
     local icon = row:CreateTexture(nil, "ARTWORK")
-    icon:SetSize(44, 44)
-    icon:SetPoint("LEFT", row, "LEFT", 8, 4)
+    icon:SetSize(28, 28)
+    icon:SetPoint("LEFT", row, "LEFT", 8, 0)
     icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
     local coords = CLASS_ICON_TCOORDS and CLASS_ICON_TCOORDS[classInfo.token]
     if coords then
@@ -602,24 +801,18 @@ function NS:CreateClassRow(parent, classInfo, y, onClick)
     iconEdge:SetPoint("TOPLEFT", icon, "TOPLEFT", -1, 1)
     iconEdge:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 1, -1)
 
-    local classColor = RAID_CLASS_COLORS and RAID_CLASS_COLORS[classInfo.token]
     local title = row:CreateFontString(nil, "OVERLAY")
     self:ApplyFont(title, 14, "THINOUTLINE")
-    title:SetPoint("TOPLEFT", icon, "TOPRIGHT", 12, -4)
+    title:SetPoint("LEFT", icon, "RIGHT", 12, 0)
+    title:SetPoint("RIGHT", row, "RIGHT", -12, 0)
     title:SetJustifyH("LEFT")
+    title:SetJustifyV("MIDDLE")
     title:SetText(classInfo.name)
     if classColor then
         title:SetTextColor(classColor.r, classColor.g, classColor.b)
     else
         title:SetTextColor(1, 1, 1)
     end
-
-    local desc = row:CreateFontString(nil, "OVERLAY")
-    self:ApplyFont(desc, 11)
-    desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -2)
-    desc:SetJustifyH("LEFT")
-    desc:SetText(classInfo.description or "Macros")
-    desc:SetTextColor(self.COLOR.muted[1], self.COLOR.muted[2], self.COLOR.muted[3])
 
     row:SetScript("OnClick", function()
         if onClick then
@@ -628,11 +821,11 @@ function NS:CreateClassRow(parent, classInfo, y, onClick)
     end)
 
     row:SetScript("OnEnter", function()
-        bg:SetColorTexture(accent[1], accent[2], accent[3], 0.08)
+        PaintRowBg(true)
     end)
 
     row:SetScript("OnLeave", function()
-        bg:SetColorTexture(1, 1, 1, 0.04)
+        PaintRowBg(false)
     end)
 
     row:SetScript("OnMouseWheel", function(_, delta)
@@ -656,14 +849,26 @@ function NS:CreateMacroBlock(parent)
     bar:SetPoint("TOPLEFT", block, "TOPLEFT", 1, -1)
     bar:SetPoint("BOTTOMLEFT", block, "BOTTOMLEFT", 1, 1)
 
+    local iconBorder = block:CreateTexture(nil, "BACKGROUND")
+    iconBorder:SetColorTexture(0.22, 0.22, 0.22, 1)
+    iconBorder:SetSize(34, 34)
+    iconBorder:SetPoint("TOPLEFT", block, "TOPLEFT", 13, -9)
+
+    local icon = block:CreateTexture(nil, "ARTWORK")
+    icon:SetSize(32, 32)
+    icon:SetPoint("CENTER", iconBorder, "CENTER", 0, 0)
+    icon:SetTexture(134400)
+    icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
     local name = block:CreateFontString(nil, "OVERLAY")
     self:ApplyFont(name, 13, "THINOUTLINE")
-    name:SetPoint("TOPLEFT", block, "TOPLEFT", 14, -10)
+    name:SetPoint("TOPLEFT", iconBorder, "TOPRIGHT", 10, -2)
+    name:SetPoint("RIGHT", block, "RIGHT", -10, 0)
     name:SetJustifyH("LEFT")
     name:SetTextColor(1, 1, 1)
 
     local code = CreateFrame("Frame", nil, block, "BackdropTemplate")
-    code:SetPoint("TOPLEFT", name, "BOTTOMLEFT", -4, -6)
+    code:SetPoint("TOPLEFT", iconBorder, "BOTTOMLEFT", -1, -8)
     code:SetPoint("RIGHT", block, "RIGHT", -10, 0)
     self:ApplyBoxBackdrop(code, 0.2, 0.2, 0.2, 1)
     code:SetBackdropColor(0.02, 0.02, 0.02, 0.75)
@@ -676,6 +881,8 @@ function NS:CreateMacroBlock(parent)
     body:SetSpacing(2)
     body:SetTextColor(0.82, 0.82, 0.82)
 
+    block.iconBorder = iconBorder
+    block.iconTexture = icon
     block.nameText = name
     block.code = code
     block.bodyText = body
@@ -723,10 +930,37 @@ StaticPopupDialogs["ARENAUI_CONFIRM_MACRO"] = {
     text = "%s",
     button1 = "Confirm",
     button2 = "Cancel",
+    hasEditBox = true,
+    OnShow = function(self)
+        local data = self.data
+        if not data or not data.macro then
+            return
+        end
+        local edit = self:GetEditBox()
+        if not edit then
+            return
+        end
+        edit:SetMaxLetters(16)
+        local base = data.macro.name or "Macro"
+        if string.len(base) > 16 then
+            base = string.sub(base, 1, 16)
+        end
+        edit:SetText(base)
+        edit:SetScript("OnEscapePressed", function(box)
+            box:ClearFocus()
+            StaticPopup_Hide("ARENAUI_CONFIRM_MACRO")
+        end)
+        edit:SetScript("OnEnterPressed", function(box)
+            local parent = box:GetParent()
+            if parent and parent.GetButton1 then
+                parent:GetButton1():Click()
+            end
+        end)
+    end,
     OnAccept = function(dialog, data)
         data = data or (dialog and dialog.data)
         if data and data.macro then
-            NS:InstallMacro(data.macro, data.perCharacter)
+            NS:InstallMacro(data.macro, data.perCharacter, NS:MacroBaseNameFromPopup(dialog))
         end
     end,
     timeout = 0,
@@ -734,6 +968,20 @@ StaticPopupDialogs["ARENAUI_CONFIRM_MACRO"] = {
     hideOnEscape = true,
     preferredIndex = 3,
 }
+
+function NS:MacroBaseNameFromPopup(dialog)
+    if dialog and dialog.GetEditBox then
+        local edit = dialog:GetEditBox()
+        if edit then
+            local text = edit:GetText() or ""
+            text = text:gsub("^%s+", ""):gsub("%s+$", "")
+            if text ~= "" then
+                return text
+            end
+        end
+    end
+    return nil
+end
 
 function NS:MacroListName(base, perCharacter)
     local general = base or "Macro"
@@ -759,9 +1007,9 @@ function NS:PromptInstallMacro(macro, perCharacter)
     local existing = GetMacroIndexByName(name)
     local message
     if existing and existing > 0 and (existing > maxAccount) == perCharacter then
-        message = "Update the " .. kind .. " macro \"" .. name .. "\"?"
+        message = "Update the " .. kind .. " macro. Name it below, or leave the default."
     else
-        message = "Create the " .. kind .. " macro \"" .. name .. "\"?"
+        message = "Create a " .. kind .. " macro. Name it below, or leave the default."
     end
 
     StaticPopup_Show("ARENAUI_CONFIRM_MACRO", message, nil, {
@@ -770,13 +1018,17 @@ function NS:PromptInstallMacro(macro, perCharacter)
     })
 end
 
-function NS:InstallMacro(macro, perCharacter)
+function NS:InstallMacro(macro, perCharacter, nameOverride)
     if InCombatLockdown and InCombatLockdown() then
         print("|cFFFF8C33ArenaUI|r Leave combat before creating a macro.")
         return
     end
 
-    local name = self:MacroListName(macro.name, perCharacter)
+    local baseName = nameOverride
+    if not baseName or baseName == "" then
+        baseName = macro.name
+    end
+    local name = self:MacroListName(baseName, perCharacter)
     local body = macro.body or ""
     if string.len(body) > 255 then
         body = string.sub(body, 1, 255)
@@ -788,16 +1040,16 @@ function NS:InstallMacro(macro, perCharacter)
     if existing and existing > 0 then
         local existingIsCharacter = existing > maxAccount
         if existingIsCharacter == perCharacter then
-            EditMacro(existing, name, nil, body)
+            EditMacro(existing, name, self:GetMacroCreateIcon(macro), body)
             local kind = perCharacter and "character-specific" or "general"
             print("|cFFFF8C33ArenaUI|r Updated " .. kind .. " macro: " .. name)
             return
         end
         if not perCharacter and existingIsCharacter then
-            local characterName = self:MacroListName(macro.name, true)
+            local characterName = self:MacroListName(baseName, true)
             local characterTaken = GetMacroIndexByName(characterName)
             if not characterTaken or characterTaken == 0 then
-                EditMacro(existing, characterName, nil, body)
+                EditMacro(existing, characterName, self:GetMacroCreateIcon(macro), body)
             else
                 print("|cFFFF8C33ArenaUI|r \"" .. name .. "\" is already used by a character macro.")
                 return
@@ -818,7 +1070,7 @@ function NS:InstallMacro(macro, perCharacter)
         return
     end
 
-    local icon = "INV_MISC_QUESTIONMARK"
+    local icon = self:GetMacroCreateIcon(macro)
     local ok, created
     if perCharacter then
         ok, created = pcall(CreateMacro, name, icon, body, true)
@@ -844,6 +1096,9 @@ function NS:SetMacroBlock(block, macro, width)
 
     block.macro = macro
     block.nameText:SetText(macro.name or "Macro")
+    if block.iconTexture then
+        self:SetMacroIconTexture(block.iconTexture, macro)
+    end
     block.bodyText:SetWidth(textWidth)
     block.bodyText:SetText(macro.body or "")
 
@@ -867,5 +1122,163 @@ function NS:SetMacroBlock(block, macro, width)
     block.generalButton:SetPoint("TOPLEFT", block.code, "BOTTOMLEFT", 0, -8)
     block.characterButton:SetPoint("TOPLEFT", block.generalButton, "TOPRIGHT", 8, 0)
 
-    block:SetHeight(32 + codeHeight + 8 + 22 + 12)
+    block:SetHeight(46 + codeHeight + 8 + 22 + 12)
 end
+
+function NS:MapVendoredMediaPath(path)
+    if type(path) ~= "string" then
+        return path
+    end
+    return (path:gsub("([Ii]nterface)[\\/]([Aa]dd[Oo]ns)[\\/]([^\\/]+)[\\/]", function(_, _, name)
+        if ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(name) then
+            return "Interface\\AddOns\\ArenaUI\\vendored\\" .. name .. "\\"
+        end
+        return "Interface\\AddOns\\" .. name .. "\\"
+    end))
+end
+
+local function HookMediaMethod(obj, method)
+    local meta = getmetatable(obj)
+    local index = meta and meta.__index
+    if type(index) ~= "table" or type(index[method]) ~= "function" or index["ArenaUIHook_" .. method] then
+        return
+    end
+    local original = index[method]
+    index["ArenaUIHook_" .. method] = true
+    index[method] = function(self, first, ...)
+        if type(first) == "string" then
+            first = NS:MapVendoredMediaPath(first)
+        elseif type(first) == "table" then
+            local copy = {}
+            for key, value in pairs(first) do
+                copy[key] = type(value) == "string" and NS:MapVendoredMediaPath(value) or value
+            end
+            first = copy
+        end
+        if method == "SetFont" then
+            local ok = original(self, first, ...)
+            if not ok then
+                return original(self, "Fonts\\FRIZQT__.TTF", ...)
+            end
+            return ok
+        end
+        return original(self, first, ...)
+    end
+end
+
+local mediaProbe = CreateFrame("Frame")
+local mediaTexture = mediaProbe:CreateTexture()
+local mediaText = mediaProbe:CreateFontString()
+local mediaBar = CreateFrame("StatusBar")
+local mediaButton = CreateFrame("Button")
+HookMediaMethod(mediaTexture, "SetTexture")
+HookMediaMethod(mediaTexture, "SetMask")
+HookMediaMethod(mediaProbe, "SetBackdrop")
+HookMediaMethod(mediaText, "SetFont")
+HookMediaMethod(mediaBar, "SetStatusBarTexture")
+HookMediaMethod(mediaButton, "SetNormalTexture")
+HookMediaMethod(mediaButton, "SetPushedTexture")
+HookMediaMethod(mediaButton, "SetDisabledTexture")
+HookMediaMethod(mediaButton, "SetHighlightTexture")
+mediaProbe:Hide()
+mediaButton:Hide()
+
+if C_AddOns and C_AddOns.GetAddOnMetadata then
+    local realGetAddOnMetadata = C_AddOns.GetAddOnMetadata
+    NS.RealGetAddOnMetadata = realGetAddOnMetadata
+    function C_AddOns.GetAddOnMetadata(name, field)
+        local metaName = name
+        if name == "Diminish_Options" then
+            metaName = "Diminish"
+        end
+        if ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(metaName) then
+            local meta = ArenaUI_VendoredMeta and ArenaUI_VendoredMeta[name]
+            if meta and meta[field] then
+                return meta[field]
+            end
+            -- WeakAuras Init reads X-Flavor before anything else; without it every
+            -- IsTBC/IsRetail check is wrong and talent APIs blow up on classic.
+            if field == "X-Flavor" and (name == "WeakAuras" or name:find("^WeakAuras", 1, true)) then
+                local project = WOW_PROJECT_ID
+                if project == WOW_PROJECT_CLASSIC then
+                    return "Vanilla"
+                elseif project == (WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5) then
+                    return "TBC"
+                elseif project == (WOW_PROJECT_WRATH_CLASSIC or 11) then
+                    return "Wrath"
+                elseif project == (WOW_PROJECT_CATACLYSM_CLASSIC or 14) then
+                    return "Cata"
+                elseif project == (WOW_PROJECT_MISTS_CLASSIC or 19) then
+                    return "Mists"
+                elseif project == WOW_PROJECT_MAINLINE then
+                    return "Mainline"
+                end
+                return "TBC"
+            end
+        end
+        if name == addonName then
+            local stack = debugstack(2, 1, 0) or ""
+            if stack:find("OmniBar", 1, true) and field == "Version" then
+                return "v34"
+            end
+            if stack:find("OmniCD", 1, true) then
+                local omniCDMeta = {
+                    Version = "v2.8.35",
+                    Author = "Treebonker",
+                    Notes = "Party cooldown tracker. /oc",
+                    ["X-License"] = "All Rights Reserved",
+                    ["X-Localizations"] = "enUS, deDE, esMX, frFR, itIT, koKR, ruRU, zhCN, zhTW",
+                }
+                if omniCDMeta[field] then
+                    return omniCDMeta[field]
+                end
+            end
+        end
+        return realGetAddOnMetadata(name, field)
+    end
+end
+
+if C_AddOns and C_AddOns.IsAddOnLoaded then
+    local realIsAddOnLoaded = C_AddOns.IsAddOnLoaded
+    NS._realIsAddOnLoaded = realIsAddOnLoaded
+    local embedded = {
+        Diminish = "Diminish",
+        Diminish_Options = "Diminish",
+        Details = "Details",
+        WeakAuras = "WeakAuras",
+        WeakAurasOptions = "WeakAuras",
+        WeakAurasModelPaths = "WeakAuras",
+        WeakAurasTemplates = "WeakAuras",
+        WeakAurasArchive = "WeakAuras",
+    }
+    function C_AddOns.IsAddOnLoaded(name)
+        local host = embedded[name]
+        if host and ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(host) then
+            return true
+        end
+        return realIsAddOnLoaded(name)
+    end
+end
+
+if C_AddOns and C_AddOns.LoadAddOn then
+    local realLoadAddOn = C_AddOns.LoadAddOn
+    local loadable = {
+        WeakAurasOptions = "WeakAuras",
+        WeakAurasModelPaths = "WeakAuras",
+        WeakAurasTemplates = "WeakAuras",
+        WeakAurasArchive = "WeakAuras",
+    }
+    function C_AddOns.LoadAddOn(name)
+        local host = loadable[name]
+        if host and ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(host) then
+            if name == "WeakAurasArchive" then
+                WeakAurasArchive = WeakAurasArchive or {}
+            end
+            return true
+        end
+        return realLoadAddOn(name)
+    end
+end
+
+-- Before any embedded addon file runs. A standalone that is enabled takes over.
+NS:YieldVendoredModules()

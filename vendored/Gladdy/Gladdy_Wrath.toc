@@ -1,4 +1,4 @@
-﻿## Interface: 30402
+## Interface: 30402
 ## Title: Gladdy - |cFF1ADB04WotLK|r
 ## Version: 2.725-Release
 ## IconTexture: 236641

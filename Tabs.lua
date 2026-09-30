@@ -2,7 +2,7 @@ local addonName, NS = ...
 
 local VENDOR = "Interface\\AddOns\\ArenaUI\\vendored\\"
 
-NS.CATEGORIES = {
+NS.ADDON_CATEGORIES = {
     {
         title = "Arena Frames",
         addons = {
@@ -124,7 +124,7 @@ local function BuildAddonPage(page)
     scroll:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", -8, 30)
 
     local y = -8
-    for _, category in ipairs(NS.CATEGORIES) do
+    for _, category in ipairs(NS.ADDON_CATEGORIES) do
         local header = NS:CreateHeader(child, category.title)
         header:SetPoint("TOPLEFT", child, "TOPLEFT", 0, y)
         header:SetPoint("TOPRIGHT", child, "TOPRIGHT", 0, y)
@@ -168,14 +168,6 @@ NS.CLASSES = {
     { token = "DRUID", name = "Druid" },
 }
 
-NS.STARTER_MACROS = {
-    { name = "Arena 1", body = "/target arena1" },
-    { name = "Arena 2", body = "/target arena2" },
-    { name = "Arena 3", body = "/target arena3" },
-    { name = "Focus Arena 1", body = "/focus arena1" },
-    { name = "Party 1", body = "/target party1" },
-}
-
 local function BuildMacrosPage(page)
     local accent = NS.COLOR.accent
     local muted = NS.COLOR.muted
@@ -204,7 +196,8 @@ local function BuildMacrosPage(page)
 
     local crumbMacros = CreateFrame("Button", nil, nav)
     crumbMacros:SetPoint("TOPLEFT", nav, "TOPLEFT", 0, 0)
-    crumbMacros:SetHeight(16)
+    crumbMacros:SetHeight(22)
+    crumbMacros:RegisterForClicks("AnyUp")
     local crumbMacrosText = crumbMacros:CreateFontString(nil, "OVERLAY")
     ApplyItalic(crumbMacrosText, 12)
     crumbMacrosText:SetAllPoints()
@@ -225,29 +218,57 @@ local function BuildMacrosPage(page)
 
     local separator = nav:CreateFontString(nil, "OVERLAY")
     ApplyItalic(separator, 12)
-    separator:SetPoint("LEFT", crumbMacros, "RIGHT", 5, 0)
+    separator:SetPoint("LEFT", crumbMacros, "RIGHT", 2, 0)
     separator:SetText(">")
     separator:SetTextColor(muted[1], muted[2], muted[3])
 
+    local crumbIcon = nav:CreateTexture(nil, "ARTWORK")
+    crumbIcon:SetSize(14, 14)
+    crumbIcon:SetPoint("LEFT", separator, "RIGHT", 5, 0)
+    crumbIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
+    if crumbIcon.CreateMaskTexture and crumbIcon.AddMaskTexture then
+        local ok, mask = pcall(crumbIcon.CreateMaskTexture, crumbIcon)
+        if ok and mask then
+            mask:SetAllPoints(crumbIcon)
+            mask:SetTexture("Interface\\CharacterFrame\\TempPortraitAlphaMask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+            crumbIcon:AddMaskTexture(mask)
+        end
+    end
+
+    local crumbIconRing = nav:CreateTexture(nil, "OVERLAY")
+    crumbIconRing:SetSize(16, 16)
+    crumbIconRing:SetPoint("CENTER", crumbIcon, "CENTER", 0, 0)
+    crumbIconRing:SetTexture("Interface\\Common\\WhiteIconFrame")
+    crumbIconRing:SetVertexColor(1, 1, 1, 0.55)
+
     local crumbClass = nav:CreateFontString(nil, "OVERLAY")
     ApplyItalic(crumbClass, 12)
-    crumbClass:SetPoint("LEFT", separator, "RIGHT", 5, 0)
+    crumbClass:SetPoint("LEFT", crumbIcon, "RIGHT", 5, 0)
     crumbClass:SetJustifyH("LEFT")
     crumbClass:SetTextColor(1, 1, 1)
 
     local back = CreateFrame("Button", nil, nav)
     back:SetSize(22, 22)
     back:SetPoint("TOPLEFT", crumbMacros, "BOTTOMLEFT", 0, -10)
+
+    local backRing = back:CreateTexture(nil, "ARTWORK")
+    backRing:SetSize(22, 22)
+    backRing:SetPoint("CENTER")
+    backRing:SetTexture("Interface\\Common\\WhiteIconFrame")
+    backRing:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
+
     local backText = back:CreateFontString(nil, "OVERLAY")
-    NS:ApplyFont(backText, 16)
-    backText:SetAllPoints()
+    NS:ApplyFont(backText, 14)
+    backText:SetPoint("CENTER", back, "CENTER", -1, 0)
     backText:SetText("<")
     backText:SetTextColor(accent[1], accent[2], accent[3])
     back:SetScript("OnEnter", function()
         backText:SetTextColor(1, 1, 1)
+        backRing:SetVertexColor(1, 1, 1, 1)
     end)
     back:SetScript("OnLeave", function()
         backText:SetTextColor(accent[1], accent[2], accent[3])
+        backRing:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
     end)
 
     local detail = CreateFrame("Frame", nil, page)
@@ -262,10 +283,14 @@ local function BuildMacrosPage(page)
         detail:Hide()
         nav:Hide()
         list:Show()
+        if listScroll then
+            listScroll:SetVerticalScroll(0)
+            NS:UpdateScroll(listScroll)
+        end
     end
 
     local function RenderMacros(classInfo)
-        local macros = classInfo.macros or NS.STARTER_MACROS
+        local macros = classInfo.macros or NS:GetClassMacros(classInfo.token)
         local width = detailChild:GetWidth()
         if not width or width < 80 then
             width = detailScroll:GetWidth()
@@ -277,7 +302,7 @@ local function BuildMacrosPage(page)
         local y = -4
         for index, macro in ipairs(macros) do
             local block = blocks[index]
-            if not block then
+            if not block or not block.iconTexture then
                 block = NS:CreateMacroBlock(detailChild)
                 blocks[index] = block
             end
@@ -303,17 +328,31 @@ local function BuildMacrosPage(page)
         nav:Show()
         detail:Show()
         crumbClass:SetText(classInfo.name)
+        crumbIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
+        local coords = CLASS_ICON_TCOORDS and CLASS_ICON_TCOORDS[classInfo.token]
+        if coords then
+            crumbIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
+        else
+            crumbIcon:SetTexCoord(0, 1, 0, 1)
+        end
         local classColor = RAID_CLASS_COLORS and RAID_CLASS_COLORS[classInfo.token]
         if classColor then
             crumbClass:SetTextColor(classColor.r, classColor.g, classColor.b)
+            crumbIconRing:SetVertexColor(classColor.r, classColor.g, classColor.b, 0.85)
         else
             crumbClass:SetTextColor(1, 1, 1)
+            crumbIconRing:SetVertexColor(1, 1, 1, 0.55)
         end
         detailScroll:SetVerticalScroll(0)
         RenderMacros(classInfo)
         if C_Timer and C_Timer.After then
             C_Timer.After(0, function()
                 RenderMacros(classInfo)
+            end)
+            C_Timer.After(1, function()
+                if detail:IsShown() then
+                    RenderMacros(classInfo)
+                end
             end)
         end
     end
@@ -322,10 +361,12 @@ local function BuildMacrosPage(page)
     crumbMacros:SetScript("OnClick", ShowList)
 
     local listScroll, listChild = NS:CreateScrollArea(list)
+    page.ResetToClassList = ShowList
+    NS.macrosResetToClassList = ShowList
     local y = -8
     for _, classInfo in ipairs(NS.CLASSES) do
         NS:CreateClassRow(listChild, classInfo, y, ShowClass)
-        y = y - 72
+        y = y - 48
     end
     listChild.contentHeight = -y + 8
     listChild:SetHeight(listChild.contentHeight)
@@ -363,10 +404,29 @@ local MAPS = {
 }
 
 local TOOLS = {
-    { name = "Pencil", file = "pencil.tga", iconOnly = true, iconSize = 13 },
-    { name = "Eraser", file = "eraser.tga", iconOnly = true, iconSize = 18 },
-    { name = "Notes", file = "notes.tga", iconOnly = true, iconSize = 13 },
+    { name = "Pencil", file = "pencil.tga", iconOnly = true, iconSize = 13, tip = "Draw freehand lines on the map." },
+    { name = "Eraser", file = "eraser.tga", iconOnly = true, iconSize = 18, tip = "Erase drawings, notes, and class pins." },
+    { name = "Notes", file = "notes.tga", iconOnly = true, iconSize = 13, tip = "Place text notes on the map." },
 }
+
+local function AttachTooltip(frame, title, tip)
+    if not frame or not title then
+        return
+    end
+    frame.tooltipTitle = title
+    frame.tooltipText = tip
+    frame:HookScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_TOP")
+        GameTooltip:AddLine(self.tooltipTitle, 1, 1, 1)
+        if self.tooltipText and self.tooltipText ~= "" then
+            GameTooltip:AddLine(self.tooltipText, 0.75, 0.75, 0.75, true)
+        end
+        GameTooltip:Show()
+    end)
+    frame:HookScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
+end
 
 local function StyleChoice(button, active)
     local accent = NS.COLOR.accent
@@ -510,6 +570,9 @@ local function CreateChoices(parent, items)
         button:SetScript("OnLeave", function()
             StyleChoice(button, row.active == index)
         end)
+        if item.tip or item.iconOnly then
+            AttachTooltip(button, item.name, item.tip)
+        end
         row.buttons[index] = button
     end
 
@@ -717,6 +780,7 @@ local function BuildDrawPage(page)
 
         classButtons[#classButtons + 1] = button
         buttonX = buttonX + 26
+        AttachTooltip(button, classInfo.name, "Place " .. classInfo.name .. " pins on the map.")
     end
 
     local function StyleClassButtons()
@@ -1315,15 +1379,17 @@ local function BuildDrawPage(page)
     clearIcon:SetPoint("CENTER", clearButton, "CENTER", 0, 0)
     clearIcon:SetTexture(ASSETS .. "clear.tga")
     clearButton:SetScript("OnClick", ClearLines)
+    AttachTooltip(clearButton, "Clear drawings", "Remove all freehand lines from this map.")
 
     local clearPinsButton = CreateFrame("Button", nil, toolRow, "BackdropTemplate")
     ApplyToolBox(clearPinsButton)
     clearPinsButton:SetSize(22, 22)
     local clearPinsIcon = clearPinsButton:CreateTexture(nil, "ARTWORK")
-    clearPinsIcon:SetSize(16, 16)
+    clearPinsIcon:SetSize(18, 18)
     clearPinsIcon:SetPoint("CENTER", clearPinsButton, "CENTER", 0, 0)
     clearPinsIcon:SetTexture(ASSETS .. "clear_pins.tga")
     clearPinsButton:SetScript("OnClick", ClearPins)
+    AttachTooltip(clearPinsButton, "Clear class pins", "Remove all class pins from this map.")
 
     local undoButton = CreateFrame("Button", nil, toolRow, "BackdropTemplate")
     ApplyToolBox(undoButton)
@@ -1333,6 +1399,7 @@ local function BuildDrawPage(page)
     undoIcon:SetPoint("CENTER", undoButton, "CENTER", 0, 0)
     undoIcon:SetTexture(ASSETS .. "undo.tga")
     undoButton:SetScript("OnClick", Undo)
+    AttachTooltip(undoButton, "Undo", "Undo the last draw action.")
 
     local redoButton = CreateFrame("Button", nil, toolRow, "BackdropTemplate")
     ApplyToolBox(redoButton)
@@ -1343,6 +1410,7 @@ local function BuildDrawPage(page)
     redoIcon:SetTexture(ASSETS .. "undo.tga")
     redoIcon:SetTexCoord(1, 0, 0, 1)
     redoButton:SetScript("OnClick", Redo)
+    AttachTooltip(redoButton, "Redo", "Redo the last undone action.")
 
     local function PlaceActionButtons()
         local anchor = toolRow.buttons[#toolRow.buttons]

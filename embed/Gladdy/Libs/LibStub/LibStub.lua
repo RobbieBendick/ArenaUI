@@ -1,0 +1,68 @@
+if ArenaUI_VendoredSkip and ArenaUI_VendoredSkip["Gladdy"] then return end
+ArenaUI_LoadingVendored = "Gladdy"
+local __aui_chunk = function(...)
+-- LibStub is a simple versioning stub meant for use in Libraries.  http://www.wowace.com/wiki/LibStub for more info
+-- LibStub is hereby placed in the Public Domain Credits: Kaelten, Cladhaire, ckknight, Mikk, Ammo, Nevcairiel, joshborke
+local LIBSTUB_MAJOR, LIBSTUB_MINOR = "LibStub", 2  -- NEVER MAKE THIS AN SVN REVISION! IT NEEDS TO BE USABLE IN ALL REPOS!
+local LibStub = _G[LIBSTUB_MAJOR]
+
+if not LibStub or LibStub.minor < LIBSTUB_MINOR then
+	LibStub = LibStub or {libs = {}, minors = {} }
+	_G[LIBSTUB_MAJOR] = LibStub
+	LibStub.minor = LIBSTUB_MINOR
+
+	function LibStub:NewLibrary(major, minor)
+		assert(type(major) == "string", "Bad argument #2 to `NewLibrary' (string expected)")
+		minor = assert(tonumber(string.match(minor, "%d+")), "Minor version must either be a number or contain a number.")
+
+		local oldminor = self.minors[major]
+		if oldminor and oldminor >= minor then return nil end
+		self.minors[major], self.libs[major] = minor, self.libs[major] or {}
+		return self.libs[major], oldminor
+	end
+
+	function LibStub:GetLibrary(major, silent)
+		if not self.libs[major] and not silent then
+			error(("Cannot find a library instance of %q."):format(tostring(major)), 2)
+		end
+		return self.libs[major], self.minors[major]
+	end
+
+	function LibStub:IterateLibraries() return pairs(self.libs) end
+	setmetatable(LibStub, { __call = LibStub.GetLibrary })
+end
+
+end
+local __aui_frames = ArenaUI_EmbedFrames and ArenaUI_EmbedFrames["Gladdy"]
+local __aui_templates = ArenaUI_EmbedTemplates and ArenaUI_EmbedTemplates["Gladdy"]
+local function __aui_template(template)
+  if type(template) ~= "string" or not __aui_templates then return template end
+  if not template:find("[,%s]") then return __aui_templates[template] or template end
+  local out, n = {}, 0
+  for part in template:gmatch("[^,%s]+") do
+    n = n + 1
+    out[n] = __aui_templates[part] or part
+  end
+  return table.concat(out, ", ")
+end
+setfenv(__aui_chunk, setmetatable({
+  CreateFrame = function(frameType, frameName, parent, template, ...)
+    local frame = _G.CreateFrame(frameType, frameName, parent, __aui_template(template), ...)
+    if frame and ArenaUI_TrackVendoredFrame then ArenaUI_TrackVendoredFrame("Gladdy", frame) end
+    return frame
+  end,
+}, {
+  __index = function(_, key)
+    if __aui_frames and __aui_frames[key] then
+      local frame = _G[__aui_frames[key]]
+      if frame ~= nil then return frame end
+    end
+    return _G[key]
+  end,
+  __newindex = function(_, key, value)
+    rawset(_G, key, value)
+  end,
+}))
+local __aui_ok, __aui_err = pcall(__aui_chunk, "Gladdy", ArenaUI_VendoredNS["Gladdy"])
+ArenaUI_LoadingVendored = nil
+if not __aui_ok then geterrorhandler()(__aui_err) end

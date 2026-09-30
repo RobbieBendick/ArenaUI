@@ -1,4 +1,4 @@
-## Interface: 38002
+## Interface: 38002
 # WOW_INTERFACE_TARGETS: wrath-titan
 ## Title: WeakAuras Options
 ## Author: The WeakAuras Team
