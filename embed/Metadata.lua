@@ -102,4 +102,16 @@ ArenaUI_VendoredMeta = {
         ["Author"] = "The WeakAuras Team",
         ["X-Flavor"] = "TBC",
     },
+    ["BetterBlizzPlates"] = {
+        ["Version"] = "v2.1.8b",
+        ["Title"] = "Better|cff00c0ffBlizz|rPlates",
+        ["Notes"] = "Default Blizzard Nameplates with more features added to them with easy settings.",
+        ["Author"] = "Bodify",
+    },
+    ["BetterBlizzFrames"] = {
+        ["Version"] = "v2.1.3b",
+        ["Title"] = "Better|cff00c0ffBlizz|rFrames",
+        ["Notes"] = "More options for Blizzard frames. Aura filtering, Party castbars, Combat indicator, Dark Mode etc.",
+        ["Author"] = "Bodify",
+    },
 }

@@ -132,9 +132,9 @@ local function StopProfileUID(uid)
 end
 
 local function RefreshProfileBars()
-  if WeakAurasProfilingFrame and WeakAurasProfilingFrame.bars then
-    WeakAurasProfilingFrame:ResetBars()
-    WeakAurasProfilingFrame:RefreshBars(nil, true)
+  if ArenaUI_WeakAurasProfilingFrame and ArenaUI_WeakAurasProfilingFrame.bars then
+    ArenaUI_WeakAurasProfilingFrame:ResetBars()
+    ArenaUI_WeakAurasProfilingFrame:RefreshBars(nil, true)
   end
 end
 
@@ -155,34 +155,34 @@ local RegisterProfile = function(startType)
   end
   local delayedStart
   if startType == "encounter" then
-    WeakAurasProfilingFrame:UnregisterAllEvents()
+    ArenaUI_WeakAurasProfilingFrame:UnregisterAllEvents()
     prettyPrint(L["Your next encounter will automatically be profiled."])
-    WeakAurasProfilingFrame:RegisterEvent("ENCOUNTER_START")
-    WeakAurasProfilingFrame:RegisterEvent("ENCOUNTER_END")
+    ArenaUI_WeakAurasProfilingFrame:RegisterEvent("ENCOUNTER_START")
+    ArenaUI_WeakAurasProfilingFrame:RegisterEvent("ENCOUNTER_END")
     currentProfileState = startType
     delayedStart = true
   elseif startType == "combat" then
-    WeakAurasProfilingFrame:UnregisterAllEvents()
+    ArenaUI_WeakAurasProfilingFrame:UnregisterAllEvents()
     prettyPrint(L["Your next instance of combat will automatically be profiled."])
-    WeakAurasProfilingFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
-    WeakAurasProfilingFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+    ArenaUI_WeakAurasProfilingFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
+    ArenaUI_WeakAurasProfilingFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
     currentProfileState = startType
     delayedStart = true
   elseif startType == "autostart" then
     prettyPrint(L["Profiling automatically started."])
     currentProfileState = "profiling"
   elseif startType and startType:match("%d") then
-    WeakAurasProfilingFrame:UnregisterAllEvents()
+    ArenaUI_WeakAurasProfilingFrame:UnregisterAllEvents()
     local time = startType + 0
     prettyPrint(L["Profiling started. It will end automatically in %d seconds"]:format(time))
     ProfilingTimer = WeakAuras.timer:ScheduleTimer(WeakAuras.StopProfile, time)
     currentProfileState = "profiling"
   else
-    WeakAurasProfilingFrame:UnregisterAllEvents()
+    ArenaUI_WeakAurasProfilingFrame:UnregisterAllEvents()
     prettyPrint(L["Profiling started."])
     currentProfileState = "profiling"
   end
-  WeakAurasProfilingFrame:UpdateButtons()
+  ArenaUI_WeakAurasProfilingFrame:UpdateButtons()
   return delayedStart
 end
 
@@ -237,9 +237,9 @@ function WeakAuras.StopProfile()
   LGF.StopProfile()
 
   currentProfileState = nil
-  if WeakAurasProfilingFrame then
-    WeakAurasProfilingFrame:UnregisterAllEvents()
-    WeakAurasProfilingFrame:UpdateButtons()
+  if ArenaUI_WeakAurasProfilingFrame then
+    ArenaUI_WeakAurasProfilingFrame:UnregisterAllEvents()
+    ArenaUI_WeakAurasProfilingFrame:UpdateButtons()
   end
 
   if ProfilingTimer then
@@ -259,8 +259,8 @@ end
 local function CancelScheduledProfile()
   prettyPrint(L["Your scheduled automatic profile has been cancelled."])
   currentProfileState = nil
-  WeakAurasProfilingFrame:UnregisterAllEvents()
-  WeakAurasProfilingFrame:UpdateButtons()
+  ArenaUI_WeakAurasProfilingFrame:UnregisterAllEvents()
+  ArenaUI_WeakAurasProfilingFrame:UpdateButtons()
 end
 
 WeakAuras.CancelScheduledProfile = CancelScheduledProfile
@@ -367,7 +367,7 @@ end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function WeakAuras.PrintProfile()
-  local popup = WeakAurasProfilingReport
+  local popup = ArenaUI_WeakAurasProfilingReport
   if not profileData.systems.time then
     prettyPrint(L["No Profiling information saved."])
     return
@@ -379,9 +379,9 @@ function WeakAuras.PrintProfile()
   end
 
   popup:ClearAllPoints()
-  if WeakAurasProfilingFrame and WeakAurasProfilingFrame:IsShown() then
-    popup:SetParent(WeakAurasProfilingFrame)
-    popup:SetPoint("TOPLEFT", WeakAurasProfilingFrame, "TOPRIGHT", 5, 0)
+  if ArenaUI_WeakAurasProfilingFrame and ArenaUI_WeakAurasProfilingFrame:IsShown() then
+    popup:SetParent(ArenaUI_WeakAurasProfilingFrame)
+    popup:SetPoint("TOPLEFT", ArenaUI_WeakAurasProfilingFrame, "TOPRIGHT", 5, 0)
   else
     popup:SetParent(UIParent)
     if WeakAurasSaved.ProfilingWindow then
@@ -565,7 +565,7 @@ function WeakAurasProfilingMixin:OnShow()
   end
 
   local view = CreateScrollBoxListLinearView()
-  view:SetElementInitializer("WeakAurasProfilingLineTemplate", function(frame, elementData)
+  view:SetElementInitializer("ArenaUI_WeakAurasProfilingLineTemplate", function(frame, elementData)
     frame:Init(elementData)
   end)
   ScrollUtil.InitScrollBoxListWithScrollBar(self.ScrollBox, self.ScrollBar, view)
@@ -759,7 +759,7 @@ function WeakAurasProfilingMixin:UpdateBar(name, time, pct, spike)
     elementData.time = time
     elementData.pct = pct
     elementData.spike = spike
-    local button = WeakAurasProfilingFrame.ScrollBox:FindFrame(elementData)
+    local button = ArenaUI_WeakAurasProfilingFrame.ScrollBox:FindFrame(elementData)
     if button then
       button.time:SetText(("%.2fms"):format(time))
       button.spike:SetText(ColoredSpike(spike))

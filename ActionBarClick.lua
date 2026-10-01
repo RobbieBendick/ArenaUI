@@ -41,6 +41,85 @@ local function KnownPage(button)
     return nil
 end
 
+local CLICK_PAGE = [[
+local source = self:GetFrameRef("source")
+local bar = self:GetFrameRef("bar")
+local id = 0
+local page = nil
+if bar then
+    page = bar:GetAttribute("actionpage")
+end
+if (not page or page < 1) and source then
+    page = source:GetAttribute("actionpage")
+end
+if not page or page < 1 then
+    local current = source and source:GetParent()
+    for i = 1, 6 do
+        if not current then
+            break
+        end
+        page = current:GetAttribute("actionpage")
+        if page and page >= 1 then
+            break
+        end
+        current = current:GetParent()
+    end
+end
+if not page or page < 1 then
+    page = %d
+end
+if id == 0 and source then
+    id = source:GetID()
+end
+if id > 0 and page and page >= 1 then
+    self:SetAttribute("action", id + (page - 1) * %d)
+end
+]]
+
+local function PageFrame(button)
+    local bar = button.bar
+    if bar and bar.GetAttribute and tonumber(bar:GetAttribute("actionpage")) then
+        return bar
+    end
+    local current = button.GetParent and button:GetParent()
+    for _ = 1, 6 do
+        if not current or not current.GetAttribute then
+            break
+        end
+        if tonumber(current:GetAttribute("actionpage")) then
+            return current
+        end
+        current = current.GetParent and current:GetParent()
+    end
+    return bar or (button.GetParent and button:GetParent())
+end
+
+local function Bind(overlay, button)
+    if InCombatLockdown() or type(overlay.SetFrameRef) ~= "function" then
+        return
+    end
+    overlay:SetFrameRef("source", button)
+    local bar = PageFrame(button)
+    if bar then
+        overlay:SetFrameRef("bar", bar)
+    end
+end
+
+local function InstallClick(overlay, button)
+    if overlay.__pageClick or type(overlay.WrapScript) ~= "function" then
+        return
+    end
+    local perBar = NUM_ACTIONBAR_BUTTONS
+    if type(perBar) ~= "number" or perBar < 1 then
+        perBar = 12
+    end
+    local fallback = KnownPage(button) or 0
+    local ok = pcall(overlay.WrapScript, overlay, overlay, "OnClick", CLICK_PAGE:format(fallback, perBar))
+    if ok then
+        overlay.__pageClick = true
+    end
+end
+
 local function SlotFor(button)
     local id = button.GetID and button:GetID() or 0
     local page = KnownPage(button)
@@ -94,7 +173,10 @@ local function Attach(button)
         return
     end
     if button.__ArenaUIClickOverlay then
-        SyncAction(button.__ArenaUIClickOverlay, SlotFor(button))
+        local overlay = button.__ArenaUIClickOverlay
+        Bind(overlay, button)
+        InstallClick(overlay, button)
+        SyncAction(overlay, SlotFor(button))
         return
     end
     if type(button.UpdateAction) ~= "function" or type(button.action) ~= "number" then
@@ -126,6 +208,8 @@ local function Attach(button)
     end
 
     button.__ArenaUIClickOverlay = overlay
+    Bind(overlay, button)
+    InstallClick(overlay, button)
     HookUpdates(button)
     SyncAction(overlay, SlotFor(button))
 end

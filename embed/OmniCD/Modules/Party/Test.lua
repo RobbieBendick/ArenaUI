@@ -126,7 +126,7 @@ function TM:ToggleAddOnTestFrames(isInTestMode)
 end
 
 local function GetIndicator()
-	local indicator = CreateFrame("Frame", nil, UIParent, "OmniCDTemplate")
+	local indicator = CreateFrame("Frame", nil, UIParent, "ArenaUI_OmniCDTemplate")
 	indicator.anchor.background:SetColorTexture(0,0,0,1)
 	indicator.anchor.background:SetGradient("HORIZONTAL", CreateColor(1,1,1,1), CreateColor(1,1,1,0))
 	indicator.anchor:SetHeight(15)

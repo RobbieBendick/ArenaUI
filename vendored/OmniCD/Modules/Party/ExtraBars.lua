@@ -562,7 +562,7 @@ function P:CreateExBarFramePool()
 		activeExBars[exBar.key] = nil
 	end
 
-	self.ExBarPool = E:CreateFramePool("Frame", UIParent, "OmniCDTemplate", resetterFunc, initializeFunc)
+	self.ExBarPool = E:CreateFramePool("Frame", UIParent, "ArenaUI_OmniCDTemplate", resetterFunc, initializeFunc)
 end
 
 local function GetExBarFrame(key)

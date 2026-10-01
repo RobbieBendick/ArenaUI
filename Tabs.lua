@@ -93,6 +93,52 @@ NS.ADDON_CATEGORIES = {
             },
         },
     },
+    {
+        title = "Nameplates",
+        addons = {
+            {
+                name = "BetterBlizzPlates",
+                title = "BetterBlizzPlates",
+                description = "Default Blizzard nameplates with more features and easy settings.",
+                icon = "gmchat-icon-blizz",
+                reloadToToggle = true,
+                openSettings = function()
+                    if not (BBP and BBP.LoadGUI) then
+                        print("|cFFFF8C33ArenaUI|r Reload to open BetterBlizzPlates settings.")
+                        return false
+                    end
+                    if NS.frame then
+                        NS.frame:Hide()
+                    end
+                    BBP.LoadGUI()
+                    return true
+                end,
+            },
+        },
+    },
+    {
+        title = "Frames",
+        addons = {
+            {
+                name = "BetterBlizzFrames",
+                title = "BetterBlizzFrames",
+                description = "More options for Blizzard frames. Aura filtering, party castbars, combat indicator, dark mode.",
+                icon = "gmchat-icon-blizz",
+                reloadToToggle = true,
+                openSettings = function()
+                    if not (BBF and BBF.LoadGUI) then
+                        print("|cFFFF8C33ArenaUI|r Reload to open BetterBlizzFrames settings.")
+                        return false
+                    end
+                    if NS.frame then
+                        NS.frame:Hide()
+                    end
+                    BBF.LoadGUI()
+                    return true
+                end,
+            },
+        },
+    },
 }
 
 local function BuildAddonPage(page)

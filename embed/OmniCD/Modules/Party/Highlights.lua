@@ -32,7 +32,7 @@ end
 local function AcquireOverlayGlow()
 	local overlay = tremove(unusedOverlayGlows)
 	if not overlay then
-		overlay = CreateFrame("Frame", nil, UIParent, "OmniCDButtonSpellActivationAlert")
+		overlay = CreateFrame("Frame", nil, UIParent, "ArenaUI_OmniCDButtonSpellActivationAlert")
 		overlay.animOut:SetScript("OnFinished", OverlayGlow_AnimOutFinished)
 		overlay:SetScript("OnHide", OverlayGlow_OnHide)
 		Mixin(overlay, OverlayGlowFrameMixin)

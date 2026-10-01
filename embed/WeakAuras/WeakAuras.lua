@@ -208,7 +208,7 @@ function SlashCmdList.WEAKAURAS(input)
   elseif msg == "pcancel" then
     WeakAuras.CancelScheduledProfile()
   elseif msg == "pshow" or msg == "profiling" then
-    WeakAurasProfilingFrame:Toggle()
+    ArenaUI_WeakAurasProfilingFrame:Toggle()
   elseif msg == "minimap" then
     WeakAuras.ToggleMinimap();
   elseif msg == "help" then
@@ -1175,7 +1175,7 @@ Broker_WeakAuras = LDB:NewDataObject("WeakAuras", {
     elseif(button == 'MiddleButton') then
       WeakAuras.ToggleMinimap();
     else
-      WeakAurasProfilingFrame:Toggle()
+      ArenaUI_WeakAurasProfilingFrame:Toggle()
     end
     tooltip_draw()
   end,

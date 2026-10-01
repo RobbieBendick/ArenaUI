@@ -1,3 +1,7 @@
+param(
+    [string[]]$Only
+)
+
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $vendored = Join-Path $root "vendored"
@@ -179,21 +183,36 @@ $addons = @(
     "Details", "Details_Compare2", "Details_DataStorage", "Details_EncounterDetails",
     "Details_RaidCheck", "Details_Streamer", "Details_TinyThreat", "Details_Vanguard",
     "ArenaAnalytics", "WeakAuras", "WeakAurasOptions", "WeakAurasModelPaths",
-    "WeakAurasTemplates", "WeakAurasArchive"
+    "WeakAurasTemplates", "WeakAurasArchive",
+    "BetterBlizzPlates", "BetterBlizzFrames"
 )
 
-$addonsDir = Split-Path -Parent $root
-foreach ($name in $addons) {
-    $link = Join-Path $addonsDir "ArenaUI_$name"
-    if (Test-Path -LiteralPath $link) {
-        cmd /c "rmdir `"$link`""
+if ($Only -and $Only.Count -gt 0) {
+    $wanted = @{}
+    foreach ($item in $Only) {
+        foreach ($part in ($item -split ',')) {
+            $part = $part.Trim()
+            if ($part) { $wanted[$part] = $true }
+        }
     }
+    $addons = @($addons | Where-Object { $wanted.ContainsKey($_) })
 }
 
-if (Test-Path -LiteralPath $embed) {
-    cmd /c "rmdir /s /q `"$embed`""
+$incremental = $Only -and $Only.Count -gt 0
+$addonsDir = Split-Path -Parent $root
+if (-not $incremental) {
+    foreach ($name in $addons) {
+        $link = Join-Path $addonsDir "ArenaUI_$name"
+        if (Test-Path -LiteralPath $link) {
+            cmd /c "rmdir `"$link`""
+        }
+    }
+
+    if (Test-Path -LiteralPath $embed) {
+        cmd /c "rmdir /s /q `"$embed`""
+    }
+    New-Item -ItemType Directory -Path $embed | Out-Null
 }
-New-Item -ItemType Directory -Path $embed | Out-Null
 
 $saved = New-Object System.Collections.Generic.List[string]
 $savedChar = New-Object System.Collections.Generic.List[string]
@@ -253,6 +272,11 @@ foreach ($name in $addons) {
             $body = Read-Text $_.FullName
             $body = $body.Replace("Interface\\AddOns\\$name\\", "Interface\\AddOns\\ArenaUI\\vendored\\$name\\")
             $body = $body.Replace("Interface/AddOns/$name/", "Interface/AddOns/ArenaUI/vendored/$name/")
+            $body = [regex]::Replace(
+                $body,
+                '(?i)Interface([\\/])Addons\1' + [regex]::Escape($name) + '\1',
+                ('Interface${1}AddOns\ArenaUI\vendored\' + $name + '${1}')
+            )
             $wrapped = "if ArenaUI_VendoredSkip and ArenaUI_VendoredSkip[`"$name`"] then return end`r`n" +
                 "ArenaUI_LoadingVendored = `"$name`"`r`n" +
                 "local __aui_chunk = function(...)`r`n" +
@@ -365,7 +389,27 @@ foreach ($name in $addons) {
 }
 
 $metaLines.Add("}")
-Write-Text (Join-Path $embed "Metadata.lua") ($metaLines -join "`r`n")
+if ($incremental) {
+    $metaPath = Join-Path $embed "Metadata.lua"
+    $existing = Read-Text $metaPath
+    $insertLines = New-Object System.Collections.Generic.List[string]
+    $keep = $false
+    foreach ($line in ($metaLines | Select-Object -Skip 1 | Select-Object -SkipLast 1)) {
+        if ($line -match '^\s+\["([^"]+)"\] = \{$') {
+            $keep = -not $existing.Contains("[`"$($Matches[1])`"]")
+        }
+        if ($keep) { $insertLines.Add($line) }
+    }
+    if ($insertLines.Count -gt 0) {
+        $existing = $existing.TrimEnd()
+        if ($existing.EndsWith("}")) {
+            $existing = $existing.Substring(0, $existing.LastIndexOf("}")).TrimEnd() + "`r`n" + ($insertLines -join "`r`n") + "`r`n}`r`n"
+            Write-Text $metaPath $existing
+        }
+    }
+} else {
+    Write-Text (Join-Path $embed "Metadata.lua") ($metaLines -join "`r`n")
+}
 
 $mapLines = New-Object System.Collections.Generic.List[string]
 $mapLines.Add("ArenaUI_EmbedFrames = {")
@@ -386,7 +430,9 @@ foreach ($addonName in $embedTemplates.Keys) {
     $mapLines.Add("  },")
 }
 $mapLines.Add("}")
-Write-Text (Join-Path $embed "TemplateMap.lua") ($mapLines -join "`r`n")
+if (-not $incremental) {
+    Write-Text (Join-Path $embed "TemplateMap.lua") ($mapLines -join "`r`n")
+}
 
 $savedVars = @("ArenaUIDB") + @($saved)
 $savedLine = ($savedVars | Select-Object -Unique) -join ", "
@@ -423,7 +469,21 @@ foreach ($name in $addons) {
     $header += "`r`n"
 }
 $header += "VendoredFinish.lua`r`n"
-Write-Text (Join-Path $root "ArenaUI.toc") $header
+if ($incremental) {
+    $tocChunk = ""
+    foreach ($name in $addons) {
+        $files = $bundles[$name]
+        if (-not $files) { continue }
+        foreach ($rel in $files) {
+            $tocChunk += "embed\$name\$rel`r`n"
+        }
+        $tocChunk += "`r`n"
+    }
+    Write-Text (Join-Path $embed "_incremental.toc") $tocChunk
+    if ($saved.Count -gt 0) { Write-Host "New SavedVariables: $($saved -join ', ')" }
+} else {
+    Write-Text (Join-Path $root "ArenaUI.toc") $header
+}
 Write-Host "Bundles: $($bundles.Count)"
 Write-Host "SavedVariables: $savedLine"
 if ($savedChar.Count -gt 0) { Write-Host "PerCharacter: $($savedChar -join ', ')" }

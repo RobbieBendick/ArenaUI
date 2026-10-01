@@ -615,7 +615,7 @@ do
         elseif mouseButton == "MiddleButton" then
           WeakAuras.ToggleMinimap()
         else
-          WeakAurasProfilingFrame:Toggle()
+          ArenaUI_WeakAurasProfilingFrame:Toggle()
         end
       end,
       funcOnEnter = function(button)

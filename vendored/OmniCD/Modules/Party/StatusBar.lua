@@ -658,7 +658,7 @@ function P:CreateStatusBarFramePool()
 		statusBar:Hide()
 	end
 
-	self.StatusBarPool = E:CreateFramePool("Frame", UIParent, "OmniCDStatusBar", resetterFunc, initializeFunc)
+	self.StatusBarPool = E:CreateFramePool("Frame", UIParent, "ArenaUI_OmniCDStatusBar", resetterFunc, initializeFunc)
 end
 
 function P:GetStatusBarFrame(icon, key, nameWithoutRealm)

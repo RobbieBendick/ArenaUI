@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-	<Frame name="OmniCDButtonSpellActivationAlert" virtual="true" ignoreParentAlpha="true">
+	<Frame name="ArenaUI_OmniCDButtonSpellActivationAlert" virtual="true" ignoreParentAlpha="true">
 		<Layers>
 			<Layer level="BACKGROUND">
 				<Texture parentKey="spark" file="Interface\SpellActivationOverlay\IconAlert" alpha="0" setAllPoints="true">

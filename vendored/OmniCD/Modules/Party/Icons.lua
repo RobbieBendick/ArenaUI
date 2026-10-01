@@ -325,7 +325,7 @@ function P:CreateIconFramePool()
 		icon:Hide()
 	end
 
-	self.IconPool = E:CreateFramePool("Button", UIParent, "OmniCDButtonTemplate", resetterFunc, initializeFunc)
+	self.IconPool = E:CreateFramePool("Button", UIParent, "ArenaUI_OmniCDButtonTemplate", resetterFunc, initializeFunc)
 end
 
 P.BarFrameIconMixin = BarFrameIconMixin

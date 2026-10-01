@@ -11,4 +11,6 @@ ArenaUI_VendoredLinks = {
     WeakAurasModelPaths = true,
     WeakAurasTemplates = true,
     WeakAurasArchive = true,
+    BetterBlizzPlates = true,
+    BetterBlizzFrames = true,
 }

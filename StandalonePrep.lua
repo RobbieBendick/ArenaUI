@@ -17,10 +17,26 @@ local hosts = {
     Gladdy = { "Gladdy" },
     OmniCD = { "OmniCD" },
     ArenaAnalytics = { "ArenaAnalytics" },
+    BetterBlizzPlates = { "BetterBlizzPlates" },
+    BetterBlizzFrames = { "BetterBlizzFrames" },
 }
+
+-- These hook Blizzard frames at load and cannot be unhooked later.
+local reloadToToggle = {
+    BetterBlizzPlates = true,
+    BetterBlizzFrames = true,
+}
+
+NS._vendoredBooted = NS._vendoredBooted or {}
 
 for host, keys in pairs(hosts) do
     local skip = NS:StandaloneIsOn(host)
+    if reloadToToggle[host] and not NS:ModuleEnabled(host) then
+        skip = true
+    end
+    if reloadToToggle[host] then
+        NS._vendoredBooted[host] = not skip
+    end
     for i = 1, #keys do
         if skip then
             ArenaUI_VendoredSkip[keys[i]] = true

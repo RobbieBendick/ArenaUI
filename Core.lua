@@ -215,6 +215,8 @@ local VENDORED_HOSTS = {
     "Diminish",
     "Details",
     "WeakAuras",
+    "BetterBlizzPlates",
+    "BetterBlizzFrames",
 }
 
 function NS:YieldVendoredToStandalone(name)
@@ -321,6 +323,11 @@ function NS:AddonIsActive(addon)
 end
 
 function NS:AddonNeedsReload(addon)
+    -- These copies hook Blizzard frames while loading, so the toggle applies on reload.
+    if addon.reloadToToggle and self:RunsFromArenaUI(addon.name) then
+        local booted = self._vendoredBooted and self._vendoredBooted[addon.name]
+        return (booted and true or false) ~= self:ModuleEnabled(addon.name)
+    end
     -- ArenaUI copies toggle live via Ace modules; no reload.
     if self:RunsFromArenaUI(addon.name) then
         return false
@@ -590,8 +597,13 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
     local icon = row:CreateTexture(nil, "ARTWORK")
     icon:SetSize(44, 44)
     icon:SetPoint("LEFT", row, "LEFT", 8, 4)
-    icon:SetTexture(addon.icon)
-    icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
+    if type(addon.icon) == "string" and not addon.icon:find("[\\/]") then
+        icon:SetAtlas(addon.icon)
+        icon:SetSize(44, 44)
+    else
+        icon:SetTexture(addon.icon)
+        icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
+    end
 
     local iconEdge = row:CreateTexture(nil, "BORDER")
     iconEdge:SetColorTexture(0, 0, 0, 0.85)
@@ -652,6 +664,32 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
     self:ApplyFont(stateText, 11)
     stateText:SetPoint("RIGHT", toggle, "LEFT", -8, 0)
 
+    local gear
+    if addon.openSettings then
+        gear = CreateFrame("Button", nil, row)
+        gear:SetSize(22, 22)
+        gear:SetPoint("RIGHT", stateText, "LEFT", -6, 0)
+        gear:SetFrameLevel(row:GetFrameLevel() + 5)
+        gear:RegisterForClicks("LeftButtonUp")
+        local gearIcon = gear:CreateTexture(nil, "ARTWORK")
+        gearIcon:SetAllPoints()
+        gearIcon:SetTexture("Interface\\AddOns\\ArenaUI\\Media\\SettingsGear.tga")
+        gearIcon:SetVertexColor(0.89, 0.89, 0.89)
+        gear:SetScript("OnClick", function()
+            addon.openSettings()
+        end)
+        gear:SetScript("OnEnter", function()
+            gearIcon:SetVertexColor(accent[1], accent[2], accent[3])
+            GameTooltip:SetOwner(gear, "ANCHOR_RIGHT")
+            GameTooltip:AddLine("Settings", 1, 1, 1)
+            GameTooltip:Show()
+        end)
+        gear:SetScript("OnLeave", function()
+            gearIcon:SetVertexColor(0.89, 0.89, 0.89)
+            GameTooltip:Hide()
+        end)
+    end
+
     local function Paint()
         if not installed and not enabled then
             fill:Hide()
@@ -661,6 +699,9 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
             title:SetTextColor(0.45, 0.45, 0.45)
             icon:SetDesaturated(true)
             note:Hide()
+            if gear then
+                gear:Hide()
+            end
             return
         end
 
@@ -671,33 +712,29 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
             self:ApplyBoxBackdrop(toggle, accent[1], accent[2], accent[3], 1)
             stateText:SetText("Enabled")
             stateText:SetTextColor(1, 1, 1)
-            if inside then
-                note:SetText("Running from ArenaUI")
-                note:SetTextColor(accent[1], accent[2], accent[3])
-                note:Show()
-            elseif self:AddonNeedsReload(addon) then
-                note:SetText("Reload required")
-                note:SetTextColor(1, 0.78, 0.35)
-                note:Show()
-            elseif self:UsesStandalone(addon.name) then
-                note:SetText("Using your existing addon")
-                note:SetTextColor(accent[1], accent[2], accent[3])
-                note:Show()
-            else
-                note:Hide()
-            end
         else
             fill:Hide()
             self:ApplyBoxBackdrop(toggle, 0.35, 0.35, 0.35, 1)
             stateText:SetText("Disabled")
             stateText:SetTextColor(self.COLOR.off[1], self.COLOR.off[2], self.COLOR.off[3])
-            if not inside and self:AddonNeedsReload(addon) then
-                note:SetText("Reload required")
-                note:SetTextColor(1, 0.78, 0.35)
-                note:Show()
-            else
-                note:Hide()
-            end
+        end
+        if self:AddonNeedsReload(addon) then
+            note:SetText("Reload required")
+            note:SetTextColor(1, 0.78, 0.35)
+            note:Show()
+        elseif enabled and inside then
+            note:SetText("Running from ArenaUI")
+            note:SetTextColor(accent[1], accent[2], accent[3])
+            note:Show()
+        elseif enabled and self:UsesStandalone(addon.name) then
+            note:SetText("Using your existing addon")
+            note:SetTextColor(accent[1], accent[2], accent[3])
+            note:Show()
+        else
+            note:Hide()
+        end
+        if gear then
+            gear:SetShown(enabled)
         end
     end
 
@@ -722,14 +759,14 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
         bg:SetColorTexture(accent[1], accent[2], accent[3], 0.08)
         GameTooltip:SetOwner(row, "ANCHOR_RIGHT")
         GameTooltip:AddLine(addon.title, 1, 1, 1)
-        if enabled and inside then
-            GameTooltip:AddLine("Running from ArenaUI.", accent[1], accent[2], accent[3], true)
-        elseif not inside and self:AddonNeedsReload(addon) then
+        if self:AddonNeedsReload(addon) then
             if enabled then
                 GameTooltip:AddLine("Reload required to enable this addon.", 1, 0.78, 0.35, true)
             else
                 GameTooltip:AddLine("Reload required to disable this addon.", 1, 0.78, 0.35, true)
             end
+        elseif enabled and inside then
+            GameTooltip:AddLine("Running from ArenaUI.", accent[1], accent[2], accent[3], true)
         elseif enabled and self:UsesStandalone(addon.name) then
             GameTooltip:AddLine("Using your existing addon.", accent[1], accent[2], accent[3], true)
         elseif not enabled and installed and not self:IsVendoredCopy(addon.name) then

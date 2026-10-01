@@ -483,7 +483,7 @@ function P:CreateBarFramePool()
 		end
 	end
 
-	self.BarPool = E:CreateFramePool("Frame", UIParent, "OmniCDTemplate", resetterFunc, initializeFunc)
+	self.BarPool = E:CreateFramePool("Frame", UIParent, "ArenaUI_OmniCDTemplate", resetterFunc, initializeFunc)
 end
 
 E.UNIT_TO_PET = UNIT_TO_PET

@@ -3,7 +3,7 @@
 ## Notes: All-In-One Arena interface
 ## Author: Mageiden
 ## Version: 0.1.0
-## SavedVariables: ArenaUIDB, OmniBarDB, GladdyXZ, OmniCDDB, ArenaAnalyticsSharedSettingsDB, ArenaAnalyticsDevData, DiminishDB, _detalhes_global, __details_backup, __details_debug, WeakAurasSaved, WeakAurasOptionsSaved, WeakAurasArchive
+## SavedVariables: ArenaUIDB, OmniBarDB, GladdyXZ, OmniCDDB, ArenaAnalyticsSharedSettingsDB, ArenaAnalyticsDevData, DiminishDB, _detalhes_global, __details_backup, __details_debug, WeakAurasSaved, WeakAurasOptionsSaved, WeakAurasArchive, BetterBlizzPlatesDB, BBPCVarBackupsDB, BetterBlizzFramesDB
 ## SavedVariablesPerCharacter: ArenaAnalyticsDB, ArenaAnalyticsTransientDB, ArenaAnalyticsMapIconPos, _detalhes_database
 ## DefaultState: enabled
 
@@ -371,6 +371,7 @@ embed\WeakAuras\Types_TBC.lua
 embed\WeakAuras\Types.lua
 embed\WeakAuras\Prototypes.lua
 embed\WeakAuras\Profiling.lua
+embed\WeakAuras\ArenaUI_XMLGuard.lua
 embed\WeakAuras\Profiling.xml
 embed\WeakAuras\WeakAuras.lua
 embed\WeakAuras\History.lua
@@ -510,5 +511,61 @@ embed\WeakAurasTemplates\TriggerTemplates.lua
 embed\WeakAurasTemplates\TriggerTemplatesDataTBC.lua
 embed\WeakAurasTemplates\AceGUI-Widgets\AceGUIContainer-WeakAurasTemplateGroup.lua
 WeakAurasGuard.lua
+
+embed\BetterBlizzPlates\ArenaUI_XMLGuard.lua
+embed\BetterBlizzPlates\embeds.xml
+embed\BetterBlizzPlates\init.lua
+embed\BetterBlizzPlates\shared\functions_classics.lua
+embed\BetterBlizzPlates\shared\nameplateToggles.lua
+embed\BetterBlizzPlates\temp_shared\ImportExport.lua
+embed\BetterBlizzPlates\temp_cata\modules\combat.lua
+embed\BetterBlizzPlates\temp_mop\modules\castbar.lua
+embed\BetterBlizzPlates\temp_cata\modules\totem.lua
+embed\BetterBlizzPlates\temp_cata\modules\arenaid.lua
+embed\BetterBlizzPlates\temp_cata\modules\execute.lua
+embed\BetterBlizzPlates\temp_mop\modules\faction.lua
+embed\BetterBlizzPlates\temp_cata\modules\healthNumbers.lua
+embed\BetterBlizzPlates\temp_cata\modules\target.lua
+embed\BetterBlizzPlates\temp_cata\modules\healer.lua
+embed\BetterBlizzPlates\temp_cata\modules\absorb.lua
+embed\BetterBlizzPlates\temp_cata\modules\classIcon.lua
+embed\BetterBlizzPlates\temp_cata\modules\partyPointer.lua
+embed\BetterBlizzPlates\temp_cata\modules\pet.lua
+embed\BetterBlizzPlates\temp_cata\modules\range.lua
+embed\BetterBlizzPlates\temp_cata\modules\quest.lua
+embed\BetterBlizzPlates\temp_mop\modules\auras.lua
+embed\BetterBlizzPlates\temp_cata\modules\profiles.lua
+embed\BetterBlizzPlates\retail\modules\importConvert.lua
+embed\BetterBlizzPlates\temp_mop\gui.lua
+embed\BetterBlizzPlates\temp_mop\BetterBlizzPlates.lua
+
+embed\BetterBlizzFrames\ArenaUI_XMLGuard.lua
+embed\BetterBlizzFrames\init.lua
+embed\BetterBlizzFrames\locales\locales.xml
+embed\BetterBlizzFrames\embeds.xml
+embed\BetterBlizzFrames\shared\functions.lua
+embed\BetterBlizzFrames\shared\functions_classics.lua
+embed\BetterBlizzFrames\shared\ImportExport.lua
+embed\BetterBlizzFrames\shared\smoothBars.lua
+embed\BetterBlizzFrames\classics\modules\darkmode.lua
+embed\BetterBlizzFrames\classics\modules\nameFix.lua
+embed\BetterBlizzFrames\classics\modules\hideFrames.lua
+embed\BetterBlizzFrames\classics\modules\auras.lua
+embed\BetterBlizzFrames\classics\modules\absorb.lua
+embed\BetterBlizzFrames\classics\modules\combat.lua
+embed\BetterBlizzFrames\classics\modules\quest.lua
+embed\BetterBlizzFrames\classics\modules\castbar.lua
+embed\BetterBlizzFrames\classics\modules\healthbarColor.lua
+embed\BetterBlizzFrames\classics\modules\statusBarTextFormat.lua
+embed\BetterBlizzFrames\classics\modules\arenaframes.lua
+embed\BetterBlizzFrames\classics\modules\profiles.lua
+embed\BetterBlizzFrames\classics\modules\chatFrame.lua
+embed\BetterBlizzFrames\classics\modules\overshields.lua
+embed\BetterBlizzFrames\shared\stealthIndicator.lua
+embed\BetterBlizzFrames\classics\modules\interruptIcon.lua
+embed\BetterBlizzFrames\classics\modules\queueTimer.lua
+embed\BetterBlizzFrames\classics\modules\loc.lua
+embed\BetterBlizzFrames\classics\gui.lua
+embed\BetterBlizzFrames\classics\BetterBlizzFrames.lua
 
 VendoredFinish.lua
