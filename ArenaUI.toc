@@ -16,6 +16,7 @@ GuidesTBC.lua
 Core.lua
 Frame.lua
 Tabs.lua
+ActionBarClick.lua
 
 StandalonePrep.lua
 

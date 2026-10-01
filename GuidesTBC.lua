@@ -451,7 +451,7 @@ NS.CLASS_SPECS = {
             stats = { "Resilience", "Stamina", "Strength", "Crit", "Attack Power" },
         },
         {
-            id = "fury", name = "Fury", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 1, 1, 1, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
+            id = "fury", name = "Fury", exclude = true, skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 1, 1, 1, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Ability_Warrior_InnerRage", color = { 0.95, 0.48, 0.12 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Hit", "Crit", "Strength", "Attack Power", "Resilience" },
@@ -600,7 +600,7 @@ NS.CLASS_SPECS = {
             id = "slsl", name = "SL/SL", skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 5, 5, 5, 5 }, compositions = { ["2s"] = {
                 { comp = COMPS.LOCK_DRUID, recommended = true }, COMPS.ROGUE_LOCK
             }, ["3s"] = {
-                { comp = COMPS.WLD, recommended = true }, COMPS.RLD
+                { comp = COMPS.WLD, recommended = {1,2} }, {comp = COMPS.RLD, recommended = {3,4}}
             } },
             icon = "Spell_Shadow_Requiem", color = { 0.58, 0.28, 0.72 },
             races = { alliance = "Gnome", horde = "Orc" },
@@ -613,7 +613,7 @@ NS.CLASS_SPECS = {
             stats = { "Stamina", "Spell Damage", "Resilience", "Spell Hit", "Crit" },
         },
         {
-            id = "demonology", name = "Demonology", skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 2, 2, 2, 2 }, compositions = { ["2s"] = {}, ["3s"] = {} },
+            id = "demonology", name = "Demonology", exclude = true, skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 2, 2, 2, 2 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Shadow_Metamorphosis", color = { 0.72, 0.32, 0.28 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Stamina", "Spell Damage", "Resilience", "Spell Hit", "Crit" },
@@ -627,7 +627,7 @@ NS.CLASS_SPECS = {
     },
     DRUID = {
         {
-            id = "balance", name = "Balance", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 2, 3, 3, 3 }, compositions = { ["2s"] = {}, ["3s"] = {} },
+            id = "balance", name = "Balance", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 2, 3, 3, 3 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Nature_StarFall", color = { 0.72, 0.48, 0.90 },
             races = { alliance = "Night Elf", horde = "Tauren" },
             stats = { "Spell Damage", "Spell Hit", "Resilience", "Stamina", "Crit" },
@@ -639,7 +639,7 @@ NS.CLASS_SPECS = {
             stats = { "Resilience", "Agility", "Stamina", "Hit", "Crit" },
         },
         {
-            id = "restoration", name = "Restoration", skillFloor = { 4, 4, 4, 4 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 5, 5, 5, 5 }, compositions = { ["2s"] = { {comp=COMPS.WARR_DRUID, recommended = {1,2}}, {comp = COMPS.ROGUE_DRUID, recommended = {3,4}} }, ["3s"] = { COMPS.RMD, {comp = COMPS.RLD, recommended = true} } },
+            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 4, 4, 5, 5 }, compositions = { ["2s"] = { { comp = COMPS.WARR_DRUID, recommended = { 1 } }, { comp = COMPS.ROGUE_DRUID, recommended = { 3, 4 } }, { comp = COMPS.LOCK_DRUID, recommended = { 2 } } }, ["3s"] = { COMPS.RMD, { comp = COMPS.RLD, recommended = true } } },
             icon = "Spell_Nature_HealingTouch", color = { 0.28, 0.72, 0.40 },
             races = { alliance = "Night Elf", horde = "Tauren" },
             stats = { "Resilience", "Healing", "Stamina", "Spirit", "Intellect" },

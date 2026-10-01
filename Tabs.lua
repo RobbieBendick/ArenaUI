@@ -912,10 +912,10 @@ local function BuildClassesPage(page)
     local statText = CreateGuideLine(detailChild)
     local statEmpty = CreateGuideLine(detailChild, "No stat priority selected yet.", muted[1], muted[2], muted[3])
 
-    local comp2Label = CreateGuideLine(detailChild, "2s", accent[1], accent[2], accent[3])
-    local comp3Label = CreateGuideLine(detailChild, "3s", accent[1], accent[2], accent[3])
-    local comp2Empty = CreateGuideLine(detailChild, "No 2s selected yet.", muted[1], muted[2], muted[3])
-    local comp3Empty = CreateGuideLine(detailChild, "No 3s selected yet.", muted[1], muted[2], muted[3])
+    local comp2Label = CreateGuideLine(detailChild, "2v2", accent[1], accent[2], accent[3])
+    local comp3Label = CreateGuideLine(detailChild, "3v3", accent[1], accent[2], accent[3])
+    local comp2Empty = CreateGuideLine(detailChild, "No 2v2 selected yet.", muted[1], muted[2], muted[3])
+    local comp3Empty = CreateGuideLine(detailChild, "No 3v3 selected yet.", muted[1], muted[2], muted[3])
 
     local macroEmpty = detailChild:CreateFontString(nil, "OVERLAY")
     NS:ApplyFont(macroEmpty, 12)
@@ -1224,9 +1224,9 @@ local function BuildClassesPage(page)
 
         local twos, threes = CompositionLists(spec.compositions)
         local cardIndex
-        y, cardIndex = DrawCompGroup(comp2Label, "2s", twos, comp2Empty, "No 2s selected yet.", y, 0)
+        y, cardIndex = DrawCompGroup(comp2Label, "2v2", twos, comp2Empty, "No 2v2 selected yet.", y, 0)
         y = y - 8
-        y, cardIndex = DrawCompGroup(comp3Label, "3s", threes, comp3Empty, "No 3s selected yet.", y, cardIndex)
+        y, cardIndex = DrawCompGroup(comp3Label, "3v3", threes, comp3Empty, "No 3v3 selected yet.", y, cardIndex)
         for index = cardIndex + 1, #compCards do
             compCards[index]:Hide()
         end
