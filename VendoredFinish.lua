@@ -93,7 +93,7 @@ end
 
 if AceAddon then
     local host = AceAddon:NewAddon("ArenaUIModules")
-    local moduleNames = { "OmniBar", "Gladdy", "OmniCD", "ArenaAnalytics", "Diminish", "Details", "WeakAuras" }
+    local moduleNames = { "OmniBar", "Gladdy", "OmniCD", "ArenaAnalytics", "Diminish", "Details", "WeakAuras", "BetterBlizzPlates", "BetterBlizzFrames" }
     local omni = host:NewModule("OmniBar")
     local gladdy = host:NewModule("Gladdy")
     local omnicd = host:NewModule("OmniCD")
@@ -101,6 +101,8 @@ if AceAddon then
     local diminish = host:NewModule("Diminish")
     local details = host:NewModule("Details")
     local weakauras = host:NewModule("WeakAuras")
+    local betterBlizzPlates = host:NewModule("BetterBlizzPlates")
+    local betterBlizzFrames = host:NewModule("BetterBlizzFrames")
 
     -- Stay off until login confirms the original addon is not loaded.
     for _, name in ipairs(moduleNames) do
@@ -990,6 +992,52 @@ if AceAddon then
         end
         SlashCmdList.WEAKAURAS = function()
             print("|cFF8800FFWeakAuras|r is disabled in ArenaUI.")
+        end
+    end
+
+    -- Slash stubs when the embed was skipped (disabled at load).
+    SLASH_BBP1 = SLASH_BBP1 or "/bbp"
+    SLASH_BBF1 = SLASH_BBF1 or "/bbf"
+
+    function betterBlizzPlates:OnEnable()
+        if NS:StandaloneIsOn("BetterBlizzPlates") or not NS:ModuleEnabled("BetterBlizzPlates") then
+            return
+        end
+        if self.savedSlash then
+            SlashCmdList.BBP = self.savedSlash
+        end
+    end
+
+    function betterBlizzPlates:OnDisable()
+        if NS:StandaloneIsOn("BetterBlizzPlates") then
+            return
+        end
+        if not self.savedSlash then
+            self.savedSlash = SlashCmdList.BBP
+        end
+        SlashCmdList.BBP = function()
+            print("|A:gmchat-icon-blizz:16:16|a Better|cff00c0ffBlizz|rPlates is disabled in ArenaUI.")
+        end
+    end
+
+    function betterBlizzFrames:OnEnable()
+        if NS:StandaloneIsOn("BetterBlizzFrames") or not NS:ModuleEnabled("BetterBlizzFrames") then
+            return
+        end
+        if self.savedSlash then
+            SlashCmdList.BBF = self.savedSlash
+        end
+    end
+
+    function betterBlizzFrames:OnDisable()
+        if NS:StandaloneIsOn("BetterBlizzFrames") then
+            return
+        end
+        if not self.savedSlash then
+            self.savedSlash = SlashCmdList.BBF
+        end
+        SlashCmdList.BBF = function()
+            print("|A:gmchat-icon-blizz:16:16|a Better|cff00c0ffBlizz|rFrames is disabled in ArenaUI.")
         end
     end
 end

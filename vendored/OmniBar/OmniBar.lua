@@ -482,7 +482,7 @@ function OmniBar:Initialize(key, name)
 
 	self:AddCustomSpells()
 
-	local f = _G[key] or CreateFrame("Frame", key, UIParent, "OmniBarTemplate")
+	local f = _G[key] or CreateFrame("Frame", key, UIParent, "ArenaUIOmniBarTemplate")
 	f:Show()
 	f.settings = self.db.profile.bars[key]
 	f.settings.align = f.settings.align or "CENTER"
@@ -646,7 +646,7 @@ function OmniBar_CreateIcon(self)
 	self.numIcons = self.numIcons + 1
 	local name = self:GetName()
 	local key = name .. "Icon" .. self.numIcons
-	local f = _G[key] or CreateFrame("Button", key, _G[name .. "Icons"], "OmniBarButtonTemplate")
+	local f = _G[key] or CreateFrame("Button", key, _G[name .. "Icons"], "ArenaUIOmniBarButtonTemplate")
 	table.insert(self.icons, f)
 end
 

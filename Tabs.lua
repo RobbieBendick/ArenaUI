@@ -2,6 +2,24 @@ local addonName, NS = ...
 
 local VENDOR = "Interface\\AddOns\\ArenaUI\\vendored\\"
 
+local function HideArenaUI()
+    if NS.frame then
+        NS.frame:Hide()
+    end
+end
+
+local function OpenAddonSettings(name, open)
+    return function()
+        HideArenaUI()
+        local ok, err = pcall(open)
+        if not ok or err == false then
+            print("|cFFFF8C33ArenaUI|r Could not open " .. name .. " settings.")
+            return false
+        end
+        return true
+    end
+end
+
 NS.ADDON_CATEGORIES = {
     {
         title = "Arena Frames",
@@ -11,6 +29,17 @@ NS.ADDON_CATEGORIES = {
                 title = "Gladdy",
                 description = "Arena frames for WoW Classic.",
                 icon = 135993,
+                openSettings = OpenAddonSettings("Gladdy", function()
+                    if Gladdy and Gladdy.ShowOptions then
+                        Gladdy:ShowOptions()
+                        return
+                    end
+                    local dialog = LibStub and LibStub("AceConfigDialog-3.0", true)
+                    if not (dialog and dialog.Open) then
+                        return false
+                    end
+                    dialog:Open("Gladdy")
+                end),
             },
         },
     },
@@ -22,12 +51,26 @@ NS.ADDON_CATEGORIES = {
                 title = "OmniBar",
                 description = "Tracks enemy cooldowns.",
                 icon = VENDOR .. "OmniBar\\Media\\Textures\\icon.blp",
+                openSettings = OpenAddonSettings("OmniBar", function()
+                    local dialog = LibStub and LibStub("AceConfigDialog-3.0", true)
+                    if not (dialog and dialog.Open) then
+                        return false
+                    end
+                    dialog:Open("OmniBar")
+                end),
             },
             {
                 name = "OmniCD",
                 title = "OmniCD",
                 description = "Party cooldown tracker.",
                 icon = VENDOR .. "OmniCD\\Media\\omnicd-logo64-c.tga",
+                openSettings = OpenAddonSettings("OmniCD", function()
+                    local E = OmniCD and OmniCD[1]
+                    if not (E and E.OpenOptionPanel) then
+                        return false
+                    end
+                    E:OpenOptionPanel()
+                end),
             },
         },
     },
@@ -42,6 +85,13 @@ NS.ADDON_CATEGORIES = {
                 companions = {
                     "Diminish_Options",
                 },
+                openSettings = OpenAddonSettings("Diminish", function()
+                    if SlashCmdList and SlashCmdList.DIMINISH then
+                        SlashCmdList.DIMINISH()
+                        return
+                    end
+                    return false
+                end),
             },
         },
     },
@@ -62,6 +112,17 @@ NS.ADDON_CATEGORIES = {
                     "Details_TinyThreat",
                     "Details_Vanguard",
                 },
+                openSettings = OpenAddonSettings("Details", function()
+                    if not (Details and Details.OpenOptionsWindow) then
+                        return false
+                    end
+                    local id = Details.GetLowerInstanceNumber and Details:GetLowerInstanceNumber()
+                    local instance = id and Details:GetInstance(id) or Details:GetInstance(1)
+                    if not instance then
+                        return false
+                    end
+                    Details:OpenOptionsWindow(instance)
+                end),
             },
         },
     },
@@ -73,6 +134,13 @@ NS.ADDON_CATEGORIES = {
                 title = "ArenaAnalytics",
                 description = "Arena log and statistics.",
                 icon = "Interface\\Icons\\achievement_arena_3v3_7",
+                openSettings = OpenAddonSettings("ArenaAnalytics", function()
+                    if ArenaAnalyticsOpenOptions then
+                        ArenaAnalyticsOpenOptions()
+                        return
+                    end
+                    return false
+                end),
             },
         },
     },
@@ -90,6 +158,12 @@ NS.ADDON_CATEGORIES = {
                     "WeakAurasTemplates",
                     "WeakAurasArchive",
                 },
+                openSettings = OpenAddonSettings("WeakAuras", function()
+                    if not (WeakAuras and WeakAuras.OpenOptions) then
+                        return false
+                    end
+                    WeakAuras.OpenOptions()
+                end),
             },
         },
     },
@@ -102,17 +176,12 @@ NS.ADDON_CATEGORIES = {
                 description = "Default Blizzard nameplates with more features and easy settings.",
                 icon = "gmchat-icon-blizz",
                 reloadToToggle = true,
-                openSettings = function()
+                openSettings = OpenAddonSettings("BetterBlizzPlates", function()
                     if not (BBP and BBP.LoadGUI) then
-                        print("|cFFFF8C33ArenaUI|r Reload to open BetterBlizzPlates settings.")
                         return false
                     end
-                    if NS.frame then
-                        NS.frame:Hide()
-                    end
                     BBP.LoadGUI()
-                    return true
-                end,
+                end),
             },
         },
     },
@@ -125,17 +194,12 @@ NS.ADDON_CATEGORIES = {
                 description = "More options for Blizzard frames. Aura filtering, party castbars, combat indicator, dark mode.",
                 icon = "gmchat-icon-blizz",
                 reloadToToggle = true,
-                openSettings = function()
+                openSettings = OpenAddonSettings("BetterBlizzFrames", function()
                     if not (BBF and BBF.LoadGUI) then
-                        print("|cFFFF8C33ArenaUI|r Reload to open BetterBlizzFrames settings.")
                         return false
                     end
-                    if NS.frame then
-                        NS.frame:Hide()
-                    end
                     BBF.LoadGUI()
-                    return true
-                end,
+                end),
             },
         },
     },

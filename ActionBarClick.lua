@@ -26,6 +26,8 @@ local BAR_PAGES = {
 }
 
 local hookedFuncs = {}
+local overlays = {}
+local placing = false
 
 local function KnownPage(button)
     local name = button.GetName and button:GetName()
@@ -154,6 +156,24 @@ local function SyncAction(overlay, action)
     ))
 end
 
+local function SetOverlayMouse(overlay, enabled)
+    if overlay:IsMouseEnabled() == enabled then
+        return
+    end
+    overlay:EnableMouse(enabled)
+end
+
+local function UpdatePlacementMode()
+    local nextPlacing = GetCursorInfo() ~= nil
+    if nextPlacing == placing then
+        return
+    end
+    placing = nextPlacing
+    for overlay in pairs(overlays) do
+        SetOverlayMouse(overlay, not placing)
+    end
+end
+
 local function HookUpdates(button)
     local func = button.UpdateAction
     if type(func) ~= "function" or hookedFuncs[func] then
@@ -174,9 +194,11 @@ local function Attach(button)
     end
     if button.__ArenaUIClickOverlay then
         local overlay = button.__ArenaUIClickOverlay
+        overlays[overlay] = true
         Bind(overlay, button)
         InstallClick(overlay, button)
         SyncAction(overlay, SlotFor(button))
+        SetOverlayMouse(overlay, not placing)
         return
     end
     if type(button.UpdateAction) ~= "function" or type(button.action) ~= "number" then
@@ -196,7 +218,7 @@ local function Attach(button)
     local level = (button.GetFrameLevel and button:GetFrameLevel()) or 1
     overlay:SetFrameLevel(level + 20)
     overlay:RegisterForClicks("AnyUp", "AnyDown")
-    overlay:EnableMouse(true)
+    overlay:EnableMouse(not placing)
     if overlay.SetPropagateMouseMotion then
         overlay:SetPropagateMouseMotion(true)
     end
@@ -207,6 +229,7 @@ local function Attach(button)
         RegisterStateDriver(overlay, "visibility", "[mod:shift] hide; show")
     end
 
+    overlays[overlay] = true
     button.__ArenaUIClickOverlay = overlay
     Bind(overlay, button)
     InstallClick(overlay, button)
@@ -228,6 +251,7 @@ local function AttachAll()
             Attach(_G[prefix .. n])
         end
     end
+    UpdatePlacementMode()
 end
 
 local waiter = CreateFrame("Frame")
@@ -235,5 +259,14 @@ waiter:RegisterEvent("ADDON_LOADED")
 waiter:RegisterEvent("PLAYER_LOGIN")
 waiter:RegisterEvent("PLAYER_ENTERING_WORLD")
 waiter:RegisterEvent("PLAYER_REGEN_ENABLED")
-waiter:SetScript("OnEvent", AttachAll)
+waiter:RegisterEvent("ACTIONBAR_SHOWGRID")
+waiter:RegisterEvent("ACTIONBAR_HIDEGRID")
+pcall(waiter.RegisterEvent, waiter, "CURSOR_CHANGED")
+waiter:SetScript("OnEvent", function(_, event)
+    if event == "ACTIONBAR_SHOWGRID" or event == "ACTIONBAR_HIDEGRID" or event == "CURSOR_CHANGED" then
+        UpdatePlacementMode()
+        return
+    end
+    AttachAll()
+end)
 AttachAll()

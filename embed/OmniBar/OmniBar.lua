@@ -485,7 +485,7 @@ function OmniBar:Initialize(key, name)
 
 	self:AddCustomSpells()
 
-	local f = _G[key] or CreateFrame("Frame", key, UIParent, "OmniBarTemplate")
+	local f = _G[key] or CreateFrame("Frame", key, UIParent, "ArenaUIOmniBarTemplate")
 	f:Show()
 	f.settings = self.db.profile.bars[key]
 	f.settings.align = f.settings.align or "CENTER"
@@ -649,7 +649,7 @@ function OmniBar_CreateIcon(self)
 	self.numIcons = self.numIcons + 1
 	local name = self:GetName()
 	local key = name .. "Icon" .. self.numIcons
-	local f = _G[key] or CreateFrame("Button", key, _G[name .. "Icons"], "OmniBarButtonTemplate")
+	local f = _G[key] or CreateFrame("Button", key, _G[name .. "Icons"], "ArenaUIOmniBarButtonTemplate")
 	table.insert(self.icons, f)
 end
 
@@ -1730,8 +1730,8 @@ end
 
 end
 local __aui_frames = ArenaUI_EmbedFrames and ArenaUI_EmbedFrames["OmniBar"]
-local __aui_templates = ArenaUI_EmbedTemplates and ArenaUI_EmbedTemplates["OmniBar"]
 local function __aui_template(template)
+  local __aui_templates = ArenaUI_EmbedTemplates and ArenaUI_EmbedTemplates["OmniBar"]
   if type(template) ~= "string" or not __aui_templates then return template end
   if not template:find("[,%s]") then return __aui_templates[template] or template end
   local out, n = {}, 0

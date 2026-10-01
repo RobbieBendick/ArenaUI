@@ -322,11 +322,28 @@ function NS:AddonIsActive(addon)
     return self:IsAddonLoaded(addon.name)
 end
 
+function NS:VendoredWasBooted(name)
+    if self._vendoredBooted and self._vendoredBooted[name] ~= nil then
+        return self._vendoredBooted[name] and true or false
+    end
+    if ArenaUI_VendoredSkip and ArenaUI_VendoredSkip[name] then
+        return false
+    end
+    if name == "BetterBlizzPlates" then
+        return BBP ~= nil and type(BBP.LoadGUI) == "function"
+    end
+    if name == "BetterBlizzFrames" then
+        return BBF ~= nil and type(BBF.LoadGUI) == "function"
+    end
+    return false
+end
+
 function NS:AddonNeedsReload(addon)
-    -- These copies hook Blizzard frames while loading, so the toggle applies on reload.
+    -- These copies only start on load. Prompt reload when enabling a copy that
+    -- did not boot this session. Soft-disable needs no nag; the next reload
+    -- honors ModuleEnabled via StandalonePrep.
     if addon.reloadToToggle and self:RunsFromArenaUI(addon.name) then
-        local booted = self._vendoredBooted and self._vendoredBooted[addon.name]
-        return (booted and true or false) ~= self:ModuleEnabled(addon.name)
+        return self:ModuleEnabled(addon.name) and not self:VendoredWasBooted(addon.name)
     end
     -- ArenaUI copies toggle live via Ace modules; no reload.
     if self:RunsFromArenaUI(addon.name) then
@@ -667,13 +684,13 @@ function NS:CreateAddonRow(parent, addon, y, onToggle)
     local gear
     if addon.openSettings then
         gear = CreateFrame("Button", nil, row)
-        gear:SetSize(22, 22)
-        gear:SetPoint("RIGHT", stateText, "LEFT", -6, 0)
+        gear:SetSize(16, 16)
+        gear:SetPoint("RIGHT", stateText, "LEFT", -8, 0)
         gear:SetFrameLevel(row:GetFrameLevel() + 5)
         gear:RegisterForClicks("LeftButtonUp")
         local gearIcon = gear:CreateTexture(nil, "ARTWORK")
         gearIcon:SetAllPoints()
-        gearIcon:SetTexture("Interface\\AddOns\\ArenaUI\\Media\\SettingsGear.tga")
+        gearIcon:SetTexture("Interface\\AddOns\\ArenaUI\\assets\\SettingsGear.tga")
         gearIcon:SetVertexColor(0.89, 0.89, 0.89)
         gear:SetScript("OnClick", function()
             addon.openSettings()

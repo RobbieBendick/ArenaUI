@@ -11,12 +11,14 @@ VendoredLinks.lua
 VendoredNS.lua
 DetailsCompat.lua
 embed\Metadata.lua
+embed\TemplateMap.lua
 Guides.lua
 GuidesTBC.lua
 Core.lua
 Frame.lua
 Tabs.lua
 ActionBarClick.lua
+SpellBookClick.lua
 
 StandalonePrep.lua
 
@@ -188,7 +190,6 @@ vendored\Diminish_Options\profiles.lua
 DiminishOptionsGuard.lua
 
 DetailsPrep.lua
-embed\TemplateMap.lua
 embed\Details\Libs\libs.xml
 embed\Details\locales\Details-enUS.lua
 embed\Details\locales\Details-deDE.lua

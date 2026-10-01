@@ -283,8 +283,8 @@ foreach ($name in $addons) {
                 $body +
                 "`r`nend`r`n" +
                 "local __aui_frames = ArenaUI_EmbedFrames and ArenaUI_EmbedFrames[`"$name`"]`r`n" +
-                "local __aui_templates = ArenaUI_EmbedTemplates and ArenaUI_EmbedTemplates[`"$name`"]`r`n" +
                 "local function __aui_template(template)`r`n" +
+                "  local __aui_templates = ArenaUI_EmbedTemplates and ArenaUI_EmbedTemplates[`"$name`"]`r`n" +
                 "  if type(template) ~= `"string`" or not __aui_templates then return template end`r`n" +
                 "  if not template:find(`"[,%s]`") then return __aui_templates[template] or template end`r`n" +
                 "  local out, n = {}, 0`r`n" +
