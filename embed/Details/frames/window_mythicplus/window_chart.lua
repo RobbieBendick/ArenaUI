@@ -57,7 +57,7 @@ function mythicDungeonCharts.ShowChart()
 			titlebar:SetPoint("topleft", dungeonChartFrame, "topleft", 2, -3)
 			titlebar:SetPoint("topright", dungeonChartFrame, "topright", -2, -3)
 			titlebar:SetHeight(20)
-			titlebar:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+			titlebar:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
 			titlebar:SetBackdropColor(.5, .5, .5, 1)
 			titlebar:SetBackdropBorderColor(0, 0, 0, 1)
 
@@ -72,7 +72,7 @@ function mythicDungeonCharts.ShowChart()
 			titlebarMinimized:SetPoint("topleft", fMinimized, "topleft", 2, -3)
 			titlebarMinimized:SetPoint("topright", fMinimized, "topright", -2, -3)
 			titlebarMinimized:SetHeight(20)
-			titlebarMinimized:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+			titlebarMinimized:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
 			titlebarMinimized:SetBackdropColor(.5, .5, .5, 1)
 			titlebarMinimized:SetBackdropBorderColor(0, 0, 0, 1)
 
@@ -488,6 +488,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

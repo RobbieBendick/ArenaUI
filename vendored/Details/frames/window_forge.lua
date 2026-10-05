@@ -80,7 +80,7 @@ function Details:OpenForge()
             tutorialFrame:SetPoint("center", f, "center")
             tutorialFrame:SetFrameStrata("DIALOG")
             tutorialFrame:SetSize(400, 300)
-            tutorialFrame:SetBackdrop({bgFile = [[Interface\AddOns\Details\images\background]], tile = true, tileSize = 16,
+            tutorialFrame:SetBackdrop({bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tile = true, tileSize = 16,
             insets = {left = 0, right = 0, top = 0, bottom = 0}, edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize=1})
             tutorialFrame:SetBackdropColor(0, 0, 0, 1)
 
@@ -117,7 +117,7 @@ function Details:OpenForge()
         end)
 
         f.bg1 = f:CreateTexture(nil, "background")
-        f.bg1:SetTexture([[Interface\AddOns\Details\images\background]], true)
+        f.bg1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\background]], true)
         f.bg1:SetAlpha(0.7)
         f.bg1:SetVertexColor(0.27, 0.27, 0.27)
         f.bg1:SetVertTile(true)
@@ -125,7 +125,7 @@ function Details:OpenForge()
         f.bg1:SetSize(790, 454)
         f.bg1:SetAllPoints()
 
-        f:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+        f:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
         f:SetBackdropColor(.5, .5, .5, .5)
         f:SetBackdropBorderColor(0, 0, 0, 1)
 

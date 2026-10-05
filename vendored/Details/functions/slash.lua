@@ -367,7 +367,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 		print(loaded, reason, DetailsDataStorage)
 
 	elseif (msg == "chaticon") then
-		Details:Msg("|TInterface\\AddOns\\Details\\images\\icones_barra:" .. 14 .. ":" .. 14 .. ":0:0:256:32:0:32:0:32|tteste")
+		Details:Msg("|TInterface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icones_barra:" .. 14 .. ":" .. 14 .. ":0:0:256:32:0:32:0:32|tteste")
 
 	elseif (msg == "align") then
 		local c = RightChatPanel
@@ -455,7 +455,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 		f:SetPoint("center", UIParent, "center", 200, -2)
 		f:SetWidth(300)
 		f:SetHeight(150)
-		f:SetBackdrop({bgFile = "Interface\\AddOns\\Details\\images\\background", tile = true, tileSize = 16, insets = {left = 0, right = 0, top = 0, bottom = 0}})
+		f:SetBackdrop({bgFile = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\background", tile = true, tileSize = 16, insets = {left = 0, right = 0, top = 0, bottom = 0}})
 		f:SetBackdropColor(0, 0, 0, 1)
 		f:EnableMouseWheel(true)
 
@@ -465,7 +465,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 			row:SetPoint("topleft", f, "topleft", 10, -(i-1)*21)
 			row:SetWidth(200)
 			row:SetHeight(20)
-			row:SetBackdrop({bgFile = "Interface\\AddOns\\Details\\images\\background", tile = true, tileSize = 16, insets = {left = 0, right = 0, top = 0, bottom = 0}})
+			row:SetBackdrop({bgFile = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\background", tile = true, tileSize = 16, insets = {left = 0, right = 0, top = 0, bottom = 0}})
 			local t = row:CreateFontString(nil, "overlay", "GameFontHighlightSmall")
 			t:SetPoint("left", row, "left")
 			row.text = t
@@ -1375,9 +1375,9 @@ function SlashCmdList.DETAILS (msg, editbox)
 
 				--texture:SetSize(math.random(50, 300), math.random(50, 300))
 				--local spec = allspecs [math.random(#allspecs)]
-				texture:SetTexture([[Interface\AddOns\Details\images\options_window]])
+				texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\options_window]])
 				--texture:SetTexture([[Interface\Store\Store-Splash]])
-				--texture:SetTexture([[Interface\AddOns\Details\images\options_window]])
+				--texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\options_window]])
 				--texture:SetTexture([[Interface\CHARACTERFRAME\Button_BloodPresence_DeathKnight]])
 				--texture:SetTexCoord(unpack(_detalhes.class_specs_coords [spec]))
 
@@ -1396,7 +1396,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 			local instance = Details:GetInstance(lower_instance)
 			if (instance) then
 				local func = {Details.OpenRaidHistoryWindow, Details, "Hellfire Citadel", 1800, 15, "DAMAGER", "Rock Lobster", 2, "Keyspell"}
-				instance:InstanceAlert ("Boss Defeated, Open History! ", {[[Interface\AddOns\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}, 40, func, true)
+				instance:InstanceAlert ("Boss Defeated, Open History! ", {[[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}, 40, func, true)
 			end
 		end
 
@@ -1408,7 +1408,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 		local raid_name = "Tomb of Sargeras"
 		local guildName = "Rock Lobster"
 		local func = {Details.OpenRaidHistoryWindow, Details, raid_name, 2050, 15, my_role, guildName} --, 2, UnitName ("player")
-		--local icon = {[[Interface\AddOns\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}
+		--local icon = {[[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}
 		local icon = {[[Interface\PvPRankBadges\PvPRank08]], 16, 16, false, 0, 1, 0, 1}
 
 		local lower_instance = Details:GetLowerInstanceNumber()

@@ -32,7 +32,7 @@ function Details:OpenProfiler()
     f:SetPoint("right", UIParent, "right", -5, 0)
 
     local logo = f:CreateTexture(nil, "artwork")
-    logo:SetTexture([[Interface\AddOns\Details\images\logotipo]])
+    logo:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\logotipo]])
     logo:SetSize(256*0.8, 128*0.8)
     logo:SetPoint("center", f, "center", 0, 0)
     logo:SetPoint("top", f, "top", 20, 20)
@@ -108,6 +108,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

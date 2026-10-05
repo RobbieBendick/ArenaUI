@@ -1681,9 +1681,9 @@ L["STRING_WELCOME_31"] = [=[|cFFFFFF00Rechtsklick|r irgendwo im Fenster zeigt da
 |cFFFFFF00Erneuter Rechtsklick|r schließt das Menü
  oder wähle mit
 |cFFFFFF00Klick|r auf ein Symbol eine andere Ansicht
-|TInterface\AddOns\Details\images\key_shift:14:30:0:0:64:64:0:64:0:40|t + Rechtsklick öffnet stattdessen die |cFFFFAA00Lesezeichen|r.
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_shift:14:30:0:0:64:64:0:64:0:40|t + Rechtsklick öffnet stattdessen die |cFFFFAA00Lesezeichen|r.
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Rechtsklick schließt das Fenster.]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Rechtsklick schließt das Fenster.]=]
 L["STRING_WELCOME_32"] = "Interface: Fenstergruppierung"
 L["STRING_WELCOME_34"] = "Interface: Tooltips"
 L["STRING_WELCOME_36"] = "Interface: Zusatzmodule"

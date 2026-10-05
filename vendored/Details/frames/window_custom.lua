@@ -113,7 +113,7 @@
 		DetailsCustomPanel.__name = Loc ["STRING_SCRIPTS_TITLE"]
 		DetailsCustomPanel.real_name = "DETAILS_CUSTOMDISPLAY"
 		--DetailsCustomPanel.__icon = [[Interface\FriendsFrame\UI-FriendsList-Small-Up]]
-		DetailsCustomPanel.__icon = [[Interface\AddOns\Details\images\icons]]
+		DetailsCustomPanel.__icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
 		DetailsCustomPanel.__iconcoords = {412/512, 441/512, 43/512, 79/512}
 		DetailsCustomPanel.__iconcolor = "DETAILS_CUSTOMDISPLAY_ICON"
 		DetailsPluginContainerWindow.EmbedPlugin (DetailsCustomPanel, DetailsCustomPanel, true)
@@ -168,7 +168,7 @@
 				titlebar:SetPoint("topleft", customWindow, "topleft", 2, -3)
 				titlebar:SetPoint("topright", customWindow, "topright", -2, -3)
 				titlebar:SetHeight(20)
-				titlebar:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+				titlebar:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
 				titlebar:SetBackdropColor(.5, .5, .5, 1)
 				titlebar:SetBackdropBorderColor(0, 0, 0, 1)
 
@@ -197,14 +197,14 @@
 
 			--background
 				customWindow.bg1 = customWindow:CreateTexture(nil, "background")
-				customWindow.bg1:SetTexture([[Interface\AddOns\Details\images\background]], true)
+				customWindow.bg1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\background]], true)
 				customWindow.bg1:SetAlpha(0.7)
 				customWindow.bg1:SetVertexColor(0.27, 0.27, 0.27)
 				customWindow.bg1:SetVertTile(true)
 				customWindow.bg1:SetHorizTile(true)
 				customWindow.bg1:SetAllPoints()
 
-				customWindow:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+				customWindow:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
 				customWindow:SetBackdropColor(.5, .5, .5, .5)
 				customWindow:SetBackdropBorderColor(0, 0, 0, 1)
 
@@ -980,7 +980,7 @@
 					button.icon = button:CreateTexture(nil, "overlay")
 					button.icon:SetPoint("left", button, "left", 6, 0)
 					button.icon:SetSize(22, 22)
-					button.icon:SetTexture([[Interface\AddOns\Details\images\custom_icones]])
+					button.icon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\custom_icones]])
 					button.icon:SetTexCoord(p*(i-1), p*(i), 0, 1)
 
 					button.text = button:CreateFontString(nil, "overlay", "GameFontHighlightSmall")

@@ -87,7 +87,7 @@ local createAuraTabOnBreakdownWindow = function(tab, frame)
         receivedTexture:SetPoint("topright", line, "topright", 0, 0)
         receivedTexture:SetPoint("bottomright", line, "bottomright", 0, 0)
         receivedTexture:SetWidth(line:GetWidth())
-        receivedTexture:SetTexture([[Interface\AddOns\Details\images\bar_textures\gradient_white_10percent_left]])
+        receivedTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\gradient_white_10percent_left]])
         receivedTexture:SetTexCoord(0, 1, 0, 1)
         receivedTexture:SetVertexColor(0, .8, 0, 0.7)
         receivedTexture:Hide()
@@ -291,7 +291,7 @@ local aurasTabFillCallback = function(tab, player, combat)
 end
 
 local iconTableAuras = {
-    texture = [[Interface\AddOns\Details\images\icons]],
+    texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
     coords = {257/512, 278/512, 0/512, 19/512},
     width = 16,
     height = 16,

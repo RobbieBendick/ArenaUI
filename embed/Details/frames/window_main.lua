@@ -46,7 +46,7 @@ _ = nil
 --constants
 local baseframe_strata = "LOW"
 local defaultBackdropSt = {
-	bgFile = [[Interface\AddOns\Details\images\background]], tile = true, tileSize = 12,
+	bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tile = true, tileSize = 12,
 	insets = {left = 0, right = 0, top = 0, bottom = 0}}
 
 local CONST_ROWFRAME_ALPHA = 0.975036
@@ -71,7 +71,7 @@ local GetSpellInfo = Details222.GetSpellInfo --api local
 local _GetSpellInfo = Details.getspellinfo --details api
 
 --skins TCoords
-	local DEFAULT_SKIN = [[Interface\AddOns\Details\images\skins\classic_skin]]
+	local DEFAULT_SKIN = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin]]
 	local COORDS_LEFT_BALL = {0.15625, 0.2802734375, 0.08203125, 0.2060546875} -- 160 287 84 211
 	local COORDS_LEFT_CONNECTOR = {0.294921875, 0.3017578125, 0.08203125, 0.2060546875} --302 84 309 211 (updated)
 	local COORDS_LEFT_CONNECTOR_NO_ICON = {0.587890625+0.00048828125, 0.5947265625, 0.08203125, 0.2060546875} -- 602 609 x 84 211
@@ -95,7 +95,7 @@ local _GetSpellInfo = Details.getspellinfo --details api
 	local menus_backdrop = {
 		edgeFile = [[Interface\Buttons\WHITE8X8]],
 		edgeSize=1,
-		bgFile = [[Interface\AddOns\Details\images\background]],
+		bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]],
 		tileSize=16,
 		tile=true,
 		insets = {top=0, right=0, left=0, bottom=0}
@@ -573,7 +573,7 @@ local update_line = function(self, target_frame)
 		local ball = guide_balls [i]
 		if (not ball) then
 			ball = Details.overlay_frame:CreateTexture(nil, "Overlay")
-			ball:SetTexture([[Interface\AddOns\Details\images\icons]])
+			ball:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]])
 			ball:SetSize(16, 16)
 			ball:SetAlpha(0.3)
 			ball:SetTexCoord(410/512, 426/512, 2/512, 18/512)
@@ -1406,13 +1406,13 @@ local resizeTooltip = {
 	{text = "|cff33CC00Click|cffEEEEEE: ".. Loc["STRING_RESIZE_COMMON"]},
 
 	{text = "+|cff33CC00 Click|cffEEEEEE: " .. Loc["STRING_RESIZE_HORIZONTAL"]},
-	{icon = [[Interface\AddOns\Details\images\key_shift]], width = 24, height = 14, l = 0, r = 1, t = 0, b =0.640625},
+	{icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], width = 24, height = 14, l = 0, r = 1, t = 0, b =0.640625},
 
 	{text = "+|cff33CC00 Click|cffEEEEEE: " .. Loc["STRING_RESIZE_VERTICAL"]},
-	{icon = [[Interface\AddOns\Details\images\key_alt]], width = 24, height = 14, l = 0, r = 1, t = 0, b =0.640625},
+	{icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\key_alt]], width = 24, height = 14, l = 0, r = 1, t = 0, b =0.640625},
 
 	{text = "+|cff33CC00 Click|cffEEEEEE: " .. Loc["STRING_RESIZE_ALL"]},
-	{icon = [[Interface\AddOns\Details\images\key_ctrl]], width = 24, height = 14, l = 0, r = 1, t = 0, b =0.640625}
+	{icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], width = 24, height = 14, l = 0, r = 1, t = 0, b =0.640625}
 }
 
 --search key: ~resizescript
@@ -1770,7 +1770,7 @@ Details.lock_instance_function = lockFunctionOnClick
 
 local unSnapButtonTooltip = {
 	{text = Loc["STRING_DETACH_DESC"]},
-	{icon = [[Interface\AddOns\Details\images\icons]], width = 14, height = 14, l = 160/512, r = 179/512, t = 142/512, b = 162/512},
+	{icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], width = 14, height = 14, l = 160/512, r = 179/512, t = 142/512, b = 162/512},
 }
 
 local unSnapButtonOnEnter = function(self)
@@ -2184,13 +2184,13 @@ local iconFrame_OnEnter = function(self)
 			end
 
 			if (class == "UNKNOW" or class == "UNGROUPPLAYER") then
-				GameCooltip:AddIcon([[Interface\AddOns\Details\images\classes_small_alpha]], 1, 1, iconSize, iconSize, 0, 0.25, 0.75, 1)
+				GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]], 1, 1, iconSize, iconSize, 0, 0.25, 0.75, 1)
 			else
-				GameCooltip:AddIcon([[Interface\AddOns\Details\images\classes_small_alpha]], 1, 1, iconSize, iconSize, classL, classR, classT, classB)
+				GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]], 1, 1, iconSize, iconSize, classL, classR, classT, classB)
 			end
 
 			if (specL) then
-				GameCooltip:AddIcon([[Interface\AddOns\Details\images\spec_icons_normal_alpha]], 1, 2, iconSize, iconSize, specL, specR, specT, specB)
+				GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal_alpha]], 1, 2, iconSize, iconSize, specL, specR, specT, specB)
 			else
 				GameCooltip:AddIcon([[Interface\GossipFrame\IncompleteQuestIcon]], 1, 2, iconSize, iconSize)
 			end
@@ -2370,7 +2370,7 @@ local iconFrame_OnEnter = function(self)
 				height = height + lineHeight
 			end
 
-			GameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\Details\images\bar_skyline]])
+			GameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_skyline]])
 			GameCooltip:SetOption("FixedHeight", height+11)
 			GameCooltip:SetOption("LineHeightSizeOffset", -8)
 			Details:AddRoundedCornerToTooltip()
@@ -3219,7 +3219,7 @@ local function CreateAlertFrame(baseframe, instancia)
 	alertBackgroundFrame:SetPoint("left", baseframe, "left", 3, 0)
 	alertBackgroundFrame:SetPoint("right", baseframe, "right", -3, 0)
 	alertBackgroundFrame:SetHeight(12)
-	alertBackgroundFrame:SetBackdrop({bgFile = [[Interface\AddOns\Details\images\background]], tile = true, tileSize = 16,
+	alertBackgroundFrame:SetBackdrop({bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tile = true, tileSize = 16,
 	insets = {left = 0, right = 0, top = 0, bottom = 0}})
 	alertBackgroundFrame:SetBackdropColor(.1, .1, .1, 1)
 	alertBackgroundFrame:SetFrameStrata("FULLSCREEN")
@@ -3493,7 +3493,7 @@ do
 	tooltipAnchor.glowAnimation = glowAnimation
 
 	local icon = tooltipAnchor:CreateTexture(nil, "overlay")
-	icon:SetTexture([[Interface\AddOns\Details\images\minimap]])
+	icon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\minimap]])
 	icon:SetPoint("left", tooltipAnchor, "left", 4, 0)
 	icon:SetSize(18, 18)
 
@@ -3532,7 +3532,7 @@ function gump:CriaJanelaPrincipal(ID, instancia, criando)
 
 	titleBar.texture = titleBar:CreateTexture("$parentTexture", "artwork")
 	titleBar.texture:SetAllPoints()
-	titleBar.texture:SetTexture([[Interface\AddOns\Details\images\bar_serenity]])
+	titleBar.texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]])
 	titleBar.texture:SetVertexColor(0, 0, 0, 0)
 
 	--a background frame that anchors in the topleft of the title bar and bottom right of the baseframe
@@ -3910,7 +3910,7 @@ function gump:CriaJanelaPrincipal(ID, instancia, criando)
 		frameHighlightTop:Hide()
 
 		instancia.h_cima = frameHighlightTop:CreateTexture(nil, "overlay")
-		instancia.h_cima:SetTexture([[Interface\AddOns\Details\images\highlight_updown]])
+		instancia.h_cima:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\highlight_updown]])
 		instancia.h_cima:SetTexCoord(0, 1, 0.5, 1)
 		instancia.h_cima:SetPoint("topleft", baseframe.cabecalho.top_bg, "bottomleft", -10, 37)
 		instancia.h_cima:SetPoint("topright", baseframe.cabecalho.ball_r, "bottomright", -97, 37)
@@ -3924,7 +3924,7 @@ function gump:CriaJanelaPrincipal(ID, instancia, criando)
 		frameHighlightBottom:Hide()
 
 		instancia.h_baixo = frameHighlightBottom:CreateTexture(nil, "overlay")
-		instancia.h_baixo:SetTexture([[Interface\AddOns\Details\images\highlight_updown]])
+		instancia.h_baixo:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\highlight_updown]])
 		instancia.h_baixo:SetTexCoord(0, 1, 0, 0.5)
 		instancia.h_baixo:SetPoint("topleft", baseframe.rodape.esquerdo, "bottomleft", 16, 17)
 		instancia.h_baixo:SetPoint("topright", baseframe.rodape.direita, "bottomright", -16, 17)
@@ -3938,7 +3938,7 @@ function gump:CriaJanelaPrincipal(ID, instancia, criando)
 		frameHighlightLeft:Hide()
 
 		instancia.h_esquerda = frameHighlightLeft:CreateTexture(nil, "overlay")
-		instancia.h_esquerda:SetTexture([[Interface\AddOns\Details\images\highlight_leftright]])
+		instancia.h_esquerda:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\highlight_leftright]])
 		instancia.h_esquerda:SetTexCoord(0.5, 1, 0, 1)
 		instancia.h_esquerda:SetPoint("topleft", baseframe.barra_esquerda, "topleft", 40, 0)
 		instancia.h_esquerda:SetPoint("bottomleft", baseframe.barra_esquerda, "bottomleft", 40, 0)
@@ -3952,7 +3952,7 @@ function gump:CriaJanelaPrincipal(ID, instancia, criando)
 		frameHighlightRight:Hide()
 
 		instancia.h_direita = frameHighlightRight:CreateTexture(nil, "overlay")
-		instancia.h_direita:SetTexture([[Interface\AddOns\Details\images\highlight_leftright]])
+		instancia.h_direita:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\highlight_leftright]])
 		instancia.h_direita:SetTexCoord(0, 0.5, 1, 0)
 		instancia.h_direita:SetPoint("topleft", baseframe.barra_direita, "topleft", 8, 18)
 		instancia.h_direita:SetPoint("bottomleft", baseframe.barra_direita, "bottomleft", 8, 0)
@@ -4210,7 +4210,7 @@ function gump:CreateNewLine(instance, index)
 
 	--by default painting the extraStatusbar with the evoker color
 	local evokerColor = Details.class_colors["EVOKER"]
-	--newLine.extraStatusbar.texture:SetTexture([[Interface\AddOns\Details\images\bar_textures\bar_of_bars.png]]) --setColorTexture is very expensive, so set the color once and use vertex color to change it
+	--newLine.extraStatusbar.texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\bar_of_bars.png]]) --setColorTexture is very expensive, so set the color once and use vertex color to change it
 	newLine.extraStatusbar.texture:SetColorTexture(1, 1, 1, 1) --setColorTexture is very expensive, so set the color once and use vertex color to change it
 
 	newLine.extraStatusbar.texture:SetVertexColor(unpack(evokerColor))
@@ -5858,7 +5858,7 @@ function gump:CriaRodape(baseframe, instancia)
 	statusbar_text:SetPoint("left", statusbar_icon, "right", 2, 0)
 
 	baseframe.statusbar:SetBackdrop({
-	bgFile = [[Interface\AddOns\Details\images\background]], tile = true, tileSize = 16,
+	bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tile = true, tileSize = 16,
 	insets = {left = 0, right = 0, top = 0, bottom = 0}})
 	baseframe.statusbar:SetBackdropColor(0, 0, 0, 1)
 
@@ -6338,15 +6338,15 @@ local build_mode_list = function(self, deltaTime)
 
 		gameCooltip:AddLine(Loc["STRING_MODE_GROUP"])
 		gameCooltip:AddMenu(1, function() instance:SetMode(2) end)
-		gameCooltip:AddIcon([[Interface\AddOns\Details\images\modo_icones]], 1, 1, 20, 20, 32/256, 32/256*2, 0, 1)
+		gameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\modo_icones]], 1, 1, 20, 20, 32/256, 32/256*2, 0, 1)
 
 		gameCooltip:AddLine(Loc["STRING_MODE_ALL"])
 		gameCooltip:AddMenu(1, function() instance:SetMode(3) end)
-		gameCooltip:AddIcon([[Interface\AddOns\Details\images\modo_icones]], 1, 1, 20, 20, 32/256*2, 32/256*3, 0, 1)
+		gameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\modo_icones]], 1, 1, 20, 20, 32/256*2, 32/256*3, 0, 1)
 
 		gameCooltip:AddLine(Loc["STRING_OPTIONS_PLUGINS"])
 		gameCooltip:AddMenu(1, function() instance:SetMode(4) end)
-		gameCooltip:AddIcon([[Interface\AddOns\Details\images\modo_icones]], 1, 1, 20, 20, 32/256*3, 32/256*4, 0, 1)
+		gameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\modo_icones]], 1, 1, 20, 20, 32/256*3, 32/256*4, 0, 1)
 
 		Details:AddRoundedCornerToTooltip()
 
@@ -6373,7 +6373,7 @@ local build_mode_list = function(self, deltaTime)
 		--window control
 		gameCooltip:AddLine("$div")
 		gameCooltip:AddLine(Loc["STRING_MENU_INSTANCE_CONTROL"])
-		gameCooltip:AddIcon([[Interface\AddOns\Details\images\modo_icones]], 1, 1, 20, 20, 0.625, 0.75, 0, 1)
+		gameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\modo_icones]], 1, 1, 20, 20, 0.625, 0.75, 0, 1)
 
 		local hasClosedInstances = false
 		for index = 1, math.min(#Details:GetAllInstances(), Details.instances_amount), 1 do
@@ -6418,7 +6418,7 @@ local build_mode_list = function(self, deltaTime)
 
 		if not detailsFramework.IsAddonApocalypseWow() then
 			gameCooltip:AddMenu(2, createAllInOneWindow, true, instance, nil, "Create Midnight Window (12.0)", _, true)
-			gameCooltip:AddIcon([[Interface\AddOns\Details\assets\textures\icons\midnight.png]], 2, 1, 16, 14)
+			gameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\assets\textures\icons\midnight.png]], 2, 1, 16, 14)
 			if (hasClosedInstances) then
 				GameCooltip:AddLine("$div", nil, 2, nil, -5, -11)
 			end
@@ -6517,7 +6517,7 @@ local build_mode_list = function(self, deltaTime)
 		--options
 		gameCooltip:AddLine(Loc["STRING_OPTIONS_WINDOW"])
 		gameCooltip:AddMenu(1, Details.OpenOptionsWindow)
-		gameCooltip:AddIcon([[Interface\AddOns\Details\images\modo_icones]], 1, 1, 20, 20, 0.5, 0.625, 0, 1)
+		gameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\modo_icones]], 1, 1, 20, 20, 0.5, 0.625, 0, 1)
 
 		--finishes the menu
 		Details:SetMenuOwner (self, instance)
@@ -7220,7 +7220,7 @@ local buildSegmentTooltip = function(self, deltaTime, allInOneWindowFrame)
 						local totalTime = combatElapsedTime
 						--CoolTip:AddLine(zoneName .. " +" .. mythicLevel .. " (overall)", _detalhes.gump:IntegerToTimer(totalTime), 1, dungeon_color)
 						--CoolTip:AddLine(zoneName .. " +" .. mythicLevel .. " (overall)", _detalhes.gump:IntegerToTimer(endedAt - startedAt), 1, dungeon_color)
-						--CoolTip:AddIcon([[Interface\AddOns\Details\images\icons]], "main", "left", 14, 10, 479/512, 510/512, 24/512, 51/512)
+						--CoolTip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], "main", "left", 14, 10, 479/512, 510/512, 24/512, 51/512)
 						gameCooltip:AddLine(zoneName .. " +" .. mythicLevel .. " (" .. Loc["STRING_SEGMENTS_LIST_OVERALL"] .. ")", nil, 2, "white", "white")
 
 					else
@@ -7232,7 +7232,7 @@ local buildSegmentTooltip = function(self, deltaTime, allInOneWindowFrame)
 							--CoolTip:AddLine(encounterName .. " (" .. Loc["STRING_SEGMENTS_LIST_BOSS"] .. ")", _detalhes.gump:IntegerToTimer(combat_time), 1, dungeon_color, "gray")
 							gameCooltip:AddLine(combatName, nil, 2, "white", "white")
 						end
-						--CoolTip:AddIcon([[Interface\AddOns\Details\images\icons]], "main", "left", 14, 10, 479/512, 510/512, 24/512, 51/512)
+						--CoolTip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], "main", "left", 14, 10, 479/512, 510/512, 24/512, 51/512)
 					end
 
 					local portrait = (thisCombat.is_boss and thisCombat.is_boss.bossimage) or Details:GetBossPortrait(nil, nil, encounterName, EJID)
@@ -7690,7 +7690,7 @@ function Details:ChangeSkin(skin_name)
 	do
 		local toolbar_icon_file = self.toolbar_icon_file
 		if (not toolbar_icon_file) then
-			toolbar_icon_file = [[Interface\AddOns\Details\images\toolbar_icons]]
+			toolbar_icon_file = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]]
 		end
 
 		toolbar_buttons [1] = self.baseframe.cabecalho.modo_selecao
@@ -9816,7 +9816,7 @@ local reportButton_OnEnter = function(self, motion, forced)
 	end
 
 	GameCooltip:AddLine(Loc["STRING_REPORT_TOOLTIP"], nil, 1, "white", nil, Details.font_sizes.menus, Details.font_faces.menus)
-	GameCooltip:AddIcon([[Interface\Addons\Details\Images\report_button]], 1, 1, 12, 19)
+	GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\Images\report_button]], 1, 1, 12, 19)
 	GameCooltip:AddMenu(1, function() instancia:Reportar("INSTANCE" .. instancia.meu_id) end)
 
 	show_anti_overlap(instancia, self, "top")
@@ -10095,11 +10095,11 @@ function gump:CriaCabecalho (baseframe, instancia)
 	baseframe.cabecalho.fechar:SetFrameLevel(5) --altura mais alta que os demais frames
 	baseframe.cabecalho.fechar:SetPoint("bottomright", baseframe, "topright", 5, -6) --seta o ponto dele fixando no base frame
 
-	baseframe.cabecalho.fechar:SetNormalTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	baseframe.cabecalho.fechar:SetNormalTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	baseframe.cabecalho.fechar:GetNormalTexture():SetTexCoord(160/256, 192/256, 0, 1)
-	baseframe.cabecalho.fechar:SetHighlightTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	baseframe.cabecalho.fechar:SetHighlightTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	baseframe.cabecalho.fechar:GetHighlightTexture():SetTexCoord(160/256, 192/256, 0, 1)
-	baseframe.cabecalho.fechar:SetPushedTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	baseframe.cabecalho.fechar:SetPushedTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	baseframe.cabecalho.fechar:GetPushedTexture():SetTexCoord(160/256, 192/256, 0, 1)
 
 	--baseframe.cabecalho.fechar:SetNormalTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Up]])
@@ -10291,7 +10291,7 @@ function gump:CriaCabecalho (baseframe, instancia)
 	end
 
 
-	baseframe.cabecalho.modo_selecao = gump:NewButton(baseframe, nil, "DetailsModeButton"..instancia.meu_id, nil, 16, 16, modeSelector_OnClick, nil, nil, [[Interface\AddOns\Details\images\modo_icone]])
+	baseframe.cabecalho.modo_selecao = gump:NewButton(baseframe, nil, "DetailsModeButton"..instancia.meu_id, nil, 16, 16, modeSelector_OnClick, nil, nil, [[Interface\AddOns\ArenaUI\vendored\Details\images\modo_icone]])
 	baseframe.cabecalho.modo_selecao:SetPoint("bottomleft", baseframe.cabecalho.ball, "bottomright", instancia.menu_anchor [1], instancia.menu_anchor [2])
 	baseframe.cabecalho.modo_selecao:SetFrameLevel(baseframe:GetFrameLevel()+5)
 	baseframe.cabecalho.modo_selecao.widget._instance = instancia
@@ -10300,11 +10300,11 @@ function gump:CriaCabecalho (baseframe, instancia)
 	baseframe.cabecalho.modo_selecao:SetScript("OnLeave", modeSelector_OnLeave)
 
 	local b = baseframe.cabecalho.modo_selecao.widget
-	b:SetNormalTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetNormalTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetNormalTexture():SetTexCoord(0/256, 32/256, 0, 1)
-	b:SetHighlightTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetHighlightTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetHighlightTexture():SetTexCoord(0/256, 32/256, 0, 1)
-	b:SetPushedTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetPushedTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetPushedTexture():SetTexCoord(0/256, 32/256, 0, 1)
 
 
@@ -10323,7 +10323,7 @@ function gump:CriaCabecalho (baseframe, instancia)
 		end
 	end
 
-	baseframe.cabecalho.segmento = gump:NewButton(baseframe, nil, "DetailsSegmentButton"..instancia.meu_id, nil, 16, 16, segmentSelector_OnClick, nil, nil, [[Interface\AddOns\Details\images\segmentos_icone]])
+	baseframe.cabecalho.segmento = gump:NewButton(baseframe, nil, "DetailsSegmentButton"..instancia.meu_id, nil, 16, 16, segmentSelector_OnClick, nil, nil, [[Interface\AddOns\ArenaUI\vendored\Details\images\segmentos_icone]])
 	baseframe.cabecalho.segmento:SetFrameLevel(baseframe.UPFrame:GetFrameLevel()+1)
 	baseframe.cabecalho.segmento.widget._instance = instancia
 	baseframe.cabecalho.segmento:SetPoint("left", baseframe.cabecalho.modo_selecao, "right", 0, 0)
@@ -10335,11 +10335,11 @@ function gump:CriaCabecalho (baseframe, instancia)
 	baseframe.cabecalho.segmento:SetScript("OnLeave", segmentButton_OnLeave)
 
 	local b = baseframe.cabecalho.segmento.widget
-	b:SetNormalTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetNormalTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetNormalTexture():SetTexCoord(32/256, 64/256, 0, 1)
-	b:SetHighlightTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetHighlightTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetHighlightTexture():SetTexCoord(32/256, 64/256, 0, 1)
-	b:SetPushedTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetPushedTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetPushedTexture():SetTexCoord(32/256, 64/256, 0, 1)
 
 	--SELECIONAR O ATRIBUTO  ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -10364,11 +10364,11 @@ function gump:CriaCabecalho (baseframe, instancia)
 	baseframe.cabecalho.atributo:SetScript("OnLeave", attributeButton_OnLeave)
 
 	local b = baseframe.cabecalho.atributo.widget
-	b:SetNormalTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetNormalTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetNormalTexture():SetTexCoord(66/256, 93/256, 0, 1)
-	b:SetHighlightTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetHighlightTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetHighlightTexture():SetTexCoord(68/256, 93/256, 0, 1)
-	b:SetPushedTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	b:SetPushedTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	b:GetPushedTexture():SetTexCoord(68/256, 93/256, 0, 1)
 
 	--report button ~report
@@ -10386,11 +10386,11 @@ function gump:CriaCabecalho (baseframe, instancia)
 	baseframe.cabecalho.report:SetScript("OnLeave", reportButton_OnLeave)
 
 	local reportButton = baseframe.cabecalho.report.widget
-	reportButton:SetNormalTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	reportButton:SetNormalTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	reportButton:GetNormalTexture():SetTexCoord(96/256, 128/256, 0, 1)
-	reportButton:SetHighlightTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	reportButton:SetHighlightTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	reportButton:GetHighlightTexture():SetTexCoord(96/256, 128/256, 0, 1)
-	reportButton:SetPushedTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	reportButton:SetPushedTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	reportButton:GetPushedTexture():SetTexCoord(96/256, 128/256, 0, 1)
 
 	--reset button ~delete ~erase ~reset
@@ -10424,13 +10424,13 @@ function gump:CriaCabecalho (baseframe, instancia)
 	baseframe.cabecalho.reset:SetScript("OnLeave", resetButton_OnLeave)
 
 	local resetButton = baseframe.cabecalho.reset
-	resetButton:SetNormalTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	resetButton:SetNormalTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	resetButton:GetNormalTexture():SetTexCoord(128/256, 160/256, 0, 1)
 
-	resetButton:SetHighlightTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	resetButton:SetHighlightTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	resetButton:GetHighlightTexture():SetTexCoord(128/256, 160/256, 0, 1)
 
-	resetButton:SetPushedTexture([[Interface\AddOns\Details\images\toolbar_icons]])
+	resetButton:SetPushedTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]])
 	resetButton:GetPushedTexture():SetTexCoord(128/256, 160/256, 0, 1)
 end
 
@@ -10455,6 +10455,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

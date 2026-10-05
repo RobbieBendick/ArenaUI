@@ -67,7 +67,7 @@ function Details222.CooldownTracking.GetOrCreateNewCooldownLine(cooldownFrame, l
     if (cooldownLine) then
         return cooldownLine
     else
-        cooldownLine = DF:CreateTimeBar(cooldownFrame, [[Interface\AddOns\Details\images\bar_serenity]], Details.ocd_tracker.width-2, Details.ocd_tracker.height-2, 100, nil, cooldownFrame:GetName() .. "CDFrame" .. lineId)
+        cooldownLine = DF:CreateTimeBar(cooldownFrame, [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]], Details.ocd_tracker.width-2, Details.ocd_tracker.height-2, 100, nil, cooldownFrame:GetName() .. "CDFrame" .. lineId)
         table.insert(cooldownFrame.bars, cooldownLine)
         cooldownLine:EnableMouse(false)
         return cooldownLine

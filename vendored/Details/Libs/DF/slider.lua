@@ -1098,7 +1098,7 @@ function DF:NewSwitch(parent, container, name, member, width, height, leftText, 
 	end
 
 	slider:SetBackdrop({edgeFile = [[Interface\Buttons\UI-SliderBar-Border]], edgeSize = 8,
-	bgFile = [[Interface\AddOns\Details\images\background]], insets = {left = 3, right = 3, top = 5, bottom = 5}})
+	bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], insets = {left = 3, right = 3, top = 5, bottom = 5}})
 
 	local thumb = slider:CreateTexture(nil, "artwork")
 	thumb:SetTexture("Interface\\Buttons\\UI-ScrollBar-Knob")
@@ -1770,7 +1770,7 @@ local createKnob = function(parent, name, width, height)
 	f.mouseToRadians = 0.02
 
     local texture = f:CreateTexture("$parentCircularTexture", "overlay")
-    texture:SetTexture([[Interface\AddOns\Details\images\buttons\button1.png]])
+    texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\buttons\button1.png]])
     texture:SetPoint("center")
     texture:SetRotation(f.currentRadian)
 	f.KnobTexture = texture

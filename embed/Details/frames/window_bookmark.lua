@@ -53,7 +53,7 @@ function Details:OpenBookmarkConfig()
             GameCooltip:ShowCooltip()
         end
         
-        local button_backdrop = {bgFile = [[Interface\AddOns\Details\images\background]], tile = true, tileSize = 64, insets = {left=0, right=0, top=0, bottom=0}}
+        local button_backdrop = {bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tile = true, tileSize = 64, insets = {left=0, right=0, top=0, bottom=0}}
         
         local set_onenter = function(self, capsule)
             self:SetBackdropColor(1, 1, 1, 0.9)
@@ -86,7 +86,7 @@ function Details:OpenBookmarkConfig()
             --set:InstallCustomTexture (nil, nil, nil, nil, true)
             set:SetTemplate(DF:GetTemplate("button", "OPTIONS_BUTTON_TEMPLATE"))
             
-            local bg_texture = DF:CreateImage(set, [[Interface\AddOns\Details\images\bar_skyline]], 135, 30, "background")
+            local bg_texture = DF:CreateImage(set, [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_skyline]], 135, 30, "background")
             bg_texture:SetAllPoints()
             set.bg = bg_texture
         
@@ -134,7 +134,7 @@ function Details:OpenBookmarkConfig()
                     this_block.button:SetAlpha(1)
                 else
                     this_block.label.text = "-- x -- x --"
-                    this_block.icon.texture = [[Interface\AddOns\Details\images\icons]]
+                    this_block.icon.texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
                     this_block.icon.texcoord = unknown_coords
                     this_block.bg:SetVertexColor(.1, .1, .1, .12)
                     this_block.button:SetAlpha(0.3)
@@ -175,6 +175,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

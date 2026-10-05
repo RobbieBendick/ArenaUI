@@ -1716,7 +1716,7 @@ L["STRING_WELCOME_31"] = [=[|cFFFFFF00Right clicking|r anywhere in the window sh
 
 |cFFFFFF00Right click|r on title bar to open the 'All Displays' panel.
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Right Click to close the window.]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Right Click to close the window.]=]
 L["STRING_WELCOME_32"] = "Using the Interface: Group Windows"
 L["STRING_WELCOME_34"] = "Using the Interface: Expand Tooltip"
 L["STRING_WELCOME_36"] = "Using the Interface: Plugins"
@@ -3500,7 +3500,7 @@ L["STRING_WELCOME_31"] = [=[|cFFFFFF00Right clicking|r anywhere in the window sh
 
 |cFFFFFF00Right click|r on title bar to open the 'All Displays' panel.
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Right Click to close the window.]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Right Click to close the window.]=]
 L["STRING_WELCOME_32"] = "Using the Interface: Group Windows"
 L["STRING_WELCOME_34"] = "Using the Interface: Expand Tooltip"
 L["STRING_WELCOME_36"] = "Using the Interface: Plugins"
@@ -3599,6 +3599,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

@@ -283,7 +283,7 @@ border:UpdateSizes()
 - Example:
 ```lua
 local ants = DF:CreateAnts(myFrame, {
-  Texture = "Interface\\AddOns\\Details\\images\\ants",
+  Texture = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\ants",
   TextureWidth = 256,
   TextureHeight = 256,
   TexturePartsWidth = 16,

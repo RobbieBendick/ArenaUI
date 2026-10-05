@@ -114,4 +114,10 @@ ArenaUI_VendoredMeta = {
         ["Notes"] = "More options for Blizzard frames. Aura filtering, Party castbars, Combat indicator, Dark Mode etc.",
         ["Author"] = "Bodify",
     },
+    ["BuffOverlay"] = {
+        ["Version"] = "v12.10.4",
+        ["Title"] = "BuffOverlay",
+        ["Notes"] = "Overlays chosen auras on top of raid/party frames.",
+        ["Author"] = "clicket",
+    },
 }

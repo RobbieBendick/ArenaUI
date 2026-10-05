@@ -3106,7 +3106,7 @@ function Details:PostponeSwitchToCurrent(instance)
 		instance._postponing_switch = nil
 		if (instance.segmento > 0 and instance.auto_current) then
 			instance:TrocaTabela(0) --muda o segmento pra current
-			instance:InstanceAlert(Loc ["STRING_CHANGED_TO_CURRENT"], {[[Interface\AddOns\Details\images\toolbar_icons]], 18, 18, false, 32/256, 64/256, 0, 1}, 6)
+			instance:InstanceAlert(Loc ["STRING_CHANGED_TO_CURRENT"], {[[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]], 18, 18, false, 32/256, 64/256, 0, 1}, 6)
 			return
 		else
 			return
@@ -3144,11 +3144,11 @@ function Details:CheckSwitchToCurrent()
 			else
 				if Details:IsUsingBlizzardAPI(instance) then
 					instance:SetSegmentType(1, true)
-					--instance:InstanceAlert (Loc ["STRING_CHANGED_TO_CURRENT"], {[[Interface\AddOns\Details\images\toolbar_icons]], 18, 18, false, 32/256, 64/256, 0, 1}, 6)
+					--instance:InstanceAlert (Loc ["STRING_CHANGED_TO_CURRENT"], {[[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]], 18, 18, false, 32/256, 64/256, 0, 1}, 6)
 					instance._postponing_switch = nil
 				else
 					instance:TrocaTabela(0) --muda o segmento pra current
-					--instance:InstanceAlert (Loc ["STRING_CHANGED_TO_CURRENT"], {[[Interface\AddOns\Details\images\toolbar_icons]], 18, 18, false, 32/256, 64/256, 0, 1}, 6)
+					--instance:InstanceAlert (Loc ["STRING_CHANGED_TO_CURRENT"], {[[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]], 18, 18, false, 32/256, 64/256, 0, 1}, 6)
 					instance._postponing_switch = nil
 				end
 			end
@@ -3854,7 +3854,7 @@ function Details:MontaAtributosOption (instancia, func)
 		end
 	end
 
-	CoolTip:SetOption("StatusBarTexture", [[Interface\AddOns\Details\images\bar4_vidro]])
+	CoolTip:SetOption("StatusBarTexture", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4_vidro]])
 	CoolTip:SetOption("ButtonsYMod", -7)
 	CoolTip:SetOption("HeighMod", 7)
 
@@ -4916,6 +4916,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

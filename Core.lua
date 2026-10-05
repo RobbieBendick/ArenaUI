@@ -40,10 +40,10 @@ function NS:ApplyFont(fontString, size, flags)
 end
 
 function NS:AddonMeta(field)
-    if C_AddOns and C_AddOns.GetAddOnMetadata then
-        return C_AddOns.GetAddOnMetadata(addonName, field)
+    local getMeta = self.RealGetAddOnMetadata or (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
+    if getMeta then
+        return getMeta(addonName, field)
     end
-    return GetAddOnMetadata(addonName, field)
 end
 
 function NS:ApplyPanelBackdrop(frame)
@@ -117,13 +117,9 @@ end
 
 function NS:GetAddonVersion(name)
     local version
-    if C_AddOns and C_AddOns.GetAddOnMetadata then
-        local ok, result = pcall(C_AddOns.GetAddOnMetadata, name, "Version")
-        if ok then
-            version = result
-        end
-    elseif GetAddOnMetadata then
-        local ok, result = pcall(GetAddOnMetadata, name, "Version")
+    local getMeta = self.RealGetAddOnMetadata or (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
+    if getMeta then
+        local ok, result = pcall(getMeta, name, "Version")
         if ok then
             version = result
         end
@@ -217,6 +213,7 @@ local VENDORED_HOSTS = {
     "WeakAuras",
     "BetterBlizzPlates",
     "BetterBlizzFrames",
+    "BuffOverlay",
 }
 
 function NS:YieldVendoredToStandalone(name)
@@ -478,26 +475,97 @@ end
 function NS:CreateScrollArea(page)
     local scroll = CreateFrame("ScrollFrame", nil, page)
     scroll:SetPoint("TOPLEFT", page, "TOPLEFT", 0, 0)
-    scroll:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", -8, 0)
+    scroll:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", -10, 0)
     scroll:EnableMouseWheel(true)
 
     local child = CreateFrame("Frame", nil, scroll)
-    child:SetSize(420, 1)
+    child:SetSize(460, 1)
     scroll:SetScrollChild(child)
     child.scroll = scroll
     page.scroll = scroll
 
-    local track = scroll:CreateTexture(nil, "BACKGROUND")
+    local bar = CreateFrame("Frame", nil, page)
+    bar:SetWidth(10)
+    bar:SetPoint("TOPLEFT", scroll, "TOPRIGHT", 0, 0)
+    bar:SetPoint("BOTTOMLEFT", scroll, "BOTTOMRIGHT", 0, 0)
+    bar:EnableMouse(true)
+    bar:SetFrameLevel((scroll:GetFrameLevel() or 1) + 6)
+    scroll.bar = bar
+
+    local track = bar:CreateTexture(nil, "BACKGROUND")
     track:SetColorTexture(1, 1, 1, 0.08)
     track:SetWidth(3)
-    track:SetPoint("TOPRIGHT", scroll, "TOPRIGHT", 0, 0)
-    track:SetPoint("BOTTOMRIGHT", scroll, "BOTTOMRIGHT", 0, 0)
+    track:SetPoint("TOP", bar, "TOP", 0, 0)
+    track:SetPoint("BOTTOM", bar, "BOTTOM", 0, 0)
     scroll.track = track
 
-    local thumb = scroll:CreateTexture(nil, "OVERLAY")
-    thumb:SetWidth(3)
-    thumb:SetColorTexture(self.COLOR.accent[1], self.COLOR.accent[2], self.COLOR.accent[3], 0.85)
+    local thumb = CreateFrame("Button", nil, bar)
+    thumb:SetWidth(10)
+    thumb:EnableMouse(true)
+    thumb:RegisterForDrag("LeftButton")
+    thumb:SetFrameLevel(bar:GetFrameLevel() + 2)
+    local thumbTex = thumb:CreateTexture(nil, "ARTWORK")
+    thumbTex:SetColorTexture(self.COLOR.accent[1], self.COLOR.accent[2], self.COLOR.accent[3], 0.85)
+    thumbTex:SetWidth(3)
+    thumbTex:SetPoint("TOP", thumb, "TOP", 0, 0)
+    thumbTex:SetPoint("BOTTOM", thumb, "BOTTOM", 0, 0)
+    thumb.texture = thumbTex
     scroll.thumb = thumb
+
+    local function ScrollFromCursor()
+        local range = scroll:GetVerticalScrollRange()
+        if range <= 1 then
+            return
+        end
+        local scale = bar:GetEffectiveScale() or 1
+        local _, cursorY = GetCursorPosition()
+        cursorY = cursorY / scale
+        local top = bar:GetTop() or 0
+        local bottom = bar:GetBottom() or 0
+        local height = top - bottom
+        local thumbHeight = thumb:GetHeight() or 28
+        local travel = height - thumbHeight
+        if travel <= 0 then
+            return
+        end
+        local offset = (top - cursorY) - (thumbHeight * 0.5)
+        if offset < 0 then
+            offset = 0
+        elseif offset > travel then
+            offset = travel
+        end
+        scroll:SetVerticalScroll((offset / travel) * range)
+        NS:UpdateScroll(scroll)
+    end
+
+    thumb:SetScript("OnDragStart", function(self)
+        self.dragging = true
+    end)
+    thumb:SetScript("OnDragStop", function(self)
+        self.dragging = nil
+    end)
+    thumb:SetScript("OnUpdate", function(self)
+        if self.dragging then
+            ScrollFromCursor()
+        end
+    end)
+    thumb:SetScript("OnMouseWheel", function(_, delta)
+        NS:ScrollBy(scroll, delta)
+    end)
+
+    bar:SetScript("OnMouseDown", function(_, button)
+        if button ~= "LeftButton" or thumb.dragging then
+            return
+        end
+        ScrollFromCursor()
+        thumb.dragging = true
+    end)
+    bar:SetScript("OnMouseUp", function()
+        thumb.dragging = nil
+    end)
+    bar:SetScript("OnMouseWheel", function(_, delta)
+        NS:ScrollBy(scroll, delta)
+    end)
 
     scroll:SetScript("OnMouseWheel", function(_, delta)
         self:ScrollBy(scroll, delta)
@@ -508,6 +576,10 @@ function NS:CreateScrollArea(page)
             child:SetWidth(width)
         end
         NS:UpdateScroll(selfScroll)
+    end)
+
+    scroll:HookScript("OnVerticalScroll", function()
+        NS:UpdateScroll(scroll)
     end)
 
     return scroll, child
@@ -535,21 +607,36 @@ function NS:UpdateScroll(scroll)
     local range = scroll:GetVerticalScrollRange()
     local thumb = scroll.thumb
     local track = scroll.track
+    local bar = scroll.bar
     if range <= 1 then
         scroll:SetVerticalScroll(0)
-        thumb:Hide()
-        track:Hide()
+        if thumb then
+            thumb:Hide()
+        end
+        if track then
+            track:Hide()
+        end
+        if bar then
+            bar:Hide()
+        end
         return
     end
 
-    track:Show()
-    thumb:Show()
+    if bar then
+        bar:Show()
+    end
+    if track then
+        track:Show()
+    end
+    if thumb then
+        thumb:Show()
+    end
     local thumbHeight = math.max(28, viewHeight * (viewHeight / child:GetHeight()))
     local travel = viewHeight - thumbHeight
     local offset = (scroll:GetVerticalScroll() / range) * travel
     thumb:SetHeight(thumbHeight)
     thumb:ClearAllPoints()
-    thumb:SetPoint("TOPRIGHT", scroll, "TOPRIGHT", 0, -offset)
+    thumb:SetPoint("TOPRIGHT", bar or scroll, "TOPRIGHT", 0, -offset)
 end
 
 function NS:ScrollBy(scroll, delta)
@@ -1330,148 +1417,134 @@ function NS:MapVendoredMediaPath(path)
     end))
 end
 
-local function HookMediaMethod(obj, method)
-    local meta = getmetatable(obj)
-    local index = meta and meta.__index
-    if type(index) ~= "table" or type(index[method]) ~= "function" or index["ArenaUIHook_" .. method] then
-        return
-    end
-    local original = index[method]
-    index["ArenaUIHook_" .. method] = true
-    index[method] = function(self, first, ...)
-        if type(first) == "string" then
-            first = NS:MapVendoredMediaPath(first)
-        elseif type(first) == "table" then
-            local copy = {}
-            for key, value in pairs(first) do
-                copy[key] = type(value) == "string" and NS:MapVendoredMediaPath(value) or value
-            end
-            first = copy
-        end
-        if method == "SetFont" then
-            local ok = original(self, first, ...)
-            if not ok then
-                return original(self, "Fonts\\FRIZQT__.TTF", ...)
-            end
-            return ok
-        end
-        return original(self, first, ...)
-    end
-end
+-- Do not patch shared widget metatables (SetTexture/SetFont/etc). That taints every
+-- Blizzard frame that uses those methods. Vendored paths are rewritten at build time,
+-- and LibSharedMedia is remapped in VendoredFinish.
 
-local mediaProbe = CreateFrame("Frame")
-local mediaTexture = mediaProbe:CreateTexture()
-local mediaText = mediaProbe:CreateFontString()
-local mediaBar = CreateFrame("StatusBar")
-local mediaButton = CreateFrame("Button")
-HookMediaMethod(mediaTexture, "SetTexture")
-HookMediaMethod(mediaTexture, "SetMask")
-HookMediaMethod(mediaProbe, "SetBackdrop")
-HookMediaMethod(mediaText, "SetFont")
-HookMediaMethod(mediaBar, "SetStatusBarTexture")
-HookMediaMethod(mediaButton, "SetNormalTexture")
-HookMediaMethod(mediaButton, "SetPushedTexture")
-HookMediaMethod(mediaButton, "SetDisabledTexture")
-HookMediaMethod(mediaButton, "SetHighlightTexture")
-mediaProbe:Hide()
-mediaButton:Hide()
+local realC_AddOns = C_AddOns
+local realGetAddOnMetadata = realC_AddOns and realC_AddOns.GetAddOnMetadata
+local realIsAddOnLoaded = realC_AddOns and realC_AddOns.IsAddOnLoaded
+local realLoadAddOn = realC_AddOns and realC_AddOns.LoadAddOn
+NS.RealGetAddOnMetadata = realGetAddOnMetadata or GetAddOnMetadata
+NS._realIsAddOnLoaded = realIsAddOnLoaded or IsAddOnLoaded
 
-if C_AddOns and C_AddOns.GetAddOnMetadata then
-    local realGetAddOnMetadata = C_AddOns.GetAddOnMetadata
-    NS.RealGetAddOnMetadata = realGetAddOnMetadata
-    function C_AddOns.GetAddOnMetadata(name, field)
-        local metaName = name
-        if name == "Diminish_Options" then
-            metaName = "Diminish"
+local function VendoredGetAddOnMetadata(name, field)
+    local metaName = name
+    if name == "Diminish_Options" then
+        metaName = "Diminish"
+    end
+    if ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(metaName) then
+        local meta = ArenaUI_VendoredMeta and ArenaUI_VendoredMeta[name]
+        if meta and meta[field] then
+            return meta[field]
         end
-        if ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(metaName) then
-            local meta = ArenaUI_VendoredMeta and ArenaUI_VendoredMeta[name]
-            if meta and meta[field] then
-                return meta[field]
-            end
-            -- WeakAuras Init reads X-Flavor before anything else; without it every
-            -- IsTBC/IsRetail check is wrong and talent APIs blow up on classic.
-            if field == "X-Flavor" and (name == "WeakAuras" or name:find("^WeakAuras", 1, true)) then
-                local project = WOW_PROJECT_ID
-                if project == WOW_PROJECT_CLASSIC then
-                    return "Vanilla"
-                elseif project == (WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5) then
-                    return "TBC"
-                elseif project == (WOW_PROJECT_WRATH_CLASSIC or 11) then
-                    return "Wrath"
-                elseif project == (WOW_PROJECT_CATACLYSM_CLASSIC or 14) then
-                    return "Cata"
-                elseif project == (WOW_PROJECT_MISTS_CLASSIC or 19) then
-                    return "Mists"
-                elseif project == WOW_PROJECT_MAINLINE then
-                    return "Mainline"
-                end
+        -- WeakAuras Init reads X-Flavor before anything else; without it every
+        -- IsTBC/IsRetail check is wrong and talent APIs blow up on classic.
+        if field == "X-Flavor" and (name == "WeakAuras" or (type(name) == "string" and name:find("^WeakAuras", 1, true))) then
+            local project = WOW_PROJECT_ID
+            if project == WOW_PROJECT_CLASSIC then
+                return "Vanilla"
+            elseif project == (WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5) then
                 return "TBC"
+            elseif project == (WOW_PROJECT_WRATH_CLASSIC or 11) then
+                return "Wrath"
+            elseif project == (WOW_PROJECT_CATACLYSM_CLASSIC or 14) then
+                return "Cata"
+            elseif project == (WOW_PROJECT_MISTS_CLASSIC or 19) then
+                return "Mists"
+            elseif project == WOW_PROJECT_MAINLINE then
+                return "Mainline"
+            end
+            return "TBC"
+        end
+    end
+    if name == addonName then
+        local stack = debugstack(2, 1, 0) or ""
+        if stack:find("OmniBar", 1, true) and field == "Version" then
+            return "v34"
+        end
+        if stack:find("OmniCD", 1, true) then
+            local omniCDMeta = {
+                Version = "v2.8.35",
+                Author = "Treebonker",
+                Notes = "Party cooldown tracker. /oc",
+                ["X-License"] = "All Rights Reserved",
+                ["X-Localizations"] = "enUS, deDE, esMX, frFR, itIT, koKR, ruRU, zhCN, zhTW",
+            }
+            if omniCDMeta[field] then
+                return omniCDMeta[field]
             end
         end
-        if name == addonName then
-            local stack = debugstack(2, 1, 0) or ""
-            if stack:find("OmniBar", 1, true) and field == "Version" then
-                return "v34"
-            end
-            if stack:find("OmniCD", 1, true) then
-                local omniCDMeta = {
-                    Version = "v2.8.35",
-                    Author = "Treebonker",
-                    Notes = "Party cooldown tracker. /oc",
-                    ["X-License"] = "All Rights Reserved",
-                    ["X-Localizations"] = "enUS, deDE, esMX, frFR, itIT, koKR, ruRU, zhCN, zhTW",
-                }
-                if omniCDMeta[field] then
-                    return omniCDMeta[field]
-                end
-            end
-        end
+    end
+    if realGetAddOnMetadata then
         return realGetAddOnMetadata(name, field)
     end
+    if GetAddOnMetadata then
+        return GetAddOnMetadata(name, field)
+    end
 end
 
-if C_AddOns and C_AddOns.IsAddOnLoaded then
-    local realIsAddOnLoaded = C_AddOns.IsAddOnLoaded
-    NS._realIsAddOnLoaded = realIsAddOnLoaded
-    local embedded = {
-        Diminish = "Diminish",
-        Diminish_Options = "Diminish",
-        Details = "Details",
-        WeakAuras = "WeakAuras",
-        WeakAurasOptions = "WeakAuras",
-        WeakAurasModelPaths = "WeakAuras",
-        WeakAurasTemplates = "WeakAuras",
-        WeakAurasArchive = "WeakAuras",
-    }
-    function C_AddOns.IsAddOnLoaded(name)
-        local host = embedded[name]
-        if host and ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(host) then
-            return true
-        end
+local embeddedLoaded = {
+    Diminish = "Diminish",
+    Diminish_Options = "Diminish",
+    Details = "Details",
+    WeakAuras = "WeakAuras",
+    WeakAurasOptions = "WeakAuras",
+    WeakAurasModelPaths = "WeakAuras",
+    WeakAurasTemplates = "WeakAuras",
+    WeakAurasArchive = "WeakAuras",
+}
+
+local function VendoredIsAddOnLoaded(name)
+    local host = embeddedLoaded[name]
+    if host and ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(host) then
+        return true
+    end
+    if realIsAddOnLoaded then
         return realIsAddOnLoaded(name)
     end
-end
-
-if C_AddOns and C_AddOns.LoadAddOn then
-    local realLoadAddOn = C_AddOns.LoadAddOn
-    local loadable = {
-        WeakAurasOptions = "WeakAuras",
-        WeakAurasModelPaths = "WeakAuras",
-        WeakAurasTemplates = "WeakAuras",
-        WeakAurasArchive = "WeakAuras",
-    }
-    function C_AddOns.LoadAddOn(name)
-        local host = loadable[name]
-        if host and ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(host) then
-            if name == "WeakAurasArchive" then
-                WeakAurasArchive = WeakAurasArchive or {}
-            end
-            return true
-        end
-        return realLoadAddOn(name)
+    if IsAddOnLoaded then
+        return IsAddOnLoaded(name)
     end
 end
+
+local loadableAddOns = {
+    WeakAurasOptions = "WeakAuras",
+    WeakAurasModelPaths = "WeakAuras",
+    WeakAurasTemplates = "WeakAuras",
+    WeakAurasArchive = "WeakAuras",
+}
+
+local function VendoredLoadAddOn(name)
+    local host = loadableAddOns[name]
+    if host and ArenaUI_VendoredLinks and ArenaUI_VendoredLinks[name] and not NS:StandaloneIsOn(host) then
+        if name == "WeakAurasArchive" then
+            WeakAurasArchive = WeakAurasArchive or {}
+        end
+        return true
+    end
+    if realLoadAddOn then
+        return realLoadAddOn(name)
+    end
+    if LoadAddOn then
+        return LoadAddOn(name)
+    end
+end
+
+-- Scoped for vendored setfenv only. Do not replace globals — that taints every
+-- Blizzard/secure caller of C_AddOns.* / GetAddOnMetadata.
+if realC_AddOns then
+    ArenaUI_VendoredC_AddOns = setmetatable({
+        GetAddOnMetadata = VendoredGetAddOnMetadata,
+        IsAddOnLoaded = VendoredIsAddOnLoaded,
+        LoadAddOn = VendoredLoadAddOn,
+    }, {
+        __index = realC_AddOns,
+    })
+end
+ArenaUI_VendoredGetAddOnMetadata = VendoredGetAddOnMetadata
+ArenaUI_VendoredIsAddOnLoaded = VendoredIsAddOnLoaded
+ArenaUI_VendoredLoadAddOn = VendoredLoadAddOn
 
 -- Before any embedded addon file runs. A standalone that is enabled takes over.
 NS:YieldVendoredModules()

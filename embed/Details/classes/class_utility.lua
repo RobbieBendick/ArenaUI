@@ -172,7 +172,7 @@ end
 
 local statusBarBackgroundTable_ForDeathTooltip = {
 	value = 100,
-	texture = [[Interface\AddOns\Details\images\bar_serenity]],
+	texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]],
 	color = {DetailsFramework:GetDefaultBackdropColor()}
 }
 
@@ -215,7 +215,7 @@ function Details.ShowDeathTooltip2(instance, lineFrame) --~death
 				GameCooltip:AddStatusBar(ev.currentHP/maxHealth*100, 1, 1, .2, 0, 0.8, false)
 			end
 
-			GameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\Details\images\bar_hyanda]])
+			GameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_hyanda]])
 		end
 	end
 
@@ -389,13 +389,13 @@ function Details.ShowDeathTooltip(instance, lineFrame, combatObject, deathTable)
 
 	gameCooltip:AddLine(deathTable[6] .. " " .. Loc["STRING_TIME_OF_DEATH"] , "-- -- -- ", 1, "white")
 	gameCooltip:AddIcon("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\small_icons", 1, 1, nil, nil, .75, 1, 0, 1)
-	gameCooltip:AddStatusBar(0, 1, .5, .5, .5, .5, false, {value = 100, color = {.5, .5, .5, 1}, specialSpark = false, texture = [[Interface\AddOns\Details\images\bar4_vidro]]})
+	gameCooltip:AddStatusBar(0, 1, .5, .5, .5, .5, false, {value = 100, color = {.5, .5, .5, 1}, specialSpark = false, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4_vidro]]})
 
 	if (battleress) then
 		local spellName, _, spellIcon = _GetSpellInfo(battleress[2])
 		gameCooltip:AddLine("+" .. format("%.1f", battleress[4] - timeOfDeath) .. "s " .. spellName .. " (" .. battleress[6] .. ")", "", 1, "white")
 		gameCooltip:AddIcon("Interface\\Glues\\CharacterSelect\\Glues-AddOn-Icons", 1, 1, lineHeight, lineHeight, .75, 1, 0, 1)
-		gameCooltip:AddStatusBar(0, 1, .5, .5, .5, .5, false, {value = 100, color = {.5, .5, .5, 1}, specialSpark = false, texture = [[Interface\AddOns\Details\images\bar4_vidro]]})
+		gameCooltip:AddStatusBar(0, 1, .5, .5, .5, .5, false, {value = 100, color = {.5, .5, .5, 1}, specialSpark = false, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4_vidro]]})
 	end
 
 	if (lastcooldown) then
@@ -408,7 +408,7 @@ function Details.ShowDeathTooltip(instance, lineFrame, combatObject, deathTable)
 			gameCooltip:AddIcon([[Interface\CHARACTERFRAME\UI-Player-PlayTimeUnhealthy]], 1, 1, 18, 18)
 		end
 
-		gameCooltip:AddStatusBar(0, 1, 1, 1, 1, 1, false, {value = 100, color = {.3, .3, .3, 1}, specialSpark = false, texture = [[Interface\AddOns\Details\images\bar_serenity]]})
+		gameCooltip:AddStatusBar(0, 1, 1, 1, 1, 1, false, {value = 100, color = {.3, .3, .3, 1}, specialSpark = false, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]]})
 	end
 
 	--set the font and size of the text as defined in the options panel
@@ -1341,9 +1341,9 @@ function atributo_misc:ToolTipCC(instancia, numero, barra)
 			GameCooltip:AddLine(target_name .. ": ", amount .. "  ")
 
 			local classe = Details:GetClass(target_name)
-			GameCooltip:AddIcon([[Interface\AddOns\Details\images\espadas]], nil, 1, lineHeight, lineHeight)
+			GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\espadas]], nil, 1, lineHeight, lineHeight)
 			if (classe) then
-				GameCooltip:AddIcon([[Interface\AddOns\Details\images\classes_small]], nil, 2, lineHeight, lineHeight, unpack(Details.class_coords [classe]))
+				GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], nil, 2, lineHeight, lineHeight, unpack(Details.class_coords [classe]))
 			else
 				GameCooltip:AddIcon("Interface\\LFGFRAME\\LFGROLE_BW", nil, 2, lineHeight, lineHeight, .25, .5, 0, 1)
 			end
@@ -1509,7 +1509,7 @@ function atributo_misc:ToolTipDispell(instance, numero, barra)
 				local n = _table [1]:gsub(("%s%<.*"), "")
 				GameCooltip:AddLine(n, _table [2] .. " (" .. _math_floor(_table [2]/self.dispell*100) .. "%)")
 				Details:AddTooltipBackgroundStatusbar()
-				GameCooltip:AddIcon([[Interface\AddOns\Details\images\classes_small]], 1, 1, 14, 14, 0.25, 0.49609375, 0.75, 1)
+				GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], 1, 1, 14, 14, 0.25, 0.49609375, 0.75, 1)
 			end
 		end
 
@@ -2402,7 +2402,7 @@ function atributo_misc:ToolTipInterrupt(instance, numero, barra)
 				local n = _table [1]:gsub(("%s%<.*"), "")
 				GameCooltip:AddLine(n, floor(_table [2]) .. " (" .. _math_floor(_table [2]/self.interrupt*100) .. "%)")
 				Details:AddTooltipBackgroundStatusbar()
-				GameCooltip:AddIcon([[Interface\AddOns\Details\images\classes_small]], 1, 1, 14, 14, 0.25, 0.49609375, 0.75, 1)
+				GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], 1, 1, 14, 14, 0.25, 0.49609375, 0.75, 1)
 			end
 		end
 
@@ -3824,6 +3824,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

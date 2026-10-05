@@ -593,7 +593,7 @@ local createDropdown = function(thisFrame)
 			recentReportButton:SetSize(150, 16)
 			recentReportButton:SetPoint("topleft", window, "topleft", 5, -28 + (i * 17 * -1))
 			recentReportButton:Show()
-			recentReportButton:SetBackdrop({bgFile = [[Interface\AddOns\Details\images\background]], tile = true, tileSize = 16,
+			recentReportButton:SetBackdrop({bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tile = true, tileSize = 16,
 			insets = {left = 0, right = 0, top = 0, bottom = 0}})
 			recentReportButton:SetBackdropColor(0, 0, 0, 0.3)
 			recentReportButton.text:SetTextColor(1, 1, 1, 1)
@@ -641,7 +641,7 @@ local createDropdown = function(thisFrame)
 		window.slider:SetBackdropBorderColor(0, 0, 0, 0.5)
 		window.slider:SetBackdropColor(0, 0, 0, 0.3)
 
-		window.slider.thumb:SetTexture([[Interface\AddOns\Details\images\icons2]])
+		window.slider.thumb:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]])
 		window.slider.thumb:SetTexCoord(482/512, 492/512, 104/512, 120/512)
 		window.slider.thumb:SetSize(16, 16)
 		window.slider.thumb:SetVertexColor(0.6, 0.6, 0.6, 0.95)
@@ -683,7 +683,7 @@ local createDropdown = function(thisFrame)
 			titlebar:SetPoint("topleft", window, "topleft", 2, -3)
 			titlebar:SetPoint("topright", window, "topright", -2, -3)
 			titlebar:SetHeight(20)
-			--titlebar:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+			--titlebar:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
 			--titlebar:SetBackdropColor(.5, .5, .5, 1)
 			--titlebar:SetBackdropBorderColor(0, 0, 0, 1)
 
@@ -1032,6 +1032,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

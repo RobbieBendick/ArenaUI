@@ -324,6 +324,9 @@ NS.RACES = {
 }
 
 -- stats: ordered priority, first is highest
+-- professions: { verdict?, list = { { name = "Enchanting", recommended = true, note = "optional override" } } }
+-- Names resolve through NS.PROFESSIONS. Spec list entries can override note, kind, icon, benefits, recommended.
+-- First Aid is always shown; healers can override its note via HEALER_FIRST_AID.
 -- exclude = true hides the spec from the guide list.
 -- icon: Interface\Icons texture name. color: { r, g, b } for the spec row.
 -- compositions: ["2s"] and ["3s"] lists of COMPS entries. See COMPS below.
@@ -332,6 +335,7 @@ NS.RACES = {
 -- { comp = COMPS.WARR_DRUID, recommended = { 1, 2 } },
 -- { comp = COMPS.WARR_SHAM, recommended = { 3, 4 } },
 -- members is every spec in the comp, "Spec Class". The card hides the spec you are viewing.
+-- A member can be a list of alternatives for one slot: { "Beast Mastery Hunter", "Marksmanship Hunter" }.
 local COMPS = {
     WARR_SHAM = {
         name = "Warr/Sham",
@@ -438,6 +442,384 @@ local COMPS = {
         meta = { 3, 3, 3, 3 },
         members = { "Subtlety Rogue", "SL/SL Warlock" },
     },
+    -- PoM/Pyro mirrors of frost comps, with much lower metas.
+    PRIEST_PYRO = {
+        name = "DPM",
+        meta = { 2, 2, 2, 2 },
+        members = { "Discipline Priest", "PoM/Pyro Mage" },
+    },
+    ROGUE_PYRO = {
+        name = "RM",
+        meta = { 3, 3, 3, 3 },
+        members = { "Subtlety Rogue", "PoM/Pyro Mage" },
+    },
+    SHADOW_PYRO = {
+        name = "SP/M",
+        meta = { 1, 1, 1, 1 },
+        members = { "Shadow Priest", "PoM/Pyro Mage" },
+    },
+    RMP_PYRO = {
+        name = "RMP",
+        meta = { 3, 3, 3, 3 },
+        members = { "PoM/Pyro Mage", "Subtlety Rogue", "Discipline Priest" },
+    },
+    RMD_PYRO = {
+        name = "RMD",
+        meta = { 2, 2, 3, 3 },
+        members = { "PoM/Pyro Mage", "Subtlety Rogue", "Restoration Druid" },
+    },
+    SHADOW_PYRO_RSHAM = {
+        name = "Shatterplay",
+        meta = { 2, 2, 2, 2 },
+        members = { "Shadow Priest", "PoM/Pyro Mage", "Restoration Shaman" },
+    },
+    SHADOW_PYRO_HPAL = {
+        name = "HPal Shatterplay",
+        meta = { 1, 1, 1, 1 },
+        members = { "Shadow Priest", "PoM/Pyro Mage", "Holy Paladin" },
+    },
+    DOUBLE_PYRO = {
+        name = "Double Pyro",
+        meta = { 2, 2, 2, 2 },
+        members = {
+            "PoM/Pyro Mage",
+            "PoM/Pyro Mage",
+            { "Discipline Priest", "Restoration Shaman" },
+        },
+    },
+    PYRO_SHAM = {
+        name = "Pyro/Sham",
+        meta = { 4, 4, 4, 4 },
+        members = { "PoM/Pyro Mage", "Restoration Shaman" },
+    },
+    WARR_MAGE_HEALER = {
+        name = "Warr/Mage/Healer",
+        meta = { 3, 3, 3, 3 },
+        members = {
+            "Arms Warrior",
+            "Frost Mage",
+            { "Restoration Druid", "Restoration Shaman", "Discipline Priest" },
+        },
+    },
+    PHD = {
+        name = "PHD",
+        meta = { 4, 4, 4, 4 },
+        members = {
+            { "Marksmanship Hunter", "Survival Hunter" },
+            "Discipline Priest",
+            "Restoration Druid",
+        },
+    },
+    PHD_MM = {
+        name = "PHD",
+        meta = { 4, 4, 4, 4 },
+        members = { "Marksmanship Hunter", "Discipline Priest", "Restoration Druid" },
+    },
+    PHD_SV = {
+        name = "PHD",
+        meta = { 4, 4, 4, 4 },
+        members = { "Survival Hunter", "Discipline Priest", "Restoration Druid" },
+    },
+    PHP_MM = {
+        name = "Hunter/Disc/HPal",
+        meta = { 3, 3, 3, 3 },
+        members = { "Marksmanship Hunter", "Discipline Priest", "Holy Paladin" },
+    },
+    PHP_SV = {
+        name = "Hunter/Disc/HPal",
+        meta = { 3, 3, 3, 3 },
+        members = { "Survival Hunter", "Discipline Priest", "Holy Paladin" },
+    },
+    PHS = {
+        name = "Hunter/Disc/RSham",
+        meta = { 3, 3, 3, 3 },
+        members = {
+            { "Marksmanship Hunter", "Survival Hunter" },
+            "Discipline Priest",
+            "Restoration Shaman",
+        },
+    },
+    PHS_MM = {
+        name = "Hunter/Disc/RSham",
+        meta = { 3, 3, 3, 3 },
+        members = { "Marksmanship Hunter", "Discipline Priest", "Restoration Shaman" },
+    },
+    PHS_SV = {
+        name = "Hunter/Disc/RSham",
+        meta = { 3, 3, 3, 3 },
+        members = { "Survival Hunter", "Discipline Priest", "Restoration Shaman" },
+    },
+    HUNTER_ROGUE = {
+        name = "Hunter/Rogue",
+        meta = { 4, 3, 3, 3 },
+        members = {
+            { "Beast Mastery Hunter", "Marksmanship Hunter", "Survival Hunter" },
+            "Subtlety Rogue",
+        },
+    },
+    HUNTER_ROGUE_BM = {
+        name = "Hunter/Rogue",
+        meta = { 4, 3, 3, 3 },
+        members = { "Beast Mastery Hunter", "Subtlety Rogue" },
+    },
+    HUNTER_ROGUE_MM = {
+        name = "Hunter/Rogue",
+        meta = { 4, 3, 3, 3 },
+        members = { "Marksmanship Hunter", "Subtlety Rogue" },
+    },
+    HUNTER_ROGUE_SV = {
+        name = "Hunter/Rogue",
+        meta = { 4, 3, 3, 3 },
+        members = { "Survival Hunter", "Subtlety Rogue" },
+    },
+    HUNTER_PRIEST = {
+        name = "Hunter/Disc",
+        meta = { 4, 4, 3, 3 },
+        members = {
+            { "Marksmanship Hunter", "Survival Hunter" },
+            "Discipline Priest",
+        },
+    },
+    HUNTER_PRIEST_BM = {
+        name = "Hunter/Disc",
+        meta = { 2, 2, 1, 1 },
+        members = { "Beast Mastery Hunter", "Discipline Priest" },
+    },
+    HUNTER_PRIEST_MM = {
+        name = "Hunter/Disc",
+        meta = { 4, 4, 3, 3 },
+        members = { "Marksmanship Hunter", "Discipline Priest" },
+    },
+    HUNTER_PRIEST_SV = {
+        name = "Hunter/Disc",
+        meta = { 4, 4, 3, 3 },
+        members = { "Survival Hunter", "Discipline Priest" },
+    },
+    HUNTER_DRUID = {
+        name = "Hunter/RDruid",
+        meta = { 3, 3, 4, 4 },
+        members = {
+            { "Marksmanship Hunter", "Survival Hunter" },
+            "Restoration Druid",
+        },
+    },
+    HUNTER_DRUID_BM = {
+        name = "Hunter/RDruid",
+        meta = { 1, 1, 2, 2 },
+        members = { "Beast Mastery Hunter", "Restoration Druid" },
+    },
+    HUNTER_DRUID_MM = {
+        name = "Hunter/RDruid",
+        meta = { 3, 3, 4, 4 },
+        members = { "Marksmanship Hunter", "Restoration Druid" },
+    },
+    HUNTER_DRUID_SV = {
+        name = "Hunter/RDruid",
+        meta = { 3, 3, 4, 4 },
+        members = { "Survival Hunter", "Restoration Druid" },
+    },
+}
+
+-- Profession copy shared across specs. Specs reference these by name in professions.list.
+NS.PROFESSIONS = {
+    Enchanting = {
+        kind = "Primary",
+        icon = "Trade_Engraving",
+        note = "Your rings each get a profession-only spell damage enchant. Together that's a clean +24 nobody else can put on.",
+        benefits = {
+            {
+                name = "Enchant Ring - Spellpower",
+                icon = "INV_Misc_Note_01",
+                note = "+12 spell damage. Requires Enchanting to apply to your own rings.",
+            },
+        },
+    },
+    Jewelcrafting = {
+        kind = "Primary",
+        icon = "INV_Misc_Gem_01",
+        note = "Crafts a few BoP sockets that outpace vendor/raid gems at the start of the expansion. If you aren't JC, you can't wear them.",
+        benefits = {
+            {
+                name = "Don Julio's Heart",
+                icon = "INV_Misc_Gem_Bloodstone_02",
+                note = "+14 spell damage, unique-equipped, Jewelcrafter-only.",
+            },
+        },
+    },
+    Engineering = {
+        kind = "Primary",
+        icon = "Trade_Engineering",
+        note = "Gives you Hyper-Vision Goggles — a helmet click that lights up stealth. In rogue mirrors that often decides who opens first.",
+        benefits = {
+            {
+                name = "Hyper-Vision Goggles",
+                icon = "INV_Gizmo_NewGoggles",
+                note = "On use: 20 seconds of stealth detection. Turns rogue mirrors into your opener instead of theirs.",
+            },
+        },
+    },
+    Blacksmithing = {
+        kind = "Primary",
+        icon = "Trade_BlackSmithing",
+        note = "Required to equip Deep Thunder in Season 1 — the stun mace that defines warrior arena. It upgrades to Stormherald later, so skill this immediately.",
+        benefits = {
+            {
+                name = "Deep Thunder",
+                icon = "Inv_mace_2h_blacksmithing_02",
+                note = "The Season 1 stun mace. Required for competitive arena.",
+            },
+            {
+                name = "Stormherald",
+                icon = "inv_mace_2h_blacksmithing_03",
+                note = "Deep Thunder's upgraded form in later phases.",
+            },
+        },
+    },
+    ["First Aid"] = {
+        kind = "Secondary",
+        icon = "Spell_Holy_SealOfSacrifice",
+        note = "Always level this. Bandages are free self-heals and you should never queue without them.",
+        benefits = {
+            {
+                name = "Heavy Netherweave Bandage",
+                icon = "INV_Misc_Bandage_Netherweave_Heavy",
+                note = "2800 heal over 8 seconds. Use them if you can manage to escape for a moment.",
+            },
+        },
+    },
+}
+
+-- Healers still want First Aid: bandages are free healing on top of your kit.
+local HEALER_FIRST_AID = {
+    name = "First Aid",
+    note = "You can already heal, but bandages restore a ton of health for zero mana. If you can get one off, it's the most efficient healing available.",
+}
+
+-- Shared Enchanting / Jewelcrafting setup for healing specs.
+local HEALER_PROFESSIONS = {
+    verdict = "Take Enchanting and Jewelcrafting. Ring healing enchants alone are +40 healing, and Kailee's Rose is the early JC socket you want. Cap First Aid for bandages.",
+    list = {
+        {
+            name = "Enchanting",
+            recommended = true,
+            note = "Each ring gets a healing enchant only Enchanters can use — +40 healing across both.",
+            benefits = {
+                {
+                    name = "Formula: Enchant Ring - Healing Power",
+                    icon = "INV_Misc_Note_01",
+                    note = "+20 healing per ring.",
+                },
+            },
+        },
+        {
+            name = "Jewelcrafting",
+            recommended = true,
+            note = "Crafts Kailee's Rose, a BoP healing gem that beats normal sockets early in the expansion.",
+            benefits = {
+                {
+                    name = "Kailee's Rose",
+                    icon = "inv_jewelcrafting_crimsonspinel_02",
+                    note = "Unique-equipped JC gem with +26 healing.",
+                },
+            },
+        },
+        HEALER_FIRST_AID,
+    },
+}
+
+-- Shared Enchanting / Jewelcrafting setup for spell damage specs (mage, warlock, etc.).
+local SPELL_PROFESSIONS = {
+    verdict = "Take Enchanting with Jewelcrafting. Ring enchants stack to +24 spell damage, JC covers the BoP gems you want early, and First Aid should be capped for bandages.",
+    list = {
+        { name = "Enchanting", recommended = true },
+        { name = "Jewelcrafting", recommended = true },
+    },
+}
+
+-- Shared Enchanting / Jewelcrafting setup for hunters.
+local HUNTER_PROFESSIONS = {
+    verdict = "Go Enchanting and Jewelcrafting. Ring stats enchants give +4 to every stat on each ring, and Crimson Sun is the early JC attack power gem. Cap First Aid for bandages.",
+    list = {
+        {
+            name = "Enchanting",
+            recommended = true,
+            note = "Each ring gets +4 to all stats — +8 across both, Enchanter-only.",
+            benefits = {
+                {
+                    name = "Enchant Ring - Stats",
+                    icon = "INV_Misc_Note_01",
+                    note = "+4 to all stats per ring.",
+                },
+            },
+        },
+        {
+            name = "Jewelcrafting",
+            recommended = true,
+            note = "Crafts Crimson Sun, a BoP attack power gem that beats normal sockets early on.",
+            benefits = {
+                {
+                    name = "Crimson Sun",
+                    icon = "INV_Misc_Gem_Bloodstone_02",
+                    note = "Unique-equipped JC gem with +24 attack power.",
+                },
+            },
+        },
+    },
+}
+
+-- Shared Blacksmithing / Enchanting setup for warriors.
+local WARRIOR_PROFESSIONS = {
+    verdict = "Blacksmithing is mandatory for Deep Thunder (and later Stormherald). Enchanting covers +4 all stats on each ring. Cap First Aid for bandages.",
+    list = {
+        { name = "Blacksmithing", recommended = true },
+        {
+            name = "Enchanting",
+            recommended = true,
+            note = "Each ring gets +4 to all stats — +8 across both, Enchanter-only.",
+            benefits = {
+                {
+                    name = "Enchant Ring - Stats",
+                    icon = "INV_Misc_Note_01",
+                    note = "+4 to all stats per ring.",
+                },
+            },
+        },
+    },
+}
+
+-- Ret: Enchanting always, then Blacksmithing early or JC once you have a strong weapon.
+local RET_PROFESSIONS = {
+    verdict = "Enchanting is locked for ring stats. Take Blacksmithing early for Deep Thunder / Stormherald, or Jewelcrafting for Crimson Sun if you already have a strong weapon.",
+    list = {
+        {
+            name = "Enchanting",
+            recommended = true,
+            note = "Each ring gets +4 to all stats — +8 across both, Enchanter-only.",
+            benefits = {
+                {
+                    name = "Enchant Ring - Stats",
+                    icon = "INV_Misc_Note_01",
+                    note = "+4 to all stats per ring.",
+                },
+            },
+        },
+        {
+            name = "Blacksmithing",
+            recommended = true,
+            note = "Best in early seasons when you still need Deep Thunder, then Stormherald. Skill it up until your weapon slot is solved.",
+        },
+        {
+            name = "Jewelcrafting",
+            note = "If you've already got a juicer weapon, skip Blacksmithing and take JC instead for the attack power gem.",
+            benefits = {
+                {
+                    name = "Crimson Sun",
+                    icon = "INV_Misc_Gem_Bloodstone_02",
+                    note = "Unique-equipped JC gem with +24 attack power.",
+                },
+            },
+        },
+    },
 }
 
 NS.ARENA_SEASONS = { "Season 1", "Season 2", "Season 3", "Season 4" }
@@ -445,34 +827,38 @@ NS.ARENA_SEASONS = { "Season 1", "Season 2", "Season 3", "Season 4" }
 NS.CLASS_SPECS = {
     WARRIOR = {
         {
-            id = "arms", name = "Arms", skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 5, 5, 5, 5 }, compositions = { ["2s"] = { COMPS.WARR_SHAM, { comp = COMPS.WARR_DRUID, recommended = true }, COMPS.WARR_HPAL }, ["3s"] = { { comp = COMPS.RET_WARR_SHAM, recommended = true }, COMPS.WLD } },
+            id = "arms", name = "Arms", skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = { COMPS.WARR_SHAM, { comp = COMPS.WARR_DRUID, recommended = true }, COMPS.WARR_HPAL }, ["3s"] = { { comp = COMPS.RET_WARR_SHAM, recommended = true }, COMPS.WLD, COMPS.WARR_MAGE_HEALER } },
             icon = "Ability_Warrior_SavageBlow", color = { 0.82, 0.24, 0.20 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Resilience", "Stamina", "Strength", "Crit", "Attack Power" },
+            professions = WARRIOR_PROFESSIONS,
         },
         {
             id = "fury", name = "Fury", exclude = true, skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 1, 1, 1, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Ability_Warrior_InnerRage", color = { 0.95, 0.48, 0.12 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Hit", "Crit", "Strength", "Attack Power", "Resilience" },
+            professions = WARRIOR_PROFESSIONS,
         },
         {
             id = "protection", name = "Protection", exclude = true, skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 1, 1, 1, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Ability_Warrior_DefensiveStance", color = { 0.42, 0.58, 0.82 },
             races = { alliance = "Gnome", horde = "Tauren" },
             stats = { "Stamina", "Defense", "Resilience", "Dodge", "Strength" },
+            professions = WARRIOR_PROFESSIONS,
         },
     },
     PALADIN = {
         {
-            id = "holy", name = "Holy", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 3, 3, 3, 3 }, compositions = { ["2s"] = {
+            id = "holy", name = "Holy", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 2, 2, 2, 2 }, compositions = { ["2s"] = {
                 { comp = COMPS.WARR_HPAL, recommended = true },
             }, ["3s"] = {
-                COMPS.ENH_WARR_HPAL, {comp = COMPS.SHADOW_MAGE_HPAL, recommended = true}
+                COMPS.ENH_WARR_HPAL, {comp = COMPS.SHADOW_MAGE_HPAL, recommended = true}, COMPS.PHP_MM, COMPS.PHP_SV
             } },
             icon = "Spell_Holy_HolyBolt", color = { 0.95, 0.82, 0.35 },
             races = { alliance = "Dwarf", horde = "Blood Elf" },
             stats = { "Resilience", "Stamina", "Intellect", "Healing", "Mp5" },
+            professions = HEALER_PROFESSIONS,
         },
         {
             id = "protection", name = "Protection", exclude = true, skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 2, 2, 2, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
@@ -485,26 +871,46 @@ NS.CLASS_SPECS = {
             icon = "Spell_Holy_AuraOfLight", color = { 0.90, 0.38, 0.28 },
             races = { alliance = "Dwarf", horde = "Blood Elf" },
             stats = { "Resilience", "Stamina", "Strength", "Crit", "Spell Damage" },
+            professions = RET_PROFESSIONS,
         },
     },
     HUNTER = {
         {
-            id = "beastmastery", name = "Beast Mastery", skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 3, 2, 2 }, compositions = { ["2s"] = {}, ["3s"] = {} },
+            id = "beastmastery", name = "Beast Mastery", skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 3, 2, 2 }, compositions = { ["2s"] = {
+                { comp = COMPS.HUNTER_ROGUE_BM, recommended = true },
+                { comp = COMPS.HUNTER_PRIEST_BM, recommended = { 1, 2 } },
+                { comp = COMPS.HUNTER_DRUID_BM, recommended = { 3, 4 } },
+            }, ["3s"] = {} },
             icon = "Ability_Hunter_BeastTaming", color = { 0.48, 0.72, 0.32 },
             races = { alliance = "Dwarf", horde = "Orc" },
             stats = { "Resilience", "Agility", "Stamina", "Hit", "Attack Power" },
+            professions = HUNTER_PROFESSIONS,
         },
         {
-            id = "marksmanship", name = "Marksmanship", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = {}, ["3s"] = {} },
+            id = "marksmanship", name = "Marksmanship", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = {
+                COMPS.HUNTER_ROGUE_MM,
+                { comp = COMPS.HUNTER_PRIEST_MM, recommended = { 1, 2 } },
+                { comp = COMPS.HUNTER_DRUID_MM, recommended = { 3, 4 } },
+            }, ["3s"] = {
+                { comp = COMPS.PHD_MM, recommended = true }, COMPS.PHP_MM, COMPS.PHS_MM
+            } },
             icon = "Ability_Marksmanship", color = { 0.86, 0.52, 0.22 },
             races = { alliance = "Dwarf", horde = "Orc" },
             stats = { "Resilience", "Agility", "Crit", "Stamina", "Hit" },
+            professions = HUNTER_PROFESSIONS,
         },
         {
-            id = "survival", name = "Survival", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = {}, ["3s"] = {} },
+            id = "survival", name = "Survival", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = {
+                COMPS.HUNTER_ROGUE_SV,
+                { comp = COMPS.HUNTER_PRIEST_SV, recommended = { 1, 2 } },
+                { comp = COMPS.HUNTER_DRUID_SV, recommended = { 3, 4 } },
+            }, ["3s"] = {
+                { comp = COMPS.PHD_SV, recommended = true }, COMPS.PHP_SV, COMPS.PHS_SV
+            } },
             icon = "Ability_Hunter_SwiftStrike", color = { 0.28, 0.66, 0.58 },
             races = { alliance = "Dwarf", horde = "Orc" },
             stats = { "Resilience", "Agility", "Stamina", "Hit", "Attack Power" },
+            professions = HUNTER_PROFESSIONS,
         },
     },
     ROGUE = {
@@ -524,19 +930,38 @@ NS.CLASS_SPECS = {
         },
         {
             id = "subtlety", name = "Subtlety", skillFloor = { 4, 4, 4, 4 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 5, 5, 5, 5 }, compositions = { ["2s"] = {
-                 COMPS.ROGUE_MAGE, {comp = COMPS.PRIEST_ROGUE, recommended = {1,2}}, {comp = COMPS.ROGUE_DRUID, recommended = {3,4}}, COMPS.ROGUE_ROGUE
+                 COMPS.ROGUE_MAGE, {comp = COMPS.PRIEST_ROGUE, recommended = {1,2}}, {comp = COMPS.ROGUE_DRUID, recommended = {3,4}}, COMPS.ROGUE_ROGUE, COMPS.HUNTER_ROGUE
             }, ["3s"] = { {comp = COMPS.RMP, recommended = true }, COMPS.RMD, COMPS.RLD } },
             icon = "Ability_Stealth", color = { 0.58, 0.40, 0.82 },
             races = { alliance = "Human", horde = "Undead" },
             stats = { "Resilience", "Stamina", "Agility", "Hit", "Crit" },
+            professions = {
+                verdict = "Go Jewelcrafting and Engineering. The Nightseye Panther figurine helps you stay hidden, and Hyper-Vision Goggles make rogue mirrors much easier to open. Cap First Aid for bandages.",
+                list = {
+                    {
+                        name = "Jewelcrafting",
+                        recommended = true,
+                        note = "Lets you make the Nightseye Panther figurine, which raises your stealth. Getting the open matters so much that this trinket is a real priority.",
+                        benefits = {
+                            {
+                                name = "Figurine - Nightseye Panther",
+                                icon = "inv_jewelcrafting_blackpearlpanther",
+                                note = "On use: summons a panther and improves your stealth.",
+                            },
+                        },
+                    },
+                    { name = "Engineering", recommended = true },
+                },
+            },
         },
     },
     PRIEST = {
         {
-            id = "discipline", name = "Discipline", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 5, 5, 4, 4 }, compositions = { ["2s"] = {{ comp = COMPS.PRIEST_ROGUE, recommended = true }, COMPS.PRIEST_MAGE}, ["3s"] = { { comp = COMPS.RMP, recommended = true } } },
+            id = "discipline", name = "Discipline", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 5, 5, 4, 4 }, compositions = { ["2s"] = {{ comp = COMPS.PRIEST_ROGUE, recommended = true }, COMPS.PRIEST_MAGE, { comp = COMPS.HUNTER_PRIEST, recommended = { 1, 2 } }, COMPS.HUNTER_PRIEST_BM}, ["3s"] = { { comp = COMPS.RMP, recommended = true }, COMPS.PHD, COMPS.PHP_MM, COMPS.PHP_SV, COMPS.PHS, COMPS.WARR_MAGE_HEALER } },
             icon = "Spell_Holy_PowerWordShield", color = { 0.72, 0.76, 0.88 },
             races = { alliance = "Dwarf", horde = "Undead" },
             stats = { "Resilience", "Stamina", "Spell Damage", "Intellect", "Healing" },
+            professions = HEALER_PROFESSIONS,
         },
         {
             id = "holy", name = "Holy", exclude = true, skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 2, 2, 2, 2 }, meta = { 1, 1, 1, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
@@ -549,6 +974,7 @@ NS.CLASS_SPECS = {
             icon = "Spell_Shadow_ShadowWordPain", color = { 0.52, 0.32, 0.72 },
             races = { alliance = "Dwarf", horde = "Undead" },
             stats = { "Spell Hit", "Spell Damage", "Resilience", "Stamina", "Crit" },
+            professions = SPELL_PROFESSIONS,
         },
     },
     SHAMAN = {
@@ -565,10 +991,11 @@ NS.CLASS_SPECS = {
             stats = { "Resilience", "Hit", "Agility", "Strength", "Stamina" },
         },
         {
-            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 3, 3, 5, 5 }, compositions = { ["2s"] = { COMPS.WARR_SHAM, { comp = COMPS.RET_SHAM, recommended = true } }, ["3s"] = { COMPS.RET_WARR_SHAM, { comp = COMPS.SHADOW_MAGE_RSHAM, recommended = true } } },
+            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 3, 3, 5, 5 }, compositions = { ["2s"] = { COMPS.WARR_SHAM, { comp = COMPS.RET_SHAM, recommended = true }, { comp = COMPS.PYRO_SHAM, recommended = true } }, ["3s"] = { COMPS.RET_WARR_SHAM, { comp = COMPS.SHADOW_MAGE_RSHAM, recommended = true }, COMPS.PHS, COMPS.WARR_MAGE_HEALER } },
             icon = "Spell_Nature_MagicImmunity", color = { 0.28, 0.70, 0.52 },
             races = { alliance = "Draenei", horde = "Orc" },
             stats = { "Resilience", "Healing", "Stamina", "Intellect", "Mp5" },
+            professions = HEALER_PROFESSIONS,
         },
     },
     MAGE = {
@@ -580,19 +1007,23 @@ NS.CLASS_SPECS = {
         },
         {
             id = "fire", name = "PoM/Pyro", skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 3, 3, 3, 3 }, compositions = { ["2s"] = {
-                
-            }, ["3s"] = {} },
+                { comp = COMPS.PYRO_SHAM, recommended = true }, COMPS.PRIEST_PYRO, COMPS.ROGUE_PYRO, COMPS.SHADOW_PYRO
+            }, ["3s"] = {
+                COMPS.RMP_PYRO, COMPS.RMD_PYRO, COMPS.SHADOW_PYRO_RSHAM, COMPS.SHADOW_PYRO_HPAL, COMPS.DOUBLE_PYRO
+            } },
             icon = "Spell_Fire_Fireball02", color = { 0.95, 0.38, 0.16 },
             races = { alliance = "Gnome", horde = "Undead" },
             stats = { "Crit", "Spell Damage", "Spell Hit", "Resilience", "Stamina" },
+            professions = SPELL_PROFESSIONS,
         },
         {
             id = "frost", name = "Frost", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 5, 5, 5, 5 }, compositions = { ["2s"] = {
                 COMPS.PRIEST_MAGE, {comp = COMPS.ROGUE_MAGE, recommended = true}, COMPS.SHADOW_MAGE
-            }, ["3s"] = { { comp = COMPS.RMP, recommended = true }, COMPS.RMD, COMPS.SHADOW_MAGE_RSHAM, COMPS.SHADOW_MAGE_HPAL } },
+            }, ["3s"] = { { comp = COMPS.RMP, recommended = true }, COMPS.RMD, COMPS.SHADOW_MAGE_RSHAM, COMPS.SHADOW_MAGE_HPAL, COMPS.WARR_MAGE_HEALER } },
             icon = "Spell_Frost_FrostBolt02", color = { 0.38, 0.72, 0.95 },
             races = { alliance = "Gnome", horde = "Undead" },
             stats = { "Resilience", "Stamina", "Spell Damage", "Spell Hit", "Crit" },
+            professions = SPELL_PROFESSIONS,
         },
     },
     WARLOCK = {
@@ -605,24 +1036,28 @@ NS.CLASS_SPECS = {
             icon = "Spell_Shadow_Requiem", color = { 0.58, 0.28, 0.72 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Stamina", "Spell Damage", "Resilience", "Spell Hit", "Crit" },
+            professions = SPELL_PROFESSIONS,
         },
         {
             id = "affliction", name = "Affliction", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Shadow_UnstableAffliction_3", color = { 0.58, 0.28, 0.72 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Stamina", "Spell Damage", "Resilience", "Spell Hit", "Crit" },
+            professions = SPELL_PROFESSIONS,
         },
         {
             id = "demonology", name = "Demonology", exclude = true, skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 2, 2, 2, 2 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Shadow_Metamorphosis", color = { 0.72, 0.32, 0.28 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Stamina", "Spell Damage", "Resilience", "Spell Hit", "Crit" },
+            professions = SPELL_PROFESSIONS,
         },
         {
             id = "destruction", name = "Destruction", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 2, 3, 3, 3 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Shadow_RainOfFire", color = { 0.92, 0.42, 0.18 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Spell Damage", "Crit", "Spell Hit", "Resilience", "Stamina" },
+            professions = SPELL_PROFESSIONS,
         },
     },
     DRUID = {
@@ -639,10 +1074,11 @@ NS.CLASS_SPECS = {
             stats = { "Resilience", "Agility", "Stamina", "Hit", "Crit" },
         },
         {
-            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 4, 4, 5, 5 }, compositions = { ["2s"] = { { comp = COMPS.WARR_DRUID, recommended = { 1 } }, { comp = COMPS.ROGUE_DRUID, recommended = { 3, 4 } }, { comp = COMPS.LOCK_DRUID, recommended = { 2 } } }, ["3s"] = { COMPS.RMD, { comp = COMPS.RLD, recommended = true } } },
+            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 4, 4, 5, 5 }, compositions = { ["2s"] = { { comp = COMPS.WARR_DRUID, recommended = { 1 } }, { comp = COMPS.ROGUE_DRUID, recommended = { 3, 4 } }, { comp = COMPS.LOCK_DRUID, recommended = { 2 } }, { comp = COMPS.HUNTER_DRUID, recommended = { 3, 4 } }, COMPS.HUNTER_DRUID_BM }, ["3s"] = { COMPS.RMD, { comp = COMPS.RLD, recommended = true }, COMPS.PHD, COMPS.WARR_MAGE_HEALER } },
             icon = "Spell_Nature_HealingTouch", color = { 0.28, 0.72, 0.40 },
             races = { alliance = "Night Elf", horde = "Tauren" },
             stats = { "Resilience", "Healing", "Stamina", "Spirit", "Intellect" },
+            professions = HEALER_PROFESSIONS,
         },
     },
 }

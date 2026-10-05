@@ -481,11 +481,11 @@ function Details:CreateEventTrackerFrame(parentObject, name)
 
 		local get_player_icon = function(spec, class)
 			if (spec) then
-				return [[Interface\AddOns\Details\images\spec_icons_normal]], unpack(Details.class_specs_coords [spec])
+				return [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal]], unpack(Details.class_specs_coords [spec])
 			elseif (class) then
-				return [[Interface\AddOns\Details\images\classes_small]], unpack(Details.class_coords [class])
+				return [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], unpack(Details.class_coords [class])
 			else
-				return [[Interface\AddOns\Details\images\classes_plus]], 0.50390625, 0.62890625, 0, 0.125
+				return [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_plus]], 0.50390625, 0.62890625, 0, 0.125
 			end
 		end
 
@@ -646,7 +646,7 @@ function Details:CreateEventTrackerFrame(parentObject, name)
 
 						line.RightText:SetText(targetName or spellName)
 
-						line.ActionIcon:SetTexture([[Interface\AddOns\Details\images\event_tracker_icons]])
+						line.ActionIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\event_tracker_icons]])
 						line.ActionIcon:SetTexCoord(0, 0.125, 0, 1)
 
 					elseif (ability [ABILITYTABLE_SPELLTYPE] == SPELLTYPE_OFFENSIVE) then
@@ -655,7 +655,7 @@ function Details:CreateEventTrackerFrame(parentObject, name)
 						line.RightIcon:SetTexCoord(.06, .94, .06, .94)
 						line.RightText:SetText(spellName)
 
-						line.ActionIcon:SetTexture([[Interface\AddOns\Details\images\event_tracker_icons]])
+						line.ActionIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\event_tracker_icons]])
 						line.ActionIcon:SetTexCoord(0.127, 0.25, 0, 1)
 
 					elseif (ability [ABILITYTABLE_SPELLTYPE] == SPELLTYPE_INTERRUPT) then
@@ -664,7 +664,7 @@ function Details:CreateEventTrackerFrame(parentObject, name)
 						line.RightIcon:SetTexCoord(.06, .94, .06, .94)
 						line.RightText:SetText(spellNameInterrupted)
 
-						line.ActionIcon:SetTexture([[Interface\AddOns\Details\images\event_tracker_icons]])
+						line.ActionIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\event_tracker_icons]])
 						line.ActionIcon:SetTexCoord(0.251, 0.375, 0, 1)
 
 					elseif (ability [ABILITYTABLE_SPELLTYPE] == SPELLTYPE_CROWDCONTROL) then
@@ -680,7 +680,7 @@ function Details:CreateEventTrackerFrame(parentObject, name)
 
 						line.RightText:SetText(targetName or spellName or "")
 
-						line.ActionIcon:SetTexture([[Interface\AddOns\Details\images\event_tracker_icons]])
+						line.ActionIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\event_tracker_icons]])
 						line.ActionIcon:SetTexCoord(0.376, 0.5, 0, 1)
 
 					end
@@ -933,6 +933,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

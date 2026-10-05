@@ -19,6 +19,7 @@ local hosts = {
     ArenaAnalytics = { "ArenaAnalytics" },
     BetterBlizzPlates = { "BetterBlizzPlates" },
     BetterBlizzFrames = { "BetterBlizzFrames" },
+    BuffOverlay = { "BuffOverlay" },
 }
 
 -- These hook Blizzard frames at load and cannot be unhooked later.

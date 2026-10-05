@@ -41,7 +41,7 @@ local formatPetName = function(petName, spellName, ownerName)
 	--remove the owner name from the pet name
 	local petNameWithoutOwner = petName:gsub((" <.*"), "")
 
-	local texture = [[Interface\AddOns\Details\images\classes_small]]
+	local texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]]
 
 	local bUseAlphaIcons = true
 	local specIcon = nil
@@ -1031,11 +1031,11 @@ local updateSpellBar = function(spellBar, index, actorName, combatObject, scroll
 
 				--update the texture taking the state of the expanded value
 				if (bIsSpellExpaded) then
-					spellBar.expandButton.texture:SetTexture([[Interface\AddOns\Details\images\arrow_face_down]])
+					spellBar.expandButton.texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\arrow_face_down]])
 					--spellBar.expandButton.texture:SetTexCoord(0, 1, 0, 1)
 					spellBar.expandButton.texture:SetRotation(0)
 				else
-					spellBar.expandButton.texture:SetTexture([[Interface\AddOns\Details\images\arrow_face_down]])
+					spellBar.expandButton.texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\arrow_face_down]])
 					--spellBar.expandButton.texture:SetTexCoord(0, 1, 0, 1)
 					spellBar.expandButton.texture:SetRotation(math.pi/2)
 				end
@@ -1630,6 +1630,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

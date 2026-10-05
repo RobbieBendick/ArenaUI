@@ -1675,7 +1675,7 @@ L["STRING_WELCOME_31"] = [=[|cFFFFFF00右鍵點一下|r視窗中的任何位置�
 
 |cFFFFFF00右鍵點一下|r標題列來打開 '所有顯示內容' 面板。
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + 右鍵點擊來關閉視窗。
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + 右鍵點擊來關閉視窗。
 ]=]
 L["STRING_WELCOME_32"] = "使用介面: 群組視窗"
 L["STRING_WELCOME_34"] = "使用介面: 展開浮動提示資訊"

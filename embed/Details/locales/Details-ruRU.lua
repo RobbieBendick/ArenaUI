@@ -1669,7 +1669,7 @@ L["STRING_WELCOME_31"] = [=[|cFFFFFF00ПКМ|r в любом месте окна
 
 |cFFFFFF00ПКМ|r в строке заголовка, чтобы открыть панель 'все дисплеи'.
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + ПКМ закрывает окно.]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + ПКМ закрывает окно.]=]
 L["STRING_WELCOME_32"] = "Использование интерфейса: Группирование окон"
 L["STRING_WELCOME_34"] = "Использование интерфейса: Расширение подсказок"
 L["STRING_WELCOME_36"] = "Использование интерфейса: Плагины"
@@ -1760,6 +1760,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

@@ -210,7 +210,7 @@ local createLine = function(self, index) --~line
     line.ExpandButton:Hide()
 
     line.ExpandTexture = line.ExpandButton:CreateTexture("$parentExpandTexture", "artwork")
-    line.ExpandTexture:SetTexture([[Interface\AddOns\Details\images\arrow_face_down]])
+    line.ExpandTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\arrow_face_down]])
     line.ExpandTexture:SetSize(sections.lineHeight - 6, sections.lineHeight - 6)
     line.ExpandTexture:SetPoint("center", line.ExpandButton, "center", 0, 0)
     line.ExpandTexture:SetAlpha(0.8)
@@ -603,6 +603,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

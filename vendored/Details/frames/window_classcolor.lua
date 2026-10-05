@@ -71,7 +71,7 @@ function Details:OpenClassColorsConfig()
                 y = y - 33
             end
 
-            local backgroundTexture = DF:CreateImage(panel, [[Interface\AddOns\Details\images\bar_skyline]], 135, 30, "artwork")
+            local backgroundTexture = DF:CreateImage(panel, [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_skyline]], 135, 30, "artwork")
             backgroundTexture:SetPoint("left", icon, "right", -32, 0)
 
             local button = DF:CreateButton(panel, set_color, 135, 30, className, className, index)

@@ -77,7 +77,7 @@ do
 	---return the path to a texture file and the texture coordinates
 	---@return string, number, number, number, number
 	function Details:GetUnknownClassIcon()
-		return [[Interface\AddOns\Details\images\classes_small]], unpack(CONST_UNKNOWN_CLASS_COORDS)
+		return [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], unpack(CONST_UNKNOWN_CLASS_COORDS)
 	end
 
 	---return a path to a texture file
@@ -89,15 +89,15 @@ do
 
 		if (iconType == "spec") then
 			if (bWithAlpha) then
-				return [[Interface\AddOns\Details\images\spec_icons_normal_alpha]]
+				return [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal_alpha]]
 			else
-				return [[Interface\AddOns\Details\images\spec_icons_normal]]
+				return [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal]]
 			end
 		else --if is class
 			if (bWithAlpha) then
-				return [[Interface\AddOns\Details\images\classes_small_alpha]]
+				return [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]]
 			else
-				return [[Interface\AddOns\Details\images\classes_small]]
+				return [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]]
 			end
 		end
 	end
@@ -164,7 +164,7 @@ do
 	---@param role string
 	---@return string texturePath, number left, number right, number top, number bottom
 	function Details:GetRoleIcon(role)
-		return [[Interface\AddOns\Details\images\icons2]], unpack(roles[role])
+		return [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], unpack(roles[role])
 	end
 
 	---return the path to a texture file and the texture coordinates for the given class
@@ -191,14 +191,14 @@ do
 			return [[Interface\ICONS\Achievement_Character_Orc_Male]], 0, 1, 0, 1
 
 		elseif (class == "PET") then
-			return [[Interface\AddOns\Details\images\classes_small]], 0.25, 0.49609375, 0.75, 1
+			return [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], 0.25, 0.49609375, 0.75, 1
 
 		else
 			local classTCoords = Details.class_coords[class]
 			if (not classTCoords) then
 				classTCoords = CONST_UNKNOWN_CLASS_COORDS
 			end
-			return [[Interface\AddOns\Details\images\classes_small]], unpack(classTCoords)
+			return [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], unpack(classTCoords)
 		end
 	end
 
@@ -209,13 +209,13 @@ do
 	function Details:GetSpecIcon(spec, useAlpha)
 		if (not spec or spec == 0 or not Details.class_specs_coords[spec]) then
 			--this returns the icon for "unknown" spec (gotten from the class icon file)
-			return [[Interface\AddOns\Details\images\classes_small]], unpack(Details.class_coords["UNKNOW"])
+			return [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], unpack(Details.class_coords["UNKNOW"])
 		end
 
 		if (useAlpha) then
-			return [[Interface\AddOns\Details\images\spec_icons_normal_alpha]], unpack(Details.class_specs_coords [spec])
+			return [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal_alpha]], unpack(Details.class_specs_coords [spec])
 		else
-			return [[Interface\AddOns\Details\images\spec_icons_normal]], unpack(Details.class_specs_coords[spec])
+			return [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal]], unpack(Details.class_specs_coords[spec])
 		end
 	end
 
@@ -258,17 +258,17 @@ do
 		if (playerObject) then
 			local spec = playerObject.spec
 			if (spec and Details.class_specs_coords[spec]) then
-				texturePath = [[Interface\AddOns\Details\images\spec_icons_normal]]
+				texturePath = [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal]]
 				left, right, top, bottom = unpack(Details.class_specs_coords[spec])
 
 			elseif (playerObject.classe) then
-				texturePath = [[Interface\AddOns\Details\images\classes_small]]
+				texturePath = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]]
 				left, right, top, bottom = unpack(Details.class_coords[playerObject.classe or "UNKNOW"])
 			end
 		end
 
 		if (not texturePath) then
-			texturePath = [[Interface\AddOns\Details\images\classes_small]]
+			texturePath = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]]
 			left, right, top, bottom = unpack(Details.class_coords["UNKNOW"])
 		end
 
@@ -664,6 +664,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

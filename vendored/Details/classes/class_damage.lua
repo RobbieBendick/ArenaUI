@@ -64,8 +64,8 @@
 	local tooltipMaximizedMethod = 1
 
 	--templates
-	local byspell_tooltip_background = {value = 100, color = {0.1960, 0.1960, 0.1960, 0.9097}, texture = [[Interface\AddOns\Details\images\bar_background_dark]]}
-	local enemies_background = {value = 100, color = {0.1960, 0.1960, 0.1960, 0.8697}, texture = "Interface\\AddOns\\Details\\images\\bar_background2"}
+	local byspell_tooltip_background = {value = 100, color = {0.1960, 0.1960, 0.1960, 0.9097}, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background_dark]]}
+	local enemies_background = {value = 100, color = {0.1960, 0.1960, 0.1960, 0.8697}, texture = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background2"}
 	Details.tooltip_key_overlay1 = {1, 1, 1, .2}
 	Details.tooltip_key_overlay2 = {1, 1, 1, .5}
 	local headerColor = {1, 0.9, 0.0, 1}
@@ -753,12 +753,12 @@ end
 		bs_tooltip_table.damage_total = total
 
 		--Details:FormatCooltipForSpells()
-		GameCooltip:SetOption("StatusBarTexture", "Interface\\AddOns\\Details\\images\\bar_serenity")
+		GameCooltip:SetOption("StatusBarTexture", "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_serenity")
 
 		local spellname, _, spellicon = select(1, _GetSpellInfo(from_spell))
 		--GameCooltip:AddLine(spellname .. " " .. Loc ["STRING_CUSTOM_ATTRIBUTE_DAMAGE"], nil, nil, headerColor, nil, 10)
 		--GameCooltip:AddIcon(spellicon, 1, 1, 14, 14, 0.078125, 0.921875, 0.078125, 0.921875)
-		--GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+		--GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 		--Details:AddTooltipHeaderStatusbar(1, 1, 1, 0.5)
 
 		local top = Targets[1] and Targets[1][2]
@@ -782,11 +782,11 @@ end
 					GameCooltip:AddIcon(texture, 1, 1, iconSize, iconSize, l, r, t, b)
 				else
 					local texture, l, r, t, b = Details:GetClassIcon(class)
-					GameCooltip:AddIcon("Interface\\AddOns\\Details\\images\\classes_small_alpha", 1, 1,iconSize,iconSize, l, r, t, b)
+					GameCooltip:AddIcon("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small_alpha", 1, 1,iconSize,iconSize, l, r, t, b)
 				end
 
 			elseif(t[1] == Loc ["STRING_TARGETS_OTHER1"]) then
-				GameCooltip:AddIcon("Interface\\AddOns\\Details\\images\\classes_small_alpha", 1, 1,iconSize,iconSize, 0.25, 0.49609375, 0.75, 1)
+				GameCooltip:AddIcon("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small_alpha", 1, 1,iconSize,iconSize, 0.25, 0.49609375, 0.75, 1)
 			end
 		end
 
@@ -1231,7 +1231,7 @@ end
 							local texture, l, r, t, b = Details:GetSpecIcon(specID, false)
 							GameCooltip:AddIcon(texture, 1, 1, iconSize, iconSize, l, r, t, b)
 						else
-							GameCooltip:AddIcon([[Interface\AddOns\Details\images\classes_small_alpha]], nil, nil, iconSize, iconSize, unpack(Details.class_coords [classe]))
+							GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]], nil, nil, iconSize, iconSize, unpack(Details.class_coords [classe]))
 						end
 					end
 
@@ -1246,7 +1246,7 @@ end
 			GameCooltip:AddLine(" ")
 			Details:AddTooltipReportLineText()
 
-			GameCooltip:SetOption("StatusBarTexture", "Interface\\AddOns\\Details\\images\\bar_serenity")
+			GameCooltip:SetOption("StatusBarTexture", "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_serenity")
 			GameCooltip:ShowCooltip()
 		end
 	end
@@ -1327,7 +1327,7 @@ end
 		Details:SetBarColors(thisLine, instancia, unpack(Details.class_colors [tabela [3]]))
 
 		if (tabela [3] == "UNKNOW" or tabela [3] == "UNGROUPPLAYER" or tabela [3] == "ENEMY") then
-			thisLine.icone_classe:SetTexture([[Interface\AddOns\Details\images\classes_plus]])
+			thisLine.icone_classe:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_plus]])
 			thisLine.icone_classe:SetTexCoord(0.50390625, 0.62890625, 0, 0.125)
 			thisLine.icone_classe:SetVertexColor(1, 1, 1)
 		else
@@ -1605,7 +1605,7 @@ end
 		local spellname, _, spellicon = _GetSpellInfo(actor.damage_spellid)
 		--Details:AddTooltipSpellHeaderText(spellname .. " " .. Loc ["STRING_VOIDZONE_TOOLTIP"], headerColor, #tooltip_void_zone_temp, spellicon, 0.078125, 0.921875, 0.078125, 0.921875)
 		--Details:AddTooltipHeaderStatusbar(1, 1, 1, 0.5)
-		--GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+		--GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 
 		--for target_name, debuff_table in pairs(container) do
 		local first = tooltip_void_zone_temp [1] and tooltip_void_zone_temp [1][3]
@@ -1646,7 +1646,7 @@ end
 					local texture, l, r, t, b = Details:GetSpecIcon(specID, false)
 					GameCooltip:AddIcon(texture, 1, 1, iconSize, iconSize, l, r, t, b)
 				else
-					GameCooltip:AddIcon([[Interface\AddOns\Details\images\classes_small_alpha]], nil, nil, iconSize, iconSize, unpack(Details.class_coords [classe]))
+					GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]], nil, nil, iconSize, iconSize, unpack(Details.class_coords [classe]))
 				end
 			else
 				GameCooltip:AddIcon("Interface\\LFGFRAME\\LFGROLE_BW", nil, nil, iconSize, iconSize, .25, .5, 0, 1)
@@ -1664,7 +1664,7 @@ end
 		GameCooltip:AddLine(" ")
 		Details:AddTooltipReportLineText()
 
-		GameCooltip:SetOption("StatusBarTexture", "Interface\\AddOns\\Details\\images\\bar_serenity")
+		GameCooltip:SetOption("StatusBarTexture", "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_serenity")
 
 		GameCooltip:ShowCooltip()
 
@@ -3949,16 +3949,16 @@ function Details:SetBarLeftText(bar, instance, enemy, arenaEnemy, arenaAlly, usi
 			if (instance.row_info.show_faction_icon) then
 				local sizeOffset = instance.row_info.faction_icon_size_offset
 				if (Details.faction_against == "Horde") then
-					local leftText = barNumber .. "|TInterface\\AddOns\\Details\\images\\icones_barra:" ..(instance.row_info.height + sizeOffset)..":"..(instance.row_info.height + sizeOffset) .. ":0:0:256:32:0:32:0:32|t"..self.displayName
+					local leftText = barNumber .. "|TInterface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icones_barra:" ..(instance.row_info.height + sizeOffset)..":"..(instance.row_info.height + sizeOffset) .. ":0:0:256:32:0:32:0:32|t"..self.displayName
 					if (usingCustomLeftText) then
-						bar.lineText1:SetText(stringReplace(instance.row_info.textL_custom_text, bar.colocacao, self.displayName, "|TInterface\\AddOns\\Details\\images\\icones_barra:" ..(instance.row_info.height + sizeOffset)..":"..(instance.row_info.height + sizeOffset) .. ":0:0:256:32:0:32:0:32|t", self, instance:GetCombat(), instance, leftText))
+						bar.lineText1:SetText(stringReplace(instance.row_info.textL_custom_text, bar.colocacao, self.displayName, "|TInterface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icones_barra:" ..(instance.row_info.height + sizeOffset)..":"..(instance.row_info.height + sizeOffset) .. ":0:0:256:32:0:32:0:32|t", self, instance:GetCombat(), instance, leftText))
 					else
 						bar.lineText1:SetText(leftText) --seta o texto da esqueda -- HORDA
 					end
 				else --alliance
-					local leftText = barNumber .. "|TInterface\\AddOns\\Details\\images\\icones_barra:" ..(instance.row_info.height + sizeOffset)..":"..(instance.row_info.height + sizeOffset) .. ":0:0:256:32:32:64:0:32|t"..self.displayName
+					local leftText = barNumber .. "|TInterface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icones_barra:" ..(instance.row_info.height + sizeOffset)..":"..(instance.row_info.height + sizeOffset) .. ":0:0:256:32:32:64:0:32|t"..self.displayName
 					if (usingCustomLeftText) then
-						bar.lineText1:SetText(stringReplace(instance.row_info.textL_custom_text, bar.colocacao, self.displayName, "|TInterface\\AddOns\\Details\\images\\icones_barra:" ..(instance.row_info.height + sizeOffset)..":"..(instance.row_info.height + sizeOffset) .. ":0:0:256:32:32:64:0:32|t", self, instance:GetCombat(), instance, leftText))
+						bar.lineText1:SetText(stringReplace(instance.row_info.textL_custom_text, bar.colocacao, self.displayName, "|TInterface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icones_barra:" ..(instance.row_info.height + sizeOffset)..":"..(instance.row_info.height + sizeOffset) .. ":0:0:256:32:32:64:0:32|t", self, instance:GetCombat(), instance, leftText))
 					else
 						bar.lineText1:SetText(leftText) --seta o texto da esqueda -- ALLY
 					end
@@ -4071,7 +4071,7 @@ function Details:SetClassIcon(texture, instance, class) --[[exported]] --~icons
 		texture:SetTexCoord(0.078125, 0.921875, 0.078125, 0.921875)
 
 	elseif(class == "UNKNOW") then
-		texture:SetTexture([[Interface\AddOns\Details\images\classes_plus]])
+		texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_plus]])
 		texture:SetTexCoord(0.50390625, 0.62890625, 0, 0.125)
 		texture:SetVertexColor(1, 1, 1)
 
@@ -4101,7 +4101,7 @@ function Details:SetClassIcon(texture, instance, class) --[[exported]] --~icons
 		end
 
 		if (englishClass) then
-			texture:SetTexture(instance.row_info.icon_file or [[Interface\AddOns\Details\images\classes_small]])
+			texture:SetTexture(instance.row_info.icon_file or [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]])
 			texture:SetTexCoord(unpack(Details.class_coords[englishClass]))
 			texture:SetVertexColor(1, 1, 1)
 			return
@@ -4128,7 +4128,7 @@ function Details:SetClassIcon(texture, instance, class) --[[exported]] --~icons
 		texture:SetVertexColor(1, 1, 1)
 
 	elseif(class == "PET") then
-		texture:SetTexture(instance and instance.row_info.icon_file or [[Interface\AddOns\Details\images\classes_small]])
+		texture:SetTexture(instance and instance.row_info.icon_file or [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]])
 		texture:SetTexCoord(0.25, 0.49609375, 0.75, 1)
 		classColor_Red, classColor_Green, classColor_Blue = DetailsFramework:ParseColors(classColor_Red, classColor_Green, classColor_Blue)
 		texture:SetVertexColor(classColor_Red, classColor_Green, classColor_Blue)
@@ -4171,7 +4171,7 @@ function Details:SetClassIcon(texture, instance, class) --[[exported]] --~icons
 				texture:SetVertexColor(1, 1, 1)
 			else
 				--issue is here
-				texture:SetTexture(instance.row_info.icon_file or [[Interface\AddOns\Details\images\classes_small]])
+				texture:SetTexture(instance.row_info.icon_file or [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]])
 				if (not class or class == "" or type(class) ~= "string" or not Details.class_coords[class]) then
 					class = "UNKNOW"
 				end
@@ -4179,7 +4179,7 @@ function Details:SetClassIcon(texture, instance, class) --[[exported]] --~icons
 				texture:SetVertexColor(1, 1, 1)
 			end
 		else
-			texture:SetTexture(instance and instance.row_info.icon_file or [[Interface\AddOns\Details\images\classes_small]])
+			texture:SetTexture(instance and instance.row_info.icon_file or [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]])
 			if (not class or class == "") then
 				class = "UNKNOW"
 			end
@@ -4529,7 +4529,7 @@ function damageClass.PredictedAugSpellsOnEnter(self)
 						local timeString = detailsFramework:IntegerToTimer(time)
 						GameCooltip:AddLine("Presciece Applied: " .. amountOfPrescienceApplied, timeString .. "(" .. format("%.1f", uptimePercent) .. "%)")
 						--5199639 prescience icon
-						GameCooltip:AddIcon([[Interface\AddOns\Details\images\spells\prescience_time]], nil, nil, iconSize, iconSize)
+						GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\spells\prescience_time]], nil, nil, iconSize, iconSize)
 						Details:AddTooltipBackgroundStatusbar(false, time/totalTimeWithPrescienceUp*100, true, "green")
 					end
 				end
@@ -4764,10 +4764,10 @@ function damageClass:ToolTip_DamageDone(instance, numero, barra, keydown)
 
 			if (is_maximized) then
 				--highlight shift key
-				--GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+				--GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 				--Details:AddTooltipHeaderStatusbar(r, g, b, 1)
 			else
-				--GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
+				--GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
 				--Details:AddTooltipHeaderStatusbar(r, g, b, barAlha)
 			end
 
@@ -4843,7 +4843,7 @@ function damageClass:ToolTip_DamageDone(instance, numero, barra, keydown)
 				--small blank space
 				Details:AddTooltipSpellHeaderText("", headerColor, 1, false, 0.1, 0.9, 0.1, 0.9, true)
 
-				Details:AddTooltipSpellHeaderText(Loc ["STRING_TARGETS"], headerColor, #ActorTargetsSortTable, [[Interface\Addons\Details\images\icons]], 0, 0.03125, 0.126953125, 0.15625)
+				Details:AddTooltipSpellHeaderText(Loc ["STRING_TARGETS"], headerColor, #ActorTargetsSortTable, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 0, 0.03125, 0.126953125, 0.15625)
 
 				local max_targets = Details.tooltip.tooltip_max_targets
 				local is_maximized = false
@@ -4854,10 +4854,10 @@ function damageClass:ToolTip_DamageDone(instance, numero, barra, keydown)
 
 				if (is_maximized) then
 					--highlight
-					GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+					GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 					Details:AddTooltipHeaderStatusbar(r, g, b, 1)
 				else
-					GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
+					GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
 					Details:AddTooltipHeaderStatusbar(r, g, b, barAlha)
 				end
 
@@ -4947,10 +4947,10 @@ function damageClass:ToolTip_DamageDone(instance, numero, barra, keydown)
 					Details:AddTooltipSpellHeaderText(Loc ["STRING_PETS"], headerColor, #petDamageTable, [[Interface\COMMON\friendship-heart]], 0.21875, 0.78125, 0.09375, 0.6875)
 
 					if (ismaximized) then
-						GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_alt]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+						GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_alt]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 						Details:AddTooltipHeaderStatusbar(r, g, b, 1)
 					else
-						GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_alt]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
+						GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_alt]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
 						Details:AddTooltipHeaderStatusbar(r, g, b, barAlha)
 					end
 				end
@@ -4973,7 +4973,7 @@ function damageClass:ToolTip_DamageDone(instance, numero, barra, keydown)
 
 				Details:AddTooltipBackgroundStatusbar(false, petDamageDone / topPetDamageDone * 100)
 
-				GameCooltip:AddIcon([[Interface\AddOns\Details\images\classes_small_alpha]], 1, 1, icon_size.W, icon_size.H, 0.25/2, 0.49609375/2, 0.75/2, 1/2)
+				GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]], 1, 1, icon_size.W, icon_size.H, 0.25/2, 0.49609375/2, 0.75/2, 1/2)
 			end
 		end
 	end
@@ -5197,7 +5197,7 @@ function damageClass:ToolTip_Enemies(instanceObject, numero, barra, keydown)
 		GameCooltip:AddStatusBar(damageDone/top*100, 1, r, g, b, 1, false, enemies_background)
 	end
 
-	GameCooltip:SetOption("StatusBarTexture", "Interface\\AddOns\\Details\\images\\bar_serenity")
+	GameCooltip:SetOption("StatusBarTexture", "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_serenity")
 
 	--damage done and heal
 	GameCooltip:AddLine(" ")
@@ -5301,19 +5301,19 @@ function damageClass:ToolTip_DamageTaken(instance, numero, barra, keydown)
 	if (subAttribute == DETAILS_SUBATTRIBUTE_ENEMIES) then
 		--Details:AddTooltipSpellHeaderText(Loc ["STRING_DAMAGE_TAKEN_FROM"], headerColor, #damageTakenDataSorted, [[Interface\Buttons\UI-MicroStream-Red]], 0.1875, 0.8125, 0.15625, 0.78125)
 	else
-		--Details:AddTooltipSpellHeaderText(Loc ["STRING_FROM"], headerColor, #damageTakenDataSorted, [[Interface\Addons\Details\images\icons]], 0.126953125, 0.1796875, 0, 0.0546875)
+		--Details:AddTooltipSpellHeaderText(Loc ["STRING_FROM"], headerColor, #damageTakenDataSorted, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 0.126953125, 0.1796875, 0, 0.0546875)
 	end
 
 	if (bIsMaximized) then
 		--highlight
-		--GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+		--GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 		--if (subAttribute == DETAILS_SUBATTRIBUTE_ENEMIES) then
 		--	GameCooltip:AddStatusBar(100, 1, 0.7, g, b, 1)
 		--else
 		--	Details:AddTooltipHeaderStatusbar(r, g, b, 1)
 		--end
 	else
-		--GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
+		--GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
 		--if (subAttribute == DETAILS_SUBATTRIBUTE_ENEMIES) then
 		--	GameCooltip:AddStatusBar(100, 1, 0.7, 0, 0, barAlha)
 		--else
@@ -5486,11 +5486,11 @@ function damageClass:ToolTip_FriendlyFire(instancia, numero, barra, keydown)
 
 	local ismaximized = false
 	if (keydown == "shift" or tooltipMaximizedMethod == 2 or tooltipMaximizedMethod == 3) then
-		GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+		GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 		Details:AddTooltipHeaderStatusbar(r, g, b, 1)
 		ismaximized = true
 	else
-		GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
+		GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
 		Details:AddTooltipHeaderStatusbar(r, g, b, barAlha)
 	end
 
@@ -5506,18 +5506,18 @@ function damageClass:ToolTip_FriendlyFire(instancia, numero, barra, keydown)
 		end
 
 		GameCooltip:AddLine(Details:GetOnlyName(DamagedPlayers[i][1]), formatTooltipNumber(_, DamagedPlayers[i][2]).."("..format("%.1f", DamagedPlayers[i][2]/FriendlyFireTotal*100).."%)")
-		GameCooltip:AddIcon("Interface\\AddOns\\Details\\images\\espadas", nil, nil, lineHeight, lineHeight)
+		GameCooltip:AddIcon("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\espadas", nil, nil, lineHeight, lineHeight)
 		Details:AddTooltipBackgroundStatusbar()
 
 		if (classe == "UNKNOW") then
-			GameCooltip:AddIcon("Interface\\AddOns\\Details\\images\\classes_small", nil, nil, lineHeight, lineHeight, unpack(Details.class_coords ["UNKNOW"]))
+			GameCooltip:AddIcon("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small", nil, nil, lineHeight, lineHeight, unpack(Details.class_coords ["UNKNOW"]))
 		else
 			local specID = Details:GetSpec(DamagedPlayers[i][1])
 			if (specID) then
 				local texture, l, r, t, b = Details:GetSpecIcon(specID, false)
 				GameCooltip:AddIcon(texture, 1, 1, lineHeight, lineHeight, l, r, t, b)
 			else
-				GameCooltip:AddIcon("Interface\\AddOns\\Details\\images\\classes_small", nil, nil, lineHeight, lineHeight, unpack(Details.class_coords [classe]))
+				GameCooltip:AddIcon("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small", nil, nil, lineHeight, lineHeight, unpack(Details.class_coords [classe]))
 			end
 		end
 
@@ -5527,11 +5527,11 @@ function damageClass:ToolTip_FriendlyFire(instancia, numero, barra, keydown)
 
 	local ismaximized = false
 	if (keydown == "ctrl" or tooltipMaximizedMethod == 2 or tooltipMaximizedMethod == 4) then
-		GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+		GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 		Details:AddTooltipHeaderStatusbar(r, g, b, 1)
 		ismaximized = true
 	else
-		GameCooltip:AddIcon([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
+		GameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay1)
 		Details:AddTooltipHeaderStatusbar(r, g, b, barAlha)
 	end
 
@@ -5993,7 +5993,7 @@ end
 
 	if (icon) then
 		row.icone:SetTexture(icon)
-		if (icon == "Interface\\AddOns\\Details\\images\\classes_small") then
+		if (icon == "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small") then
 			row.icone:SetTexCoord(0.25, 0.49609375, 0.75, 1)
 		else
 			row.icone:SetTexCoord(0, 1, 0, 1)
@@ -6279,7 +6279,7 @@ function damageClass:MontaInfoDamageDone()
 					spellTables = {}, --populated below with the spells the pet used
 					nestedData = {}, --there's none data here in the main bar as the first bar is the pet name
 					bCanExpand = true,
-					actorIcon = [[Interface\AddOns\Details\images\pets\pet_icon_1]],
+					actorIcon = [[Interface\AddOns\ArenaUI\vendored\Details\images\pets\pet_icon_1]],
 				}
 				detailsFramework:Mixin(bkSpellData, Details.SpellTableMixin)
 
@@ -6483,7 +6483,7 @@ function damageClass:MontaInfoDamageDone()
 			thisLine.lineText1:SetText(index .. ". " .. Details:GetOnlyName(thisEnemyTable[1])) --left text
 			thisLine.lineText4:SetText(Details:comma_value(thisEnemyTable[2]) .. "(" .. format("%.1f", thisEnemyTable[3]) .. "%)") --right text
 
-			thisLine.icone:SetTexture([[Interface\AddOns\Details\images\classes_small_alpha]]) --class icon
+			thisLine.icone:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]]) --class icon
 
 			local texCoords = Details.class_coords[thisEnemyTable[4]]
 			if (not texCoords) then
@@ -6568,7 +6568,7 @@ function damageClass:MontaInfoDamageDone()
 					targetActorObject:SetClassIcon(barra.icone, instance, targetActorObject.classe)
 				end
 			else
-				barra.icone:SetTexture([[Interface\AddOns\Details\images\classes_small_alpha]]) --CLASSE
+				barra.icone:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]]) --CLASSE
 				local texCoords = Details.class_coords ["ENEMY"]
 				barra.icone:SetTexCoord(unpack(texCoords))
 			end
@@ -6749,7 +6749,7 @@ function damageClass:MontaDetalhesEnemy(spellid, barra)
 			barra.textura:SetStatusBarColor(1, 1, 1, 1)
 		end
 
-		barra.icone:SetTexture("Interface\\AddOns\\Details\\images\\classes_small_alpha")
+		barra.icone:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small_alpha")
 		barra.icone:SetTexCoord(unpack(texCoords))
 
 		barra:Show() --mostra a barra
@@ -7964,7 +7964,7 @@ end
 		--enemy damage taken
 		Details:AddTooltipSpellHeaderText(Loc ["STRING_ATTRIBUTE_DAMAGE"], headerColor, i-1, true)
 		GameCooltip:AddIcon([=[Interface\Buttons\UI-MicroStream-Green]=], 2, 1, 14, 14, 0.1875, 0.8125, 0.15625, 0.78125)
-		GameCooltip:AddIcon([=[Interface\AddOns\Details\images\key_shift]=], 2, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
+		GameCooltip:AddIcon([=[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]=], 2, 2, Details.tooltip_key_size_width, Details.tooltip_key_size_height, 0, 1, 0, 0.640625, Details.tooltip_key_overlay2)
 		GameCooltip:AddStatusBar(100, 2, 0.7, g, b, 1)
 
 		--build the tooltip

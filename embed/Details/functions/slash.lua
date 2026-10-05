@@ -1378,9 +1378,9 @@ function SlashCmdList.DETAILS (msg, editbox)
 
 				--texture:SetSize(math.random(50, 300), math.random(50, 300))
 				--local spec = allspecs [math.random(#allspecs)]
-				texture:SetTexture([[Interface\AddOns\Details\images\options_window]])
+				texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\options_window]])
 				--texture:SetTexture([[Interface\Store\Store-Splash]])
-				--texture:SetTexture([[Interface\AddOns\Details\images\options_window]])
+				--texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\options_window]])
 				--texture:SetTexture([[Interface\CHARACTERFRAME\Button_BloodPresence_DeathKnight]])
 				--texture:SetTexCoord(unpack(_detalhes.class_specs_coords [spec]))
 
@@ -1399,7 +1399,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 			local instance = Details:GetInstance(lower_instance)
 			if (instance) then
 				local func = {Details.OpenRaidHistoryWindow, Details, "Hellfire Citadel", 1800, 15, "DAMAGER", "Rock Lobster", 2, "Keyspell"}
-				instance:InstanceAlert ("Boss Defeated, Open History! ", {[[Interface\AddOns\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}, 40, func, true)
+				instance:InstanceAlert ("Boss Defeated, Open History! ", {[[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}, 40, func, true)
 			end
 		end
 
@@ -1411,7 +1411,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 		local raid_name = "Tomb of Sargeras"
 		local guildName = "Rock Lobster"
 		local func = {Details.OpenRaidHistoryWindow, Details, raid_name, 2050, 15, my_role, guildName} --, 2, UnitName ("player")
-		--local icon = {[[Interface\AddOns\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}
+		--local icon = {[[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}
 		local icon = {[[Interface\PvPRankBadges\PvPRank08]], 16, 16, false, 0, 1, 0, 1}
 
 		local lower_instance = Details:GetLowerInstanceNumber()
@@ -3912,6 +3912,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

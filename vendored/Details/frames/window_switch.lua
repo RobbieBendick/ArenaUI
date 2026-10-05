@@ -283,7 +283,7 @@ function Details222.CreateAllDisplaysFrame()
 
 				local title_icon = allDisplaysFrame:CreateTexture(nil, "overlay")
 				local texture, l, r, t, b = Details:GetAttributeIcon (Details.atributos[0]+1)
-				title_icon:SetTexture([[Interface\AddOns\Details\images\icons]])
+				title_icon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]])
 				title_icon:SetTexCoord(412/512, 441/512, 43/512, 79/512)
 				title_icon:SetVertexColor(.7, .6, .5, 1)
 				title_icon:SetSize(16, 16)
@@ -301,7 +301,7 @@ function Details222.CreateAllDisplaysFrame()
 			--prepare for plugins
 			allDisplaysFrame.buttons[6] = {}
 			local title_icon = allDisplaysFrame:CreateTexture(nil, "overlay")
-			title_icon:SetTexture([[Interface\AddOns\Details\images\modo_icones]])
+			title_icon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\modo_icones]])
 			title_icon:SetTexCoord(32/256*3, 32/256*4, 0, 1)
 			title_icon:SetSize(16, 16)
 
@@ -513,7 +513,7 @@ function Details.switch:ShowMe(instancia)
 				tutorialFrame:SetFrameStrata("FULLSCREEN_DIALOG")
 				tutorialFrame:SetAllPoints()
 				tutorialFrame:EnableMouse(true)
-				tutorialFrame:SetBackdrop({bgFile = "Interface\\AddOns\\Details\\images\\background", tile = true, tileSize = 16 })
+				tutorialFrame:SetBackdrop({bgFile = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\background", tile = true, tileSize = 16 })
 				tutorialFrame:SetBackdropColor(0.05, 0.05, 0.05, 0.95)
 
 				tutorialFrame.info_label = tutorialFrame:CreateFontString(nil, "overlay", "GameFontNormal")
@@ -924,7 +924,7 @@ function Details:FastSwitch(button, bookmark, bookmarkNumber, selectNew)
 		--build raid plugins list
 		gameCooltip:AddLine(Loc["STRING_MODE_PLUGINS"])
 		gameCooltip:AddMenu(1, function() end, 4, true)
-		gameCooltip:AddIcon([[Interface\AddOns\Details\images\modo_icones]], 1, 1, 20, 20, 32/256*3, 32/256*4, 0, 1)
+		gameCooltip:AddIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\modo_icones]], 1, 1, 20, 20, 32/256*3, 32/256*4, 0, 1)
 
 		local availablePlugins = Details.RaidTables:GetAvailablePlugins()
 		local amt = 0
@@ -1082,7 +1082,7 @@ function Details.switch:Update()
 			if (options.atributo == 5) then --custom
 				local CustomObject = Details.custom [options.sub_atributo]
 				if (not CustomObject) then --ele j� foi deletado
-					icone = [[Interface\AddOns\Details\images\icons]]
+					icone = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
 					coords = add_coords
 					name = Loc["STRING_SWITCH_CLICKME"]
 					vcolor = vertex_color_unknown
@@ -1121,7 +1121,7 @@ function Details.switch:Update()
 					name = plugin.__name
 
 				else
-					icone = [[Interface\AddOns\Details\images\icons]]
+					icone = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
 					coords = add_coords
 					name = Loc["STRING_SWITCH_CLICKME"]
 					vcolor = vertex_color_unknown
@@ -1135,7 +1135,7 @@ function Details.switch:Update()
 			end
 		else
 
-			icone = [[Interface\AddOns\Details\images\icons]]
+			icone = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
 			coords = add_coords
 			name = Loc["STRING_SWITCH_CLICKME"]
 			vcolor = vertex_color_unknown

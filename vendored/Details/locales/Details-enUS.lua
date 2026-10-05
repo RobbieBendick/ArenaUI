@@ -1713,7 +1713,7 @@ L["STRING_WELCOME_31"] = [=[|cFFFFFF00Right clicking|r anywhere in the window sh
 
 |cFFFFFF00Right click|r on title bar to open the 'All Displays' panel.
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Right Click to close the window.]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Right Click to close the window.]=]
 L["STRING_WELCOME_32"] = "Using the Interface: Group Windows"
 L["STRING_WELCOME_34"] = "Using the Interface: Expand Tooltip"
 L["STRING_WELCOME_36"] = "Using the Interface: Plugins"
@@ -3497,7 +3497,7 @@ L["STRING_WELCOME_31"] = [=[|cFFFFFF00Right clicking|r anywhere in the window sh
 
 |cFFFFFF00Right click|r on title bar to open the 'All Displays' panel.
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Right Click to close the window.]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + Right Click to close the window.]=]
 L["STRING_WELCOME_32"] = "Using the Interface: Group Windows"
 L["STRING_WELCOME_34"] = "Using the Interface: Expand Tooltip"
 L["STRING_WELCOME_36"] = "Using the Interface: Plugins"

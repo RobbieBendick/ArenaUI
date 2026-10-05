@@ -12,8 +12,8 @@ function Details:InitializeRunCodeWindow()
     detailsRunCodePanel.Frame = detailsRunCodePanel
     detailsRunCodePanel.__name = "Auto Run Code"
     detailsRunCodePanel.real_name = "DETAILS_RUNCODEWINDOW"
-    --DetailsRunCodePanel.__icon = [[Interface\AddOns\Details\images\lua_logo]]
-    detailsRunCodePanel.__icon = [[Interface\AddOns\Details\images\run_code]]
+    --DetailsRunCodePanel.__icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\lua_logo]]
+    detailsRunCodePanel.__icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\run_code]]
     --DetailsRunCodePanel.__iconcoords = {0, 1, 0, 1}
     detailsRunCodePanel.__iconcoords = {0, 30/32, 0, 25/32}
     detailsRunCodePanel.__iconcoords = {0, 1, 0, 1}

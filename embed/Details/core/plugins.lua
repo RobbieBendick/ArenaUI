@@ -34,7 +34,7 @@ local __aui_chunk = function(...)
 		gameCooltip:SetOption("LinePadding", -1)
 		gameCooltip:SetOption("FrameHeightSizeOffset", 0)
 		gameCooltip:SetOption("FixedWidth", 280)
-		gameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\Details\images\bar_serenity]])
+		gameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]])
 		gameCooltip:SetOption("LeftTextWidth", 280 - 22 - 90)
 		gameCooltip:SetOption("LeftTextHeight", 14)
 		Details:SetTooltipMinWidth()
@@ -483,7 +483,7 @@ local __aui_chunk = function(...)
 			end)
 
 			optionsFrame:SetBackdrop({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 16,
-			edgeFile = [[Interface\AddOns\Details\images\border_2]], edgeSize = 32,
+			edgeFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\border_2]], edgeSize = 32,
 			insets = {left = 1, right = 1, top = 1, bottom = 1}})
 			optionsFrame:SetBackdropColor(0, 0, 0, .7)
 
@@ -919,6 +919,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

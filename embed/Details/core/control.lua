@@ -1507,8 +1507,8 @@ local __aui_chunk = function(...)
 			r, g, b, a = detailsFramework:ParseColors(statusBarColor)
 		end
 		local rBG, gBG, bBG, aBG = unpack(Details.tooltip.background)
-		--GameCooltip:AddStatusBar(value, 1, r, g, b, a, useSpark, {value = 100, color = {rBG, gBG, bBG, aBG}, texture = [[Interface\AddOns\Details\images\bar_serenity]]})
-		GameCooltip:AddStatusBar_MaxValue(value, maxValue, 1, r, g, b, a, useSpark, {value = 100, color = {rBG, gBG, bBG, aBG}, texture = [[Interface\AddOns\Details\images\bar_serenity]]})
+		--GameCooltip:AddStatusBar(value, 1, r, g, b, a, useSpark, {value = 100, color = {rBG, gBG, bBG, aBG}, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]]})
+		GameCooltip:AddStatusBar_MaxValue(value, maxValue, 1, r, g, b, a, useSpark, {value = 100, color = {rBG, gBG, bBG, aBG}, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]]})
 	end
 
 	function Details:AddTooltipBackgroundStatusbar(side, value, useSpark, statusBarColor)
@@ -1547,7 +1547,7 @@ local __aui_chunk = function(...)
 				r, g, b, a = detailsFramework:ParseColors(statusBarColor)
 			end
 			local rBG, gBG, bBG, aBG = unpack(Details.tooltip.background)
-			GameCooltip:AddStatusBar(value, 1, r, g, b, a, useSpark, {value = 100, color = {rBG, gBG, bBG, aBG}, texture = [[Interface\AddOns\Details\images\bar_serenity]]})
+			GameCooltip:AddStatusBar(value, 1, r, g, b, a, useSpark, {value = 100, color = {rBG, gBG, bBG, aBG}, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]]})
 		else
 			GameCooltip:AddStatusBar(value, 2, unpack(Details.tooltip.bar_color))
 		end
@@ -1582,7 +1582,7 @@ local __aui_chunk = function(...)
 	end
 
 	local bgColor, borderColor = {0, 0, 0, 0.8}, {0, 0, 0, 0.5} --{0.37, 0.37, 0.37, .75}, {.30, .30, .30, .3}
-	local backdrop = {bgFile = [[Interface\AddOns\Details\images\background83.png]], edgeFile = [[Interface\Buttons\WHITE8X8]], tile=true,
+	local backdrop = {bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background83.png]], edgeFile = [[Interface\Buttons\WHITE8X8]], tile=true,
 	edgeSize = 1, tileSize = 64, insets = {left = 0, right = 0, top = 0, bottom = 0}}
 
 	function Details:FormatCooltipForSpells()
@@ -1591,8 +1591,8 @@ local __aui_chunk = function(...)
 		GameCooltip:Reset()
 		GameCooltip:SetType("tooltip")
 
-		GameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\Details\images\bar_background_dark_withline]])
-		--GameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\Details\images\bar_textures\bar_rounded.png]])
+		GameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background_dark_withline]])
+		--GameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\bar_rounded.png]])
 
 		GameCooltip:SetOption("TextSize", Details.tooltip.fontsize)
 		GameCooltip:SetOption("TextFont",  Details.tooltip.fontface)
@@ -1674,7 +1674,7 @@ local __aui_chunk = function(...)
 
 		if (not Details.GameCooltipFrame1Shadow) then
 			Details.GameCooltipFrame1Shadow = GameCooltipFrame1:CreateTexture(nil, "background")
-			Details.GameCooltipFrame1Shadow:SetTexture([[Interface\AddOns\Details\images\shadow_square.png]], nil, nil, "TRILINEAR")
+			Details.GameCooltipFrame1Shadow:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\shadow_square.png]], nil, nil, "TRILINEAR")
 			GameCooltipFrame1:HookScript("OnHide", function(self)
 				Details.GameCooltipFrame1Shadow:Hide()
 			end)
@@ -2158,6 +2158,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

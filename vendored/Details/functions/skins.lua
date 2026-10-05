@@ -74,7 +74,7 @@ local addonName, Details222 = ...
 
 	--install wow interface skin:
 	_detalhes:InstallSkin ("WoW Interface", {
-		file = [[Interface\AddOns\Details\images\skins\default_skin.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\default_skin.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -184,7 +184,7 @@ local addonName, Details222 = ...
 					[4] = {["color"] = {["byClass"] = false}},
 				},
 				["textR_outline"] = true,
-				["spec_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal",
+				["spec_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal",
 				["textL_outline"] = true,
 				["texture_highlight"] = "Interface\\FriendsFrame\\UI-FriendsList-Highlight",
 				["textR_show_data"] = {
@@ -209,8 +209,8 @@ local addonName, Details222 = ...
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["font_size"] = 16,
 				["height"] = 21,
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar4",
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\classes_small",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar4",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small",
 				["textR_bracket"] = "(",
 				["textR_enable_custom_text"] = false,
 				["fixed_texture_color"] = {
@@ -229,7 +229,7 @@ local addonName, Details222 = ...
 					["lower_alpha"] = 0.1,
 					["upper_enabled"] = false,
 				},
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar_background",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background",
 				["texture_background"] = "DGround",
 				["use_spec_icons"] = true,
 				["alpha"] = 1,
@@ -314,7 +314,7 @@ local addonName, Details222 = ...
 	end
 
 	_detalhes:InstallSkin ("Minimalistic", {
-		file = [[Interface\AddOns\Details\images\skins\classic_skin_v1]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin_v1]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -376,7 +376,7 @@ local addonName, Details222 = ...
 				-3, -- [2]
 			},
 
-			["toolbar_icon_file"] = "Interface\\AddOns\\Details\\images\\toolbar_icons_2_shadow",
+			["toolbar_icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons_2_shadow",
 
 			["attribute_text"] = {
 				["enabled"] = true,
@@ -457,7 +457,7 @@ local addonName, Details222 = ...
 					[4] = {["color"] = {["byClass"] = false}},
 				},
 				["textR_outline"] = false,
-				["spec_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal",
+				["spec_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal",
 				["textL_outline"] = false,
 				["textR_outline_small"] = true,
 				["textL_outline_small"] = true,
@@ -480,12 +480,12 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = true,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Accidental Presidency.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Accidental Presidency.ttf",
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["font_size"] = 16,
 				["height"] = 21,
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar_textures\\bar_best.png",
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\classes_small",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_textures\\bar_best.png",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small",
 				["textR_bracket"] = "(",
 				["textR_enable_custom_text"] = false,
 				["fixed_texture_color"] = {
@@ -497,7 +497,7 @@ local addonName, Details222 = ...
 				["textR_custom_text"] = "{data1} ({data2}, {data3}%)",
 				["texture"] = "You Are the Best!",
 				["use_spec_icons"] = true,
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar4_reverse",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar4_reverse",
 				["texture_background"] = "Details D'ictum (reverse)",
 				["alpha"] = 1,
 				["no_icon"] = false,
@@ -547,7 +547,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("Minimalistic v2", {
-		file = [[Interface\AddOns\Details\images\skins\classic_skin.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -610,7 +610,7 @@ local addonName, Details222 = ...
 					[4] = {["color"] = {["byClass"] = false}},
 				},
 				["textR_outline"] = false,
-				["spec_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal",
+				["spec_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal",
 				["textL_outline"] = false,
 				["texture_highlight"] = "Interface\\FriendsFrame\\UI-FriendsList-Highlight",
 				["textR_show_data"] = {
@@ -635,8 +635,8 @@ local addonName, Details222 = ...
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["font_size"] = 16,
 				["height"] = 21,
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar_serenity",
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\classes_small",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_serenity",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small",
 				["textR_bracket"] = "(",
 				["textR_enable_custom_text"] = false,
 				["fixed_texture_color"] = {
@@ -655,7 +655,7 @@ local addonName, Details222 = ...
 					["lower_alpha"] = 0.1,
 					["upper_enabled"] = false,
 				},
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar_background",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background",
 				["texture_background"] = "DGround",
 				["use_spec_icons"] = true,
 				["alpha"] = 1,
@@ -773,7 +773,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("Serenity", {
-		file = [[Interface\AddOns\Details\images\skins\flat_skin.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\flat_skin.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -894,7 +894,7 @@ local addonName, Details222 = ...
 					[4] = {["color"] = {["byClass"] = false}},
 				},
 				["textR_outline"] = false,
-				["spec_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal",
+				["spec_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal",
 				["textL_outline"] = false,
 				["textR_outline_small"] = true,
 				["textL_outline_small"] = true,
@@ -912,7 +912,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = true,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Accidental Presidency.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Accidental Presidency.ttf",
 				["textL_custom_text"] = "{data1} - {data3}{data2}",
 				["models"] = {
 					["upper_model"] = "Spells\\AcidBreath_SuperGreen.M2",
@@ -922,9 +922,9 @@ local addonName, Details222 = ...
 					["lower_alpha"] = 0.1,
 					["upper_enabled"] = false,
 				},
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar_background",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background",
 				["textR_bracket"] = "[",
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\classes_small",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small",
 				["icon_grayscale"] = false,
 				["font_size"] = 16,
 				["height"] = 21,
@@ -981,7 +981,7 @@ local addonName, Details222 = ...
 				["percent_type"] = 1,
 				["font_face"] = "Accidental Presidency",
 				["texture_class_colors"] = true,
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar4",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar4",
 				["fast_ps_update"] = false,
 				["textR_separator"] = "NONE",
 				["texture_custom_file"] = "Interface\\",
@@ -1005,7 +1005,7 @@ local addonName, Details222 = ...
 				["anchor"] = "all",
 				["height"] = 225.999984741211,
 				["alpha"] = 0.266666680574417,
-				["texture"] = "Interface\\AddOns\\Details\\images\\skins\\elvui",
+				["texture"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\skins\\elvui",
 			},
 			["stretch_button_side"] = 1,
 			["hide_icon"] = true,
@@ -1094,7 +1094,7 @@ local addonName, Details222 = ...
 	end
 
 	_detalhes:InstallSkin ("Forced Square", {
-		file = [[Interface\AddOns\Details\images\skins\simplygray_skin.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\simplygray_skin.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -1264,10 +1264,10 @@ local addonName, Details222 = ...
 					0,
 				},
 				["use_spec_icons"] = true,
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal_alpha",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal_alpha",
 				["textL_show_number"] = true,
 				["texture"] = "Skyline",
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar4",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar4",
 				["textR_enable_custom_text"] = false,
 				["textR_custom_text"] = "{data1} ({data2}, {data3}%)",
 				["textL_enable_custom_text"] = false,
@@ -1289,7 +1289,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = false,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\FORCED SQUARE.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\FORCED SQUARE.ttf",
 				["backdrop"] = {
 					["enabled"] = false,
 					["size"] = 12,
@@ -1317,7 +1317,7 @@ local addonName, Details222 = ...
 				["texture_background"] = "Details Serenity",
 				["font_face"] = "FORCED SQUARE",
 				["texture_class_colors"] = true,
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar4",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar4",
 				["texture_highlight"] = "Interface\\FriendsFrame\\UI-FriendsList-Highlight",
 				["percent_type"] = 1,
 			},
@@ -1360,7 +1360,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("ElvUI Frame Style", {
-		file = [[Interface\AddOns\Details\images\skins\elvui.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\elvui.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -1470,7 +1470,7 @@ local addonName, Details222 = ...
 					[4] = {["color"] = {["byClass"] = false}},
 				},
 				["textR_outline"] = false,
-				["spec_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal",
+				["spec_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal",
 				["textL_outline"] = false,
 				["texture_highlight"] = "Interface\\FriendsFrame\\UI-FriendsList-Highlight",
 				["textR_show_data"] = {
@@ -1491,12 +1491,12 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = true,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\FORCED SQUARE.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\FORCED SQUARE.ttf",
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["font_size"] = 16,
 				["height"] = 21,
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar4",
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\classes_small",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar4",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small",
 				["textR_bracket"] = "[",
 				["textR_enable_custom_text"] = false,
 				["fixed_texture_color"] = {
@@ -1508,7 +1508,7 @@ local addonName, Details222 = ...
 				["textR_custom_text"] = "{data1} ({data2}, {data3}%)",
 				["texture"] = "Skyline",
 				["use_spec_icons"] = true,
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar_background",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background",
 				["texture_background"] = "DGround",
 				["alpha"] = 0.8,
 				["no_icon"] = false,
@@ -1584,7 +1584,7 @@ local addonName, Details222 = ...
 			["show_statusbar"] = false,
 			["wallpaper"] = {
 				["enabled"] = true,
-				["texture"] = "Interface\\AddOns\\Details\\images\\skins\\elvui",
+				["texture"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\skins\\elvui",
 				["texcoord"] = {
 					0.0480000019073486, -- [1]
 					0.298000011444092, -- [2]
@@ -1615,7 +1615,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("ElvUI Style II", {
-		file = [[Interface\AddOns\Details\images\skins\elvui_opaque.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\elvui_opaque.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -1683,8 +1683,8 @@ local addonName, Details222 = ...
 				["textL_outline"] = false,
 				["use_spec_icons"] = true,
 				["textL_enable_custom_text"] = false,
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal",
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\BantoBar",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\BantoBar",
 				["start_after_icon"] = true,
 				["texture_highlight"] = "Interface\\FriendsFrame\\UI-FriendsList-Highlight",
 				["textR_enable_custom_text"] = false,
@@ -1724,7 +1724,7 @@ local addonName, Details222 = ...
 				["height"] = 21,
 				["font_face"] = "FORCED SQUARE",
 				["texture_class_colors"] = true,
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar_background",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background",
 				["textL_show_number"] = true,
 				["fixed_texture_color"] = {0.862745098039216,0.862745098039216,0.862745098039216,1},
 			},
@@ -1778,7 +1778,7 @@ local addonName, Details222 = ...
 				["anchor"] = "all",
 				["height"] = 226.000007591173,
 				["alpha"] = 0.800000071525574,
-				["texture"] = "Interface\\AddOns\\Details\\images\\skins\\elvui",
+				["texture"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\skins\\elvui",
 			},
 			["stretch_button_side"] = 1,
 			["attribute_text"] = {
@@ -1803,7 +1803,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("Dark Theme", {
-		file = [[Interface\AddOns\Details\images\skins\darktheme.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\darktheme.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -1871,7 +1871,7 @@ local addonName, Details222 = ...
 				1, -- [3]
 				1, -- [4]
 			},
-			["toolbar_icon_file"] = "Interface\\AddOns\\Details\\images\\toolbar_icons_2",
+			["toolbar_icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons_2",
 			["bars_sort_direction"] = 1,
 			["fontstrings_width"] = 35,
 			["tooltip"] = {
@@ -1888,7 +1888,7 @@ local addonName, Details222 = ...
 					[4] = {["color"] = {["byClass"] = false}, ["anchor"] = {["x"] = 0}},
 				},
 				["textR_outline"] = false,
-				["spec_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal",
+				["spec_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal",
 				["textL_outline"] = false,
 				["textR_outline_small"] = true,
 				["textL_outline_small"] = true,
@@ -1910,7 +1910,7 @@ local addonName, Details222 = ...
 					0, -- [3]
 					1, -- [4]
 				},
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Oswald-Regular.otf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Oswald-Regular.otf",
 				["backdrop"] = {
 					["enabled"] = false,
 					["texture"] = "Details BarBorder 2",
@@ -1925,7 +1925,7 @@ local addonName, Details222 = ...
 				["font_size"] = 12,
 				["textL_translit_text"] = false,
 				["height"] = 21,
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar_textures\\texture2020.blp",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_textures\\texture2020.blp",
 				["use_spec_icons"] = true,
 				["models"] = {
 					["upper_model"] = "Spells\\AcidBreath_SuperGreen.M2",
@@ -1935,7 +1935,7 @@ local addonName, Details222 = ...
 					["lower_alpha"] = 0.1,
 					["upper_enabled"] = false,
 				},
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\classes_small",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small",
 				["icon_grayscale"] = false,
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["textR_bracket"] = "[",
@@ -1952,7 +1952,7 @@ local addonName, Details222 = ...
 				["textR_custom_text"] = "{data1} ({data2}, {data3}%)",
 				["texture"] = "Details2020",
 				["start_after_icon"] = true,
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar_background",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background",
 				["alpha"] = 0.8,
 				["texture_background"] = "Details Flat",
 				["textR_outline_small_color"] = {
@@ -1981,7 +1981,7 @@ local addonName, Details222 = ...
 				},
 				["fast_ps_update"] = false,
 				["textR_separator"] = ",",
-				["texture_custom_file"] = "Interface\\AddOns\\Details\\images\\bar_textures\\texture2020.blp",
+				["texture_custom_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_textures\\texture2020.blp",
 			},
 			["switch_tank"] = false,
 			["plugins_grow_direction"] = 1,
@@ -2262,7 +2262,7 @@ local addonName, Details222 = ...
 				["anchor"] = "all",
 				["height"] = 226.00001525879,
 				["alpha"] = 0.80000007152557,
-				["texture"] = "Interface\\AddOns\\Details\\images\\skins\\darktheme",
+				["texture"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\skins\\darktheme",
 			},
 			["total_bar"] = {
 				["enabled"] = false,
@@ -2293,7 +2293,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("New Gray", {
-		file = [[Interface\AddOns\Details\images\skins\classic_skin_v1.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin_v1.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -2466,7 +2466,7 @@ local addonName, Details222 = ...
 				["textR_outline"] = true,
 				["textL_outline_small"] = false,
 				["textR_outline_small"] = false,
-				["spec_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal_alpha",
+				["spec_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal_alpha",
 				["texture_highlight"] = "Interface\\FriendsFrame\\UI-FriendsList-Highlight",
 				["textR_show_data"] = {
 					true, -- [1]
@@ -2486,12 +2486,12 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = false,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Accidental Presidency.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Accidental Presidency.ttf",
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["font_size"] = 16,
 				["height"] = 21,
-				["texture_file"] = "Interface\\AddOns\\Details\\images\\bar_background",
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\classes_small_alpha",
+				["texture_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small_alpha",
 				["textR_bracket"] = "(",
 				["texture_custom"] = "",
 				["fixed_texture_color"] = {
@@ -2523,7 +2523,7 @@ local addonName, Details222 = ...
 				},
 				["alpha"] = 0.439999997615814,
 				["no_icon"] = false,
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar_background",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_background",
 				["texture_background"] = "DGround",
 				["font_face"] = "Accidental Presidency",
 				["texture_class_colors"] = false,
@@ -2558,7 +2558,7 @@ local addonName, Details222 = ...
 
 
 		_detalhes:InstallSkin ("Safe Skin Legion Beta", {
-		file = [[Interface\AddOns\Details\images\skins\classic_skin_v1.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin_v1.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -2666,7 +2666,7 @@ local addonName, Details222 = ...
 					[4] = {["color"] = {["byClass"] = false}},
 				},
 				["textR_outline"] = false,
-				["spec_file"] = "Interface\\AddOns\\Details\\images\\spec_icons_normal",
+				["spec_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal",
 				["textL_outline"] = false,
 				["texture_highlight"] = "Interface\\FriendsFrame\\UI-FriendsList-Highlight",
 				["textR_show_data"] = {
@@ -2687,7 +2687,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = true,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Accidental Presidency.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Accidental Presidency.ttf",
 				["backdrop"] = {
 					["enabled"] = false,
 					["size"] = 12,
@@ -2702,7 +2702,7 @@ local addonName, Details222 = ...
 				["font_size"] = 16,
 				["height"] = 21,
 				["texture_file"] = "Interface\\RaidFrame\\Raid-Bar-Hp-Fill",
-				["icon_file"] = "Interface\\AddOns\\Details\\images\\classes_small",
+				["icon_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small",
 				["textR_bracket"] = "(",
 				["textR_enable_custom_text"] = false,
 				["fixed_texture_color"] = {
@@ -2733,7 +2733,7 @@ local addonName, Details222 = ...
 				["alpha"] = 1,
 				["no_icon"] = false,
 				["texture_background"] = "Details D'ictum (reverse)",
-				["texture_background_file"] = "Interface\\AddOns\\Details\\images\\bar4_reverse",
+				["texture_background_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar4_reverse",
 				["font_face"] = "Accidental Presidency",
 				["texture_class_colors"] = true,
 				["percent_type"] = 1,

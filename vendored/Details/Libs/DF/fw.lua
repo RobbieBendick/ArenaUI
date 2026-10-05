@@ -1725,7 +1725,7 @@ function DF:AddClassIconToText(text, playerName, englishClassName, useSpec, icon
 		local specString = ""
 		local L, R, T, B = unpack(Details.class_specs_coords[spec])
 		if (L) then
-			specString = "|TInterface\\AddOns\\Details\\images\\spec_icons_normal:" .. size .. ":" .. size .. ":0:0:512:512:" .. (L * 512) .. ":" .. (R * 512) .. ":" .. (T * 512) .. ":" .. (B * 512) .. "|t"
+			specString = "|TInterface\\AddOns\\ArenaUI\\vendored\\Details\\images\\spec_icons_normal:" .. size .. ":" .. size .. ":0:0:512:512:" .. (L * 512) .. ":" .. (R * 512) .. ":" .. (T * 512) .. ":" .. (B * 512) .. "|t"
 			return specString .. " " .. text
 		end
 	end
@@ -1736,7 +1736,7 @@ function DF:AddClassIconToText(text, playerName, englishClassName, useSpec, icon
 		local L, R, T, B = unpack(Details.class_coords[englishClassName])
 		if (L) then
 			local imageSize = 128
-			classString = "|TInterface\\AddOns\\Details\\images\\classes_small:" .. size .. ":" .. size .. ":0:0:" .. imageSize .. ":" .. imageSize .. ":" .. (L * imageSize) .. ":" .. (R * imageSize) .. ":" .. (T * imageSize) .. ":" .. (B * imageSize) .. "|t"
+			classString = "|TInterface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small:" .. size .. ":" .. size .. ":0:0:" .. imageSize .. ":" .. imageSize .. ":" .. (L * imageSize) .. ":" .. (R * imageSize) .. ":" .. (T * imageSize) .. ":" .. (B * imageSize) .. "|t"
 			return classString .. " " .. text
 		end
 	end
@@ -4873,7 +4873,7 @@ function DF:ReskinSlider(slider, heightOffset)
 
 		slider.slider:cimaPoint(0, 13)
 		slider.slider:baixoPoint(0, -13)
-		slider.slider.thumb:SetTexture([[Interface\AddOns\Details\images\icons2]])
+		slider.slider.thumb:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]])
 		slider.slider.thumb:SetTexCoord(482/512, 492/512, 104/512, 120/512)
 		slider.slider.thumb:SetSize(12, 12)
 		slider.slider.thumb:SetVertexColor(0.6, 0.6, 0.6, 0.95)
@@ -4891,7 +4891,7 @@ function DF:ReskinSlider(slider, heightOffset)
 		slider.Background.Middle:Hide()
 
 		local thumb = slider.Track.Thumb.thumbTexture
-		thumb:SetTexture([[Interface\AddOns\Details\images\icons2]])
+		thumb:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]])
 		thumb:SetTexCoord(482/512, 492/512, 104/512, 120/512)
 		thumb:SetSize(12, 12)
 		thumb:SetVertexColor(0.6, 0.6, 0.6, 0.95)

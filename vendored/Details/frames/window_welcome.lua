@@ -35,7 +35,7 @@ function _detalhes:OpenWelcomeWindow()
 			if (DetailsFramework.IsClassicWow()) then
 				local new_instance = Details:GetWindow (1)
 				new_instance.row_info.use_spec_icons = false
-				new_instance.row_info.icon_file = [[Interface\AddOns\Details\images\classes_small]]
+				new_instance.row_info.icon_file = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]]
 				new_instance:SetBarSpecIconSettings (false)
 			end
 
@@ -50,7 +50,7 @@ function _detalhes:OpenWelcomeWindow()
 
 		local logotipo = window:CreateTexture(nil, "overlay")
 		logotipo:SetPoint("topleft", window, "topleft", 16, -20)
-		logotipo:SetTexture([[Interface\Addons\Details\images\logotipo]])
+		logotipo:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\logotipo]])
 		logotipo:SetTexCoord(0.07421875, 0.73828125, 0.51953125, 0.890625)
 		logotipo:SetWidth(186)
 		logotipo:SetHeight(50)
@@ -266,7 +266,7 @@ local window_openned_at = time()
 		texto_appearance:SetTextColor(1, 1, 1, 1)
 
 		local skins_image = window:CreateTexture(nil, "overlay")
-		skins_image:SetTexture([[Interface\Addons\Details\images\icons2]])
+		skins_image:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]])
 		skins_image:SetPoint("topright", window, "topright", -50, -24)
 		skins_image:SetWidth(214*0.7)
 		skins_image:SetHeight(133*0.7)
@@ -532,7 +532,7 @@ local window_openned_at = time()
 			local window_color = g:CreateButton(window, change_color, buttonWidth, 20, Loc ["STRING_OPTIONS_CHANGECOLOR"])
 			window_color:SetTemplate(g:GetTemplate("dropdown", "OPTIONS_DROPDOWN_TEMPLATE"))
 			window_color:SetPoint("topleft", create_window_button, "bottomleft", 0, padding)
-			window_color:SetIcon ([[Interface\AddOns\Details\images\icons]], 14, 14, nil, {434/512, 466/512, 277/512, 307/512}, nil, 4, 2)
+			window_color:SetIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 14, 14, nil, {434/512, 466/512, 277/512, 307/512}, nil, 4, 2)
 
 		--bar height
 			g:NewLabel(window, _, "$parentBarHeightLabel", "BarHeightLabel", Loc ["STRING_OPTIONS_BAR_HEIGHT"] .. ":", "GameFontNormal")
@@ -723,7 +723,7 @@ local window_openned_at = time()
 		end
 
 		local sword_icon2 = window:CreateTexture(nil, "overlay")
-		sword_icon2:SetTexture([[Interface\Addons\Details\images\icons2]])
+		sword_icon2:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]])
 		sword_icon2:SetPoint("topright", window, "topright", -30, -10)
 		sword_icon2:SetSize(128*1.4, 64*1.4)
 		sword_icon2:SetTexCoord(330/512, 509/512, 437/512, 509/512)
@@ -1119,7 +1119,7 @@ local window_openned_at = time()
 		texto_stretch:SetTextColor(1, 1, 1, 1)
 
 		local stretch_image = window:CreateTexture(nil, "overlay")
-		stretch_image:SetTexture([[Interface\Addons\Details\images\icons]])
+		stretch_image:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]])
 		stretch_image:SetPoint("right", texto_stretch, "left", -12, 0)
 		stretch_image:SetWidth(144)
 		stretch_image:SetHeight(61)
@@ -1188,7 +1188,7 @@ local window_openned_at = time()
 		texto_instance_button:SetTextColor(1, 1, 1, 1)
 
 		local instance_button_image = window:CreateTexture(nil, "overlay")
-		instance_button_image:SetTexture([[Interface\Addons\Details\images\icons]])
+		instance_button_image:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]])
 		instance_button_image:SetPoint("topright", window, "topright", -16, -70)
 		instance_button_image:SetWidth(198)
 		instance_button_image:SetHeight(141)
@@ -1258,7 +1258,7 @@ local window_openned_at = time()
 		texto_shortcut:SetTextColor(1, 1, 1, 1)
 
 		local shortcut_image2 = window:CreateTexture(nil, "overlay")
-		shortcut_image2:SetTexture([[Interface\Addons\Details\images\icons]])
+		shortcut_image2:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]])
 		shortcut_image2:SetPoint("topright", window, "topright", -22, -87)
 		shortcut_image2:SetWidth(165)
 		shortcut_image2:SetHeight(119)
@@ -1270,13 +1270,13 @@ local window_openned_at = time()
 		local bookmark_frame = CreateFrame("frame", "WelcomeBookmarkFrame", window,"BackdropTemplate")
 		bookmark_frame:SetPoint("topleft", instance1.baseframe, "topleft")
 		bookmark_frame:SetPoint("bottomright", instance1.baseframe, "bottomright")
-		bookmark_frame:SetBackdrop({bgFile = [[Interface\AddOns\Details\images\background]], tile = true, tileSize = 64})
+		bookmark_frame:SetBackdrop({bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tile = true, tileSize = 64})
 		bookmark_frame:SetBackdropColor(0, 0, 0, 0.8)
 		
-		--local desc_anchor_topleft = _detalhes.gump:NewImage(bookmark_frame, [[Interface\AddOns\Details\images\options_window]], 75, 106, "artwork", {0.19921875, 0.2724609375, 0.6796875, 0.783203125}, "descAnchorBottomLeftImage", "$parentDescAnchorBottomLeftImage") --204 696 279 802
+		--local desc_anchor_topleft = _detalhes.gump:NewImage(bookmark_frame, [[Interface\AddOns\ArenaUI\vendored\Details\images\options_window]], 75, 106, "artwork", {0.19921875, 0.2724609375, 0.6796875, 0.783203125}, "descAnchorBottomLeftImage", "$parentDescAnchorBottomLeftImage") --204 696 279 802
 		--desc_anchor_topleft:SetPoint("topleft", bookmark_frame, "topleft", -5, 5)
 
-		--local desc_anchor_bottomleft = _detalhes.gump:NewImage(bookmark_frame, [[Interface\AddOns\Details\images\options_window]], 75, 106, "artwork", {0.2724609375, 0.19921875, 0.783203125, 0.6796875}, "descAnchorTopLeftImage", "$parentDescAnchorTopLeftImage") --204 696 279 802
+		--local desc_anchor_bottomleft = _detalhes.gump:NewImage(bookmark_frame, [[Interface\AddOns\ArenaUI\vendored\Details\images\options_window]], 75, 106, "artwork", {0.2724609375, 0.19921875, 0.783203125, 0.6796875}, "descAnchorTopLeftImage", "$parentDescAnchorTopLeftImage") --204 696 279 802
 		--desc_anchor_bottomleft:SetPoint("bottomright", bookmark_frame, "bottomright", 5, -5)
 
 		local bmf_string = bookmark_frame:CreateFontString("overlay", nil, "GameFontNormal")
@@ -1329,7 +1329,7 @@ local window_openned_at = time()
 		texto_snap:SetFont(fonte, 11, flags)
 
 		local snap_image1 = window:CreateTexture(nil, "overlay")
-		snap_image1:SetTexture([[Interface\Addons\Details\images\icons]])
+		snap_image1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]])
 		snap_image1:SetPoint("topright", window, "topright", -12, -95)
 		snap_image1:SetWidth(310)
 		snap_image1:SetHeight(102)
@@ -1373,7 +1373,7 @@ local window_openned_at = time()
 		texto_micro_display:SetTextColor(1, 1, 1, 1)
 
 		local micro_image1 = window:CreateTexture(nil, "overlay")
-		micro_image1:SetTexture([[Interface\Addons\Details\images\icons]])
+		micro_image1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]])
 		micro_image1:SetPoint("topright", window, "topright", -15, -70)
 		micro_image1:SetWidth(186)
 		micro_image1:SetHeight(100)
@@ -1511,7 +1511,7 @@ local window_openned_at = time()
 		--texto_plugins:SetFont(fonte, 11, flags)
 
 		local plugins_image1 = window:CreateTexture(nil, "overlay")
-		plugins_image1:SetTexture([[Interface\Addons\Details\images\icons2]])
+		plugins_image1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]])
 		plugins_image1:SetPoint("topright", window, "topright", -12, -90)
 		plugins_image1:SetWidth(281)
 		plugins_image1:SetHeight(81)

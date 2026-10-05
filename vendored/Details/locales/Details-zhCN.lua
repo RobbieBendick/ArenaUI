@@ -1556,8 +1556,8 @@ L["STRING_WELCOME_3"] = "选择你的DPS和HPS者优先的方法："
 L["STRING_WELCOME_30"] = "使用界面：书签"
 L["STRING_WELCOME_31"] = [=[|cFFFFFF00右键点击|r  |cFFFFAA00书签|r 窗口的任何位置打开书签。
 |cFFFFFF00再次右键点击|r 关闭面板或选择另一个显示，如果点击一个图标。
-|TInterface\AddOns\Details\images\key_shift:14:30:0:0:64:64:0:64:0:40|t + 右键点击代替打开片段。
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + 右键点击关闭窗口。]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_shift:14:30:0:0:64:64:0:64:0:40|t + 右键点击代替打开片段。
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + 右键点击关闭窗口。]=]
 L["STRING_WELCOME_32"] = "使用界面：群组窗口"
 L["STRING_WELCOME_34"] = "使用接口：扩展工具提示"
 L["STRING_WELCOME_36"] = "使用界面：插件"

@@ -22,7 +22,7 @@ function Details:InitializeRaidHistoryWindow()
     DetailsRaidHistoryWindow.Frame = DetailsRaidHistoryWindow
     DetailsRaidHistoryWindow.__name = Loc ["STRING_STATISTICS"]
     DetailsRaidHistoryWindow.real_name = "DETAILS_STATISTICS"
-    DetailsRaidHistoryWindow.__icon = [[Interface\AddOns\Details\images\icons]]
+    DetailsRaidHistoryWindow.__icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
     DetailsRaidHistoryWindow.__iconcoords = {278/512, 314/512, 43/512, 76/512}
     DetailsRaidHistoryWindow.__iconcolor = "DETAILS_STATISTICS_ICON"
     DetailsPluginContainerWindow.EmbedPlugin (DetailsRaidHistoryWindow, DetailsRaidHistoryWindow, true)

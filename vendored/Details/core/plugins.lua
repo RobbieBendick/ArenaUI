@@ -31,7 +31,7 @@
 		gameCooltip:SetOption("LinePadding", -1)
 		gameCooltip:SetOption("FrameHeightSizeOffset", 0)
 		gameCooltip:SetOption("FixedWidth", 280)
-		gameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\Details\images\bar_serenity]])
+		gameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]])
 		gameCooltip:SetOption("LeftTextWidth", 280 - 22 - 90)
 		gameCooltip:SetOption("LeftTextHeight", 14)
 		Details:SetTooltipMinWidth()
@@ -480,7 +480,7 @@
 			end)
 
 			optionsFrame:SetBackdrop({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 16,
-			edgeFile = [[Interface\AddOns\Details\images\border_2]], edgeSize = 32,
+			edgeFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\border_2]], edgeSize = 32,
 			insets = {left = 1, right = 1, top = 1, bottom = 1}})
 			optionsFrame:SetBackdropColor(0, 0, 0, .7)
 

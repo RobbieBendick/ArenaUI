@@ -461,7 +461,7 @@ function Details.Coach.WelcomePanel()
 
         local imageSize = 26
 
-        local detailsLogo = DetailsFramework:CreateImage(welcomePanel, [[Interface\AddOns\Details\images\logotipo]])
+        local detailsLogo = DetailsFramework:CreateImage(welcomePanel, [[Interface\AddOns\ArenaUI\vendored\Details\images\logotipo]])
         detailsLogo:SetPoint("topleft", welcomePanel, "topleft", 5, -30)
         detailsLogo:SetSize(200, 50)
         detailsLogo:SetTexCoord(36/512, 380/512, 128/256, 227/256)

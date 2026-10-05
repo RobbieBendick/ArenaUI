@@ -689,7 +689,7 @@
         end
 
         local iconTableAvoidance = {
-            texture = [[Interface\AddOns\Details\images\icons]],
+            texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
             --coords = {363/512, 381/512, 0/512, 17/512},
             coords = {384/512, 402/512, 19/512, 38/512},
             width = 16,

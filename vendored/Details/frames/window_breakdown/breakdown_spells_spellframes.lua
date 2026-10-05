@@ -38,7 +38,7 @@ local formatPetName = function(petName, spellName, ownerName)
 	--remove the owner name from the pet name
 	local petNameWithoutOwner = petName:gsub((" <.*"), "")
 
-	local texture = [[Interface\AddOns\Details\images\classes_small]]
+	local texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]]
 
 	local bUseAlphaIcons = true
 	local specIcon = nil
@@ -569,7 +569,7 @@ function spellsTab.CreateSpellBlock(spellBlockContainer, index) --~breakdownspel
 	--overlay texture which fade in and out when the spell block is hovered over
 	--is only possible to hover over a spell block when the spellbar is selected
 	spellBlock.overlay = spellBlock:CreateTexture("$parentOverlay", "artwork")
-	spellBlock.overlay:SetTexture("Interface\\AddOns\\Details\\images\\overlay_detalhes")
+	spellBlock.overlay:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\overlay_detalhes")
 	spellBlock.overlay:SetPoint("topleft", spellBlock, "topleft", -8, 8)
 	spellBlock.overlay:SetPoint("bottomright", spellBlock, "bottomright", 26, -14)
 	Details.FadeHandler.Fader(spellBlock.overlay, 1) --hide
@@ -583,7 +583,7 @@ function spellsTab.CreateSpellBlock(spellBlockContainer, index) --~breakdownspel
 
 	--spark texture
 	spellBlock.sparkTexture = spellBlock:CreateTexture("$parentOverlaySparkTexture", "overlay")
-	spellBlock.sparkTexture:SetTexture("Interface\\AddOns\\Details\\images\\bar_detalhes2_end")
+	spellBlock.sparkTexture:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\bar_detalhes2_end")
 	spellBlock.sparkTexture:SetBlendMode("ADD")
 
     local gradientDown = detailsFramework:CreateTexture(spellBlock, {gradient = "vertical", fromColor = {0, 0, 0, 0.1}, toColor = "transparent"}, 1, spellBlock:GetHeight(), "background", {0, 1, 0, 1})
@@ -1028,11 +1028,11 @@ local updateSpellBar = function(spellBar, index, actorName, combatObject, scroll
 
 				--update the texture taking the state of the expanded value
 				if (bIsSpellExpaded) then
-					spellBar.expandButton.texture:SetTexture([[Interface\AddOns\Details\images\arrow_face_down]])
+					spellBar.expandButton.texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\arrow_face_down]])
 					--spellBar.expandButton.texture:SetTexCoord(0, 1, 0, 1)
 					spellBar.expandButton.texture:SetRotation(0)
 				else
-					spellBar.expandButton.texture:SetTexture([[Interface\AddOns\Details\images\arrow_face_down]])
+					spellBar.expandButton.texture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\arrow_face_down]])
 					--spellBar.expandButton.texture:SetTexCoord(0, 1, 0, 1)
 					spellBar.expandButton.texture:SetRotation(math.pi/2)
 				end
@@ -1522,7 +1522,7 @@ function spellsTab.CreateSpellBar(self, index) --~spellbar ~spellline ~spell ~cr
 
 	---@type texture overlay texture to use when the spellbar is selected
 	local statusBarOverlayTexture = statusBar:CreateTexture("$parentTextureOverlay", "overlay", nil, 7)
-	statusBarOverlayTexture:SetTexture([[Interface/AddOns/Details/images/overlay_indicator_1]])
+	statusBarOverlayTexture:SetTexture([[Interface/AddOns/ArenaUI/vendored/Details/images/overlay_indicator_1]])
 	statusBarOverlayTexture:SetVertexColor(1, 1, 1, 0.2)
 	statusBarOverlayTexture:SetAllPoints()
 	statusBarOverlayTexture:Hide()

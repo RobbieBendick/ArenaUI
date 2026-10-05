@@ -57,7 +57,7 @@ function Details:OpenNewsWindow(textToShow, dumpValues, keeptext)
 			--show textures
 			if (Details.build_counter == 8154) then
 				newsFrame.imageFrame:Show()
-				newsFrame.imageFrame.texture:SetTexture([[interface/addons/details/images/news_images]])
+				newsFrame.imageFrame.texture:SetTexture([[Interface/AddOns/ArenaUI/vendored/Details/images/news_images]])
 				newsFrame.imageFrame.texture:SetSize(279, 452)
 				newsFrame.imageFrame.texture:SetTexCoord(0, 279/512, 0, 452/512)
 			end
@@ -211,6 +211,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

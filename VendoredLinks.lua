@@ -13,4 +13,5 @@ ArenaUI_VendoredLinks = {
     WeakAurasArchive = true,
     BetterBlizzPlates = true,
     BetterBlizzFrames = true,
+    BuffOverlay = true,
 }

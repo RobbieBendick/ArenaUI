@@ -30,8 +30,9 @@ NS.ADDON_CATEGORIES = {
                 description = "Arena frames for WoW Classic.",
                 icon = 135993,
                 openSettings = OpenAddonSettings("Gladdy", function()
-                    if Gladdy and Gladdy.ShowOptions then
-                        Gladdy:ShowOptions()
+                    local gladdy = (LibStub and LibStub("Gladdy", true)) or _G.Gladdy
+                    if gladdy and gladdy.ShowOptions then
+                        gladdy:ShowOptions()
                         return
                     end
                     local dialog = LibStub and LibStub("AceConfigDialog-3.0", true)
@@ -163,6 +164,24 @@ NS.ADDON_CATEGORIES = {
                         return false
                     end
                     WeakAuras.OpenOptions()
+                end),
+            },
+            {
+                name = "BuffOverlay",
+                title = "BuffOverlay",
+                description = "Overlays chosen auras on top of raid/party frames.",
+                icon = VENDOR .. "BuffOverlay\\Media\\Textures\\logo_transparent.tga",
+                openSettings = OpenAddonSettings("BuffOverlay", function()
+                    if BuffOverlay and BuffOverlay.OpenOptions then
+                        BuffOverlay:OpenOptions()
+                        return
+                    end
+                    local dialog = LibStub and LibStub("AceConfigDialog-3.0", true)
+                    if dialog and dialog.Open then
+                        dialog:Open("BuffOverlay")
+                        return
+                    end
+                    return false
                 end),
             },
         },
@@ -535,8 +554,29 @@ local function BuildClassesPage(page)
     local specScroll, specChild = NS:CreateScrollArea(specList)
     local specRows = {}
 
+    local ratingBar = CreateFrame("Frame", nil, page)
+    ratingBar:SetPoint("TOPLEFT", nav, "BOTTOMLEFT", 0, -4)
+    ratingBar:SetPoint("TOPRIGHT", nav, "BOTTOMRIGHT", 0, -4)
+    ratingBar:SetHeight(54)
+    ratingBar:Hide()
+
+    local sectionBar = CreateFrame("Frame", nil, page)
+    sectionBar:SetPoint("TOPLEFT", ratingBar, "BOTTOMLEFT", 0, -8)
+    sectionBar:SetPoint("TOPRIGHT", ratingBar, "BOTTOMRIGHT", 0, -8)
+    sectionBar:SetHeight(26)
+    sectionBar:Hide()
+
+    local GUIDE_SECTIONS = {
+        { id = "comps", label = "Comps" },
+        { id = "macros", label = "Macros" },
+        { id = "professions", label = "Professions" },
+        { id = "stats", label = "Stat Prio" },
+    }
+    local activeGuideSection = "comps"
+    local sectionButtons = {}
+
     local detail = CreateFrame("Frame", nil, page)
-    detail:SetPoint("TOPLEFT", nav, "BOTTOMLEFT", 0, -8)
+    detail:SetPoint("TOPLEFT", sectionBar, "BOTTOMLEFT", 0, -6)
     detail:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", 0, 0)
     detail:Hide()
 
@@ -551,7 +591,7 @@ local function BuildClassesPage(page)
         local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
         NS:ApplyBoxBackdrop(card, 0.28, 0.28, 0.28, 0.9)
         card:SetBackdropColor(0.08, 0.08, 0.08, 0.55)
-        card:SetHeight(64)
+        card:SetHeight(54)
 
         local bar = card:CreateTexture(nil, "ARTWORK")
         bar:SetColorTexture(accent[1], accent[2], accent[3], 0.95)
@@ -560,23 +600,23 @@ local function BuildClassesPage(page)
         bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
 
         local caption = card:CreateFontString(nil, "OVERLAY")
-        NS:ApplyFont(caption, 10)
-        caption:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -8)
-        caption:SetPoint("TOPRIGHT", card, "TOPRIGHT", -8, -8)
+        NS:ApplyFont(caption, 9)
+        caption:SetPoint("TOPLEFT", card, "TOPLEFT", 12, -6)
+        caption:SetPoint("TOPRIGHT", card, "TOPRIGHT", -8, -6)
         caption:SetJustifyH("LEFT")
         caption:SetTextColor(muted[1], muted[2], muted[3])
 
         local value = card:CreateFontString(nil, "OVERLAY")
-        NS:ApplyFont(value, 14, "THINOUTLINE")
-        value:SetPoint("TOPLEFT", caption, "BOTTOMLEFT", 0, -2)
+        NS:ApplyFont(value, 13, "THINOUTLINE")
+        value:SetPoint("TOPLEFT", caption, "BOTTOMLEFT", 0, -1)
         value:SetJustifyH("LEFT")
         value:SetTextColor(1, 1, 1)
 
         local pips = {}
         for index = 1, 5 do
             local pip = card:CreateTexture(nil, "OVERLAY")
-            pip:SetSize(8, 8)
-            pip:SetPoint("TOPLEFT", value, "BOTTOMLEFT", (index - 1) * 12, -6)
+            pip:SetSize(7, 7)
+            pip:SetPoint("TOPLEFT", value, "BOTTOMLEFT", (index - 1) * 10, -5)
             pips[index] = pip
         end
 
@@ -596,13 +636,68 @@ local function BuildClassesPage(page)
         return card
     end
 
-    local skillFloorCard = CreateStatCard(detailChild)
-    local skillCeilingCard = CreateStatCard(detailChild)
-    local metaCard = CreateStatCard(detailChild)
+    local skillFloorCard = CreateStatCard(ratingBar)
+    local skillCeilingCard = CreateStatCard(ratingBar)
+    local metaCard = CreateStatCard(ratingBar)
+    skillFloorCard:Hide()
+    skillCeilingCard:Hide()
+    metaCard:Hide()
     local raceHeader = NS:CreateHeader(detailChild, "Best Race")
     local statHeader = NS:CreateHeader(detailChild, "Stat Priority")
+    local professionHeader = NS:CreateHeader(detailChild, "Professions")
     local compHeader = NS:CreateHeader(detailChild, "Compositions")
     local macroHeader = NS:CreateHeader(detailChild, "Macros")
+
+    local function PaintSectionBar()
+        for _, button in ipairs(sectionButtons) do
+            local active = button.sectionId == activeGuideSection
+            if active then
+                button.label:SetTextColor(accent[1], accent[2], accent[3])
+                button.underline:Show()
+            else
+                button.label:SetTextColor(NS.COLOR.off[1], NS.COLOR.off[2], NS.COLOR.off[3])
+                button.underline:Hide()
+            end
+        end
+    end
+
+    do
+        local x = 0
+        for index, section in ipairs(GUIDE_SECTIONS) do
+            local button = CreateFrame("Button", nil, sectionBar)
+            button:SetHeight(26)
+            button.sectionId = section.id
+            local label = button:CreateFontString(nil, "OVERLAY")
+            NS:ApplyFont(label, 12)
+            label:SetText(section.label)
+            label:SetPoint("LEFT", button, "LEFT", 0, 0)
+            button.label = label
+            local underline = button:CreateTexture(nil, "OVERLAY")
+            underline:SetColorTexture(accent[1], accent[2], accent[3], 1)
+            underline:SetHeight(2)
+            underline:SetPoint("BOTTOMLEFT", button, "BOTTOMLEFT", 0, 1)
+            underline:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 0, 1)
+            underline:Hide()
+            button.underline = underline
+            local textW = label:GetStringWidth()
+            if not textW or textW < 8 then
+                textW = strlen(section.label) * 7
+            end
+            button:SetWidth(textW + 4)
+            button:SetPoint("LEFT", sectionBar, "LEFT", x, 0)
+            x = x + button:GetWidth() + 14
+            button:SetScript("OnEnter", function()
+                if button.sectionId ~= activeGuideSection then
+                    label:SetTextColor(0.85, 0.85, 0.85)
+                end
+            end)
+            button:SetScript("OnLeave", function()
+                PaintSectionBar()
+            end)
+            sectionButtons[index] = button
+        end
+        PaintSectionBar()
+    end
 
     local function CreateGuideLine(parent, text, r, g, b)
         local line = parent:CreateFontString(nil, "OVERLAY")
@@ -803,6 +898,171 @@ local function BuildClassesPage(page)
         return card
     end
 
+    local function CreateProfessionCard(parent)
+        local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        NS:ApplyBoxBackdrop(card, 0.32, 0.32, 0.32, 0.9)
+        card:SetBackdropColor(0.07, 0.07, 0.07, 0.72)
+
+        local bar = card:CreateTexture(nil, "ARTWORK")
+        bar:SetWidth(3)
+        bar:SetPoint("TOPLEFT", card, "TOPLEFT", 1, -1)
+        bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
+        bar:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
+
+        local portrait = card:CreateTexture(nil, "ARTWORK")
+        portrait:SetSize(32, 32)
+        portrait:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -10)
+        portrait:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
+        local nameText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(nameText, 13)
+        nameText:SetPoint("TOPLEFT", portrait, "TOPRIGHT", 8, -1)
+        nameText:SetJustifyH("LEFT")
+        nameText:SetTextColor(0.95, 0.95, 0.95)
+
+        local recommended = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(recommended, 10)
+        recommended:SetPoint("TOPLEFT", nameText, "BOTTOMLEFT", 0, -2)
+        recommended:SetJustifyH("LEFT")
+        recommended:SetText("Recommended")
+        recommended:SetTextColor(accent[1], accent[2], accent[3])
+
+        local kindText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(kindText, 11)
+        kindText:SetPoint("TOPRIGHT", card, "TOPRIGHT", -10, -14)
+        kindText:SetJustifyH("RIGHT")
+        kindText:SetTextColor(muted[1], muted[2], muted[3])
+
+        local blurb = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(blurb, 11)
+        blurb:SetJustifyH("LEFT")
+        blurb:SetJustifyV("TOP")
+        blurb:SetTextColor(0.88, 0.88, 0.88)
+
+        local benefits = {}
+        for index = 1, 4 do
+            local icon = card:CreateTexture(nil, "ARTWORK")
+            icon:SetSize(18, 18)
+            icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+            local title = card:CreateFontString(nil, "OVERLAY")
+            NS:ApplyFont(title, 11)
+            title:SetJustifyH("LEFT")
+            title:SetTextColor(0.92, 0.92, 0.92)
+            local note = card:CreateFontString(nil, "OVERLAY")
+            NS:ApplyFont(note, 10)
+            note:SetJustifyH("LEFT")
+            note:SetJustifyV("TOP")
+            note:SetTextColor(muted[1], muted[2], muted[3])
+            benefits[index] = { icon = icon, title = title, note = note }
+        end
+
+        local function SetIcon(texture, iconName)
+            if iconName and (iconName:find("\\") or iconName:find("/")) then
+                texture:SetTexture(iconName)
+            else
+                texture:SetTexture("Interface\\Icons\\" .. (iconName or "INV_Misc_QuestionMark"))
+            end
+            texture:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+        end
+
+        function card:Apply(entry, width)
+            card:SetWidth(width)
+            if entry.recommended then
+                bar:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
+                card:SetBackdropBorderColor(accent[1], accent[2], accent[3], 1)
+                recommended:Show()
+            else
+                bar:SetVertexColor(0.55, 0.55, 0.55, 0.95)
+                card:SetBackdropBorderColor(0.32, 0.32, 0.32, 0.9)
+                recommended:Hide()
+            end
+            nameText:SetText(entry.name or "")
+            kindText:SetText(entry.kind or "")
+            SetIcon(portrait, entry.icon)
+
+            local compact = width < 280
+            kindText:ClearAllPoints()
+            if compact then
+                local anchor = entry.recommended and recommended or nameText
+                kindText:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -3)
+                nameText:SetWidth(math.max(width - 62, 40))
+            else
+                kindText:SetPoint("TOPRIGHT", card, "TOPRIGHT", -10, -14)
+                nameText:SetWidth(math.max(width - 130, 40))
+            end
+
+            local y = 48
+            if compact and entry.kind and entry.kind ~= "" then
+                y = y + 16
+            end
+
+            local textLeft = 14
+            local textWidth = width - textLeft - 14
+            if entry.note and entry.note ~= "" then
+                blurb:Show()
+                blurb:ClearAllPoints()
+                blurb:SetPoint("TOPLEFT", card, "TOPLEFT", textLeft, -y)
+                blurb:SetWidth(textWidth)
+                blurb:SetText(entry.note)
+                local blurbHeight = blurb:GetStringHeight()
+                if not blurbHeight or blurbHeight < 12 then
+                    blurbHeight = 12
+                end
+                y = y + blurbHeight + 10
+            else
+                blurb:Hide()
+            end
+
+            local portraitLeft, portraitSize, iconSize = 14, 32, 18
+            local rowLeft = portraitLeft + math.floor((portraitSize - iconSize) / 2)
+            local benefitLeft = rowLeft + iconSize + 6
+            local benefitWidth = width - benefitLeft - 14
+            for index, benefit in ipairs(entry.benefits or {}) do
+                local row = benefits[index]
+                if row then
+                    row.icon:Show()
+                    row.icon:ClearAllPoints()
+                    row.icon:SetPoint("TOPLEFT", card, "TOPLEFT", rowLeft, -y)
+                    SetIcon(row.icon, benefit.icon)
+                    row.title:Show()
+                    row.title:ClearAllPoints()
+                    row.title:SetPoint("TOPLEFT", card, "TOPLEFT", benefitLeft, -y + 2)
+                    row.title:SetWidth(benefitWidth)
+                    row.title:SetText(benefit.name or "")
+                    local block = 20
+                    if benefit.note and benefit.note ~= "" then
+                        row.note:Show()
+                        row.note:ClearAllPoints()
+                        row.note:SetPoint("TOPLEFT", card, "TOPLEFT", benefitLeft, -y - 16)
+                        row.note:SetWidth(benefitWidth)
+                        row.note:SetText(benefit.note)
+                        local noteHeight = row.note:GetStringHeight()
+                        if not noteHeight or noteHeight < 12 then
+                            noteHeight = 12
+                        end
+                        block = 16 + noteHeight
+                        if block < 20 then
+                            block = 20
+                        end
+                    else
+                        row.note:Hide()
+                    end
+                    y = y + block + 8
+                end
+            end
+            for index = #(entry.benefits or {}) + 1, #benefits do
+                benefits[index].icon:Hide()
+                benefits[index].title:Hide()
+                benefits[index].note:Hide()
+            end
+            y = y + 6
+            card:SetHeight(y)
+            return y
+        end
+
+        return card
+    end
+
     local CLASS_TOKENS = {
         Warrior = "WARRIOR",
         Paladin = "PALADIN",
@@ -867,9 +1127,13 @@ local function BuildClassesPage(page)
 
         local members = {}
         for index = 1, 4 do
-            local icon = card:CreateTexture(nil, "ARTWORK")
-            icon:SetSize(18, 18)
-            icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+            local icons = {}
+            for stack = 1, 3 do
+                local icon = card:CreateTexture(nil, "ARTWORK", nil, stack)
+                icon:SetSize(18, 18)
+                icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+                icons[stack] = icon
+            end
             local iconRing = card:CreateTexture(nil, "OVERLAY")
             iconRing:SetTexture("Interface\\Buttons\\UI-Quickslot2")
             iconRing:SetSize(28, 28)
@@ -877,45 +1141,88 @@ local function BuildClassesPage(page)
             NS:ApplyFont(label, 11)
             label:SetJustifyH("LEFT")
             label:SetJustifyV("MIDDLE")
-            members[index] = { icon = icon, ring = iconRing, label = label }
+            members[index] = { icons = icons, ring = iconRing, label = label }
         end
 
-        local function PlaceMember(member, text, token, iconPath, x, y)
-            member.icon:Show()
-            member.ring:Show()
-            member.label:Show()
-            member.icon:ClearAllPoints()
-            member.icon:SetPoint("TOPLEFT", card, "TOPLEFT", x, y)
+        local function SetMemberIcon(texture, iconPath, token)
             if iconPath then
                 if iconPath:find("\\") or iconPath:find("/") then
-                    member.icon:SetTexture(iconPath)
+                    texture:SetTexture(iconPath)
                 else
-                    member.icon:SetTexture("Interface\\Icons\\" .. iconPath)
+                    texture:SetTexture("Interface\\Icons\\" .. iconPath)
                 end
-                member.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+                texture:SetTexCoord(0.08, 0.92, 0.08, 0.92)
             else
-                member.icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
+                texture:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
                 local coords = CLASS_ICON_TCOORDS and token and CLASS_ICON_TCOORDS[token]
                 if coords then
-                    member.icon:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
+                    texture:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
                 else
-                    member.icon:SetTexCoord(0, 1, 0, 1)
-                    member.icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+                    texture:SetTexCoord(0, 1, 0, 1)
+                    texture:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
                 end
             end
-            member.ring:ClearAllPoints()
-            member.ring:SetPoint("CENTER", member.icon, "CENTER", 0, 0)
-            local classColor = RAID_CLASS_COLORS and token and RAID_CLASS_COLORS[token]
-            if classColor then
-                member.ring:SetVertexColor(classColor.r, classColor.g, classColor.b, 0.9)
-                member.label:SetTextColor(classColor.r, classColor.g, classColor.b)
-            else
-                member.ring:SetVertexColor(1, 1, 1, 0.45)
-                member.label:SetTextColor(0.92, 0.92, 0.92)
+        end
+
+        local function ClassColorCode(token)
+            local color = RAID_CLASS_COLORS and token and RAID_CLASS_COLORS[token]
+            if not color then
+                return "|cffebebeb"
             end
+            return string.format("|cff%02x%02x%02x", color.r * 255 + 0.5, color.g * 255 + 0.5, color.b * 255 + 0.5)
+        end
+
+        local function PlaceMember(member, text, token, iconPath, x, y, iconPaths, coloredText)
+            iconPaths = iconPaths
+            if not iconPaths or #iconPaths == 0 then
+                iconPaths = { iconPath }
+            end
+            local count = math.min(#iconPaths, #member.icons)
+            if count < 1 then
+                count = 1
+            end
+            local overlap = 7
+            for index, icon in ipairs(member.icons) do
+                if index <= count then
+                    icon:Show()
+                    icon:ClearAllPoints()
+                    icon:SetPoint("TOPLEFT", card, "TOPLEFT", x + (index - 1) * overlap, y)
+                    SetMemberIcon(icon, iconPaths[index], index == 1 and token or nil)
+                else
+                    icon:Hide()
+                end
+            end
+
+            local stackWidth = 18 + (count - 1) * overlap
+            member.ring:ClearAllPoints()
+            if count > 1 then
+                member.ring:Hide()
+            else
+                member.ring:Show()
+                member.ring:SetPoint("CENTER", member.icons[1], "CENTER", 0, 0)
+                local classColor = RAID_CLASS_COLORS and token and RAID_CLASS_COLORS[token]
+                if classColor then
+                    member.ring:SetVertexColor(classColor.r, classColor.g, classColor.b, 0.9)
+                else
+                    member.ring:SetVertexColor(1, 1, 1, 0.45)
+                end
+            end
+
+            if coloredText then
+                member.label:SetTextColor(1, 1, 1)
+            else
+                local classColor = RAID_CLASS_COLORS and token and RAID_CLASS_COLORS[token]
+                if classColor then
+                    member.label:SetTextColor(classColor.r, classColor.g, classColor.b)
+                else
+                    member.label:SetTextColor(0.92, 0.92, 0.92)
+                end
+            end
+            member.label:Show()
             member.label:ClearAllPoints()
-            member.label:SetPoint("LEFT", member.icon, "RIGHT", 6, 0)
+            member.label:SetPoint("LEFT", member.icons[count], "RIGHT", 6, 0)
             member.label:SetText(text or "")
+            return stackWidth
         end
 
         function card:Apply(comp, spec, classInfo, width)
@@ -962,20 +1269,72 @@ local function BuildClassesPage(page)
                 title:SetWidth(math.max(width - 28, 40))
             end
 
+            local selfName = ((spec and spec.name) or "") .. " " .. ((classInfo and classInfo.name) or "")
+            selfName = selfName:match("^%s*(.-)%s*$") or selfName
             local chips = {
                 {
-                    text = spec and spec.name or (classInfo and classInfo.name) or "",
+                    text = selfName ~= "" and selfName or (spec and spec.name) or (classInfo and classInfo.name) or "",
                     token = classInfo and classInfo.token,
                     icon = spec and spec.icon,
                 },
             }
+
+            local function MemberIncludes(member, name)
+                if type(member) == "string" then
+                    return member == name
+                end
+                if type(member) == "table" then
+                    for _, option in ipairs(member) do
+                        if option == name then
+                            return true
+                        end
+                    end
+                end
+                return false
+            end
+
+            local function PartnerChip(partner)
+                if type(partner) == "table" then
+                    local parts = {}
+                    local icons = {}
+                    local token
+                    local sameClass = true
+                    local firstClass
+                    for _, option in ipairs(partner) do
+                        local className = option:match("(%S+)$")
+                        local optionToken = className and CLASS_TOKENS[className]
+                        if not firstClass then
+                            firstClass = className
+                            token = optionToken
+                        elseif className ~= firstClass then
+                            sameClass = false
+                        end
+                        parts[#parts + 1] = ClassColorCode(optionToken) .. option .. "|r"
+                        local partnerSpec = FindPartnerSpec(option)
+                        icons[#icons + 1] = partnerSpec and partnerSpec.icon
+                    end
+                    return {
+                        text = table.concat(parts, " / "),
+                        token = sameClass and token or nil,
+                        icons = icons,
+                        colored = true,
+                    }
+                end
+                local className = partner:match("(%S+)$")
+                local partnerSpec = FindPartnerSpec(partner)
+                return {
+                    text = partner,
+                    token = CLASS_TOKENS[className],
+                    icon = partnerSpec and partnerSpec.icon,
+                }
+            end
+
             local partners = comp.partners
             if comp.members then
-                local selfName = (spec and spec.name or "") .. " " .. (classInfo and classInfo.name or "")
                 local skippedSelf = false
                 partners = {}
                 for _, member in ipairs(comp.members) do
-                    if not skippedSelf and member == selfName then
+                    if not skippedSelf and MemberIncludes(member, selfName) then
                         skippedSelf = true
                     else
                         partners[#partners + 1] = member
@@ -983,13 +1342,7 @@ local function BuildClassesPage(page)
                 end
             end
             for _, partner in ipairs(partners or {}) do
-                local className = partner:match("(%S+)$")
-                local partnerSpec = FindPartnerSpec(partner)
-                chips[#chips + 1] = {
-                    text = partner,
-                    token = CLASS_TOKENS[className],
-                    icon = partnerSpec and partnerSpec.icon,
-                }
+                chips[#chips + 1] = PartnerChip(partner)
             end
 
             local count = math.min(#chips, #members)
@@ -1000,11 +1353,13 @@ local function BuildClassesPage(page)
                 local chip = chips[index]
                 local col = (index - 1) % columns
                 local row = math.floor((index - 1) / columns)
-                PlaceMember(members[index], chip.text, chip.token, chip.icon, 14 + col * (chipWidth + 8), memberTop - row * 24)
-                members[index].label:SetWidth(math.max(chipWidth - 30, 40))
+                local stackWidth = PlaceMember(members[index], chip.text, chip.token, chip.icon, 14 + col * (chipWidth + 8), memberTop - row * 24, chip.icons, chip.colored)
+                members[index].label:SetWidth(math.max(chipWidth - stackWidth - 8, 40))
             end
             for index = count + 1, #members do
-                members[index].icon:Hide()
+                for _, icon in ipairs(members[index].icons) do
+                    icon:Hide()
+                end
                 members[index].ring:Hide()
                 members[index].label:Hide()
             end
@@ -1016,11 +1371,80 @@ local function BuildClassesPage(page)
         return card
     end
 
+    local function CreateStatStep(parent)
+        local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        NS:ApplyBoxBackdrop(card, 0.28, 0.28, 0.28, 0.9)
+        card:SetBackdropColor(0.08, 0.08, 0.08, 0.55)
+        card:SetHeight(42)
+
+        local bar = card:CreateTexture(nil, "ARTWORK")
+        bar:SetWidth(3)
+        bar:SetPoint("TOPLEFT", card, "TOPLEFT", 1, -1)
+        bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
+
+        local rankBadge = card:CreateTexture(nil, "ARTWORK")
+        rankBadge:SetSize(22, 22)
+        rankBadge:SetPoint("LEFT", card, "LEFT", 14, 0)
+        rankBadge:SetColorTexture(1, 1, 1, 0.08)
+
+        local rank = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(rank, 13, "THINOUTLINE")
+        rank:SetPoint("CENTER", rankBadge, "CENTER", 0, 0)
+        rank:SetJustifyH("CENTER")
+
+        local name = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(name, 14, "THINOUTLINE")
+        name:SetPoint("LEFT", rankBadge, "RIGHT", 12, 0)
+        name:SetPoint("RIGHT", card, "RIGHT", -14, 0)
+        name:SetJustifyH("LEFT")
+        name:SetWordWrap(false)
+
+        local connector = card:CreateTexture(nil, "ARTWORK")
+        connector:SetWidth(2)
+        connector:SetHeight(8)
+        connector:SetPoint("TOP", card, "BOTTOM", 0, 0)
+        connector:SetColorTexture(accent[1], accent[2], accent[3], 0.35)
+
+        function card:Apply(index, total, statName, width)
+            card:SetWidth(width)
+            rank:SetText(tostring(index))
+            name:SetText(statName or "")
+            local primary = index == 1
+            if primary then
+                bar:SetColorTexture(accent[1], accent[2], accent[3], 0.95)
+                rankBadge:SetColorTexture(accent[1], accent[2], accent[3], 0.22)
+                rank:SetTextColor(accent[1], accent[2], accent[3])
+                name:SetTextColor(1, 1, 1)
+                card:SetBackdropBorderColor(accent[1], accent[2], accent[3], 0.55)
+                card:SetBackdropColor(0.10, 0.08, 0.06, 0.72)
+            else
+                local fade = math.max(0.28, 0.72 - (index - 1) * 0.10)
+                bar:SetColorTexture(1, 1, 1, 0.18)
+                rankBadge:SetColorTexture(1, 1, 1, 0.06)
+                rank:SetTextColor(muted[1], muted[2], muted[3])
+                name:SetTextColor(fade, fade, fade)
+                card:SetBackdropBorderColor(0.28, 0.28, 0.28, 0.9)
+                card:SetBackdropColor(0.08, 0.08, 0.08, 0.55)
+            end
+            if index < total then
+                connector:Show()
+            else
+                connector:Hide()
+            end
+            return 42
+        end
+
+        return card
+    end
+
     local raceCards = {}
+    local professionCards = {}
     local compCards = {}
+    local statSteps = {}
     local raceEmpty = CreateGuideLine(detailChild, "No race selected yet.", muted[1], muted[2], muted[3])
-    local statText = CreateGuideLine(detailChild)
     local statEmpty = CreateGuideLine(detailChild, "No stat priority selected yet.", muted[1], muted[2], muted[3])
+    local professionVerdict = CreateGuideLine(detailChild)
+    local professionEmpty = CreateGuideLine(detailChild, "No professions selected yet.", muted[1], muted[2], muted[3])
 
     local comp2Label = CreateGuideLine(detailChild, "2v2", accent[1], accent[2], accent[3])
     local comp3Label = CreateGuideLine(detailChild, "3v3", accent[1], accent[2], accent[3])
@@ -1041,7 +1465,7 @@ local function BuildClassesPage(page)
             width = detailScroll:GetWidth()
         end
         if not width or width < 80 then
-            width = 420
+            width = 460
         end
         return width
     end
@@ -1075,6 +1499,8 @@ local function BuildClassesPage(page)
         view = "classes"
         currentSpec = nil
         detail:Hide()
+        sectionBar:Hide()
+        ratingBar:Hide()
         specList:Hide()
         nav:Hide()
         list:Show()
@@ -1117,6 +1543,8 @@ local function BuildClassesPage(page)
         currentSpec = nil
         list:Hide()
         detail:Hide()
+        sectionBar:Hide()
+        ratingBar:Hide()
         nav:Show()
         specList:Show()
         specSeparator:Hide()
@@ -1127,6 +1555,38 @@ local function BuildClassesPage(page)
         page.scroll = specScroll
         specScroll:SetVerticalScroll(0)
         RenderSpecList(classInfo)
+    end
+
+    local function HideGuideSectionWidgets()
+        raceHeader:Hide()
+        statHeader:Hide()
+        professionHeader:Hide()
+        compHeader:Hide()
+        macroHeader:Hide()
+        raceEmpty:Hide()
+        statEmpty:Hide()
+        professionVerdict:Hide()
+        professionEmpty:Hide()
+        comp2Label:Hide()
+        comp3Label:Hide()
+        comp2Empty:Hide()
+        comp3Empty:Hide()
+        macroEmpty:Hide()
+        for _, card in ipairs(raceCards) do
+            card:Hide()
+        end
+        for _, card in ipairs(professionCards) do
+            card:Hide()
+        end
+        for _, card in ipairs(compCards) do
+            card:Hide()
+        end
+        for _, step in ipairs(statSteps) do
+            step:Hide()
+        end
+        for _, block in ipairs(blocks) do
+            block:Hide()
+        end
     end
 
     local function AcquireRaceCard(index)
@@ -1157,13 +1617,22 @@ local function BuildClassesPage(page)
 
         local width = ContentWidth()
         local gap = 8
-        local cardWidth = math.floor((width - gap * 2 - 4) / 3)
+        HideGuideSectionWidgets()
+        PaintSectionBar()
+
+        local ratingWidth = ratingBar:GetWidth()
+        if not ratingWidth or ratingWidth < 80 then
+            ratingWidth = width
+        end
+        local cardWidth = math.floor((ratingWidth - gap * 2) / 3)
         if cardWidth < 80 then
             cardWidth = 80
         end
-
+        skillFloorCard:Show()
+        skillCeilingCard:Show()
+        metaCard:Show()
         skillFloorCard:ClearAllPoints()
-        skillFloorCard:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, -4)
+        skillFloorCard:SetPoint("TOPLEFT", ratingBar, "TOPLEFT", 0, 0)
         skillFloorCard:SetWidth(cardWidth)
         skillCeilingCard:ClearAllPoints()
         skillCeilingCard:SetPoint("TOPLEFT", skillFloorCard, "TOPRIGHT", gap, 0)
@@ -1179,6 +1648,7 @@ local function BuildClassesPage(page)
         metaCard:SetStat("Meta", metaRating, NS.META_LABELS[metaRating] or "Unknown")
 
         local function PlaceHeader(header, y)
+            header:Show()
             header:ClearAllPoints()
             header:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
             header:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -4, y)
@@ -1198,187 +1668,220 @@ local function BuildClassesPage(page)
             return y - lineHeight - 4
         end
 
-        local y = -4 - 64 - 18
-        y = PlaceHeader(raceHeader, y)
-        local raceList = NS:GetSpecRaces(spec, classInfo and classInfo.token)
-        local richRaces = false
-        for _, entry in ipairs(raceList) do
-            if entry.racials and #entry.racials > 0 then
-                richRaces = true
-                break
-            end
-        end
-        if #raceList == 0 then
-            for _, card in ipairs(raceCards) do
-                card:Hide()
-            end
-            y = PlaceLine(raceEmpty, "No race selected yet.", y)
-        else
-            raceEmpty:Hide()
-            local sideBySide = not richRaces and #raceList == 2
-            local raceWidth = sideBySide and math.floor((width - 8) / 2) or width
-            local rowHeight = 0
-            for index, entry in ipairs(raceList) do
-                local card = AcquireRaceCard(index)
-                local height = card:Apply(entry, raceWidth)
-                card:ClearAllPoints()
-                if sideBySide then
-                    local x = (index - 1) * (raceWidth + 8)
-                    card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", x, y)
-                    if height > rowHeight then
-                        rowHeight = height
+        local y = -4
+        local section = activeGuideSection
+
+        if section == "stats" then
+            y = PlaceHeader(statHeader, y)
+            local stats = spec.stats
+            if stats and #stats > 0 then
+                local stepWidth = math.max(width - 12, 80)
+                for index, statName in ipairs(stats) do
+                    local step = statSteps[index]
+                    if not step then
+                        step = CreateStatStep(detailChild)
+                        statSteps[index] = step
                     end
-                else
+                    local height = step:Apply(index, #stats, statName, stepWidth)
+                    step:Show()
+                    step:ClearAllPoints()
+                    step:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+                    y = y - height - (index < #stats and 10 or 0)
+                end
+            else
+                y = PlaceLine(statEmpty, "No stat priority selected yet.", y)
+            end
+        elseif section == "race" then
+            y = PlaceHeader(raceHeader, y)
+            local raceList = NS:GetSpecRaces(spec, classInfo and classInfo.token)
+            local richRaces = false
+            for _, entry in ipairs(raceList) do
+                if entry.racials and #entry.racials > 0 then
+                    richRaces = true
+                    break
+                end
+            end
+            if #raceList == 0 then
+                y = PlaceLine(raceEmpty, "No race selected yet.", y)
+            else
+                local sideBySide = not richRaces and #raceList == 2
+                local raceWidth = sideBySide and math.floor((width - 8) / 2) or width
+                local rowHeight = 0
+                for index, entry in ipairs(raceList) do
+                    local card = AcquireRaceCard(index)
+                    local height = card:Apply(entry, raceWidth)
+                    card:ClearAllPoints()
+                    if sideBySide then
+                        local x = (index - 1) * (raceWidth + 8)
+                        card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", x, y)
+                        if height > rowHeight then
+                            rowHeight = height
+                        end
+                    else
+                        card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+                        y = y - height - 8
+                    end
+                end
+                if sideBySide then
+                    y = y - rowHeight - 8
+                end
+            end
+        elseif section == "professions" then
+            y = PlaceHeader(professionHeader, y)
+            local professions = NS:GetSpecProfessions(spec)
+            local professionList = professions and professions.list or {}
+            if #professionList == 0 then
+                y = PlaceLine(professionEmpty, "No professions selected yet.", y)
+            else
+                if professions.verdict and professions.verdict ~= "" then
+                    y = PlaceLine(professionVerdict, professions.verdict, y)
+                    y = y - 6
+                end
+                for index, entry in ipairs(professionList) do
+                    local card = professionCards[index]
+                    if not card then
+                        card = CreateProfessionCard(detailChild)
+                        professionCards[index] = card
+                    end
+                    local height = card:Apply(entry, width)
+                    card:Show()
+                    card:ClearAllPoints()
                     card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
                     y = y - height - 8
                 end
             end
-            if sideBySide then
-                y = y - rowHeight - 8
-            end
-        end
-        for index = #raceList + 1, #raceCards do
-            raceCards[index]:Hide()
-        end
+        elseif section == "comps" then
+            y = PlaceHeader(compHeader, y)
 
-        y = y - 12
-        y = PlaceHeader(statHeader, y)
-        local stats = spec.stats
-        if stats and #stats > 0 then
-            statEmpty:Hide()
-            y = PlaceLine(statText, table.concat(stats, "  >  "), y)
-        else
-            statText:Hide()
-            y = PlaceLine(statEmpty, "No stat priority selected yet.", y)
-        end
-
-        y = y - 12
-        y = PlaceHeader(compHeader, y)
-
-        local function SortRecommended(list)
-            local recommended, rest = {}, {}
-            for _, comp in ipairs(list) do
-                if NS:IsCompRecommended(comp) then
-                    recommended[#recommended + 1] = comp
-                else
-                    rest[#rest + 1] = comp
-                end
-            end
-            for _, comp in ipairs(rest) do
-                recommended[#recommended + 1] = comp
-            end
-            return recommended
-        end
-
-        local function ResolveComp(entry)
-            if type(entry) ~= "table" then
-                return entry
-            end
-            local shared = entry.comp or entry[1]
-            if not entry.members and not entry.partners and type(shared) == "table" and (shared.members or shared.partners or shared.name) then
-                return {
-                    name = shared.name,
-                    meta = shared.meta,
-                    members = shared.members,
-                    partners = shared.partners,
-                    recommended = entry.recommended,
-                }
-            end
-            return entry
-        end
-
-        local function ResolveList(list)
-            local resolved = {}
-            for index, entry in ipairs(list or {}) do
-                resolved[index] = ResolveComp(entry)
-            end
-            return resolved
-        end
-
-        local function CompositionLists(compositions)
-            compositions = compositions or {}
-            local twos, threes
-            if compositions["2s"] or compositions["3s"] then
-                twos = ResolveList(compositions["2s"])
-                threes = ResolveList(compositions["3s"])
-            else
-                twos, threes = {}, {}
-                for _, comp in ipairs(compositions) do
-                    if #(comp.partners or {}) <= 1 then
-                        twos[#twos + 1] = comp
+            local function SortRecommended(list)
+                local recommended, rest = {}, {}
+                for _, comp in ipairs(list) do
+                    if NS:IsCompRecommended(comp) then
+                        recommended[#recommended + 1] = comp
                     else
-                        threes[#threes + 1] = comp
+                        rest[#rest + 1] = comp
                     end
                 end
+                for _, comp in ipairs(rest) do
+                    recommended[#recommended + 1] = comp
+                end
+                return recommended
             end
-            return SortRecommended(twos), SortRecommended(threes)
-        end
 
-        local function DrawCompGroup(titleLine, title, list, emptyLine, emptyText, y, cardIndex)
-            y = PlaceLine(titleLine, title, y)
-            if #list == 0 then
-                y = PlaceLine(emptyLine, emptyText, y)
+            local function ResolveComp(entry)
+                if type(entry) ~= "table" then
+                    return entry
+                end
+                local shared = entry.comp or entry[1]
+                if not entry.members and not entry.partners and type(shared) == "table" and (shared.members or shared.partners or shared.name) then
+                    return {
+                        name = shared.name,
+                        meta = shared.meta,
+                        members = shared.members,
+                        partners = shared.partners,
+                        recommended = entry.recommended,
+                    }
+                end
+                return entry
+            end
+
+            local function ResolveList(list)
+                local resolved = {}
+                for index, entry in ipairs(list or {}) do
+                    resolved[index] = ResolveComp(entry)
+                end
+                return resolved
+            end
+
+            local function CompositionLists(compositions)
+                compositions = compositions or {}
+                local twos, threes
+                if compositions["2s"] or compositions["3s"] then
+                    twos = ResolveList(compositions["2s"])
+                    threes = ResolveList(compositions["3s"])
+                else
+                    twos, threes = {}, {}
+                    for _, comp in ipairs(compositions) do
+                        if #(comp.partners or {}) <= 1 then
+                            twos[#twos + 1] = comp
+                        else
+                            threes[#threes + 1] = comp
+                        end
+                    end
+                end
+                return SortRecommended(twos), SortRecommended(threes)
+            end
+
+            local function DrawCompGroup(titleLine, title, list, emptyLine, emptyText, y, cardIndex)
+                y = PlaceLine(titleLine, title, y)
+                if #list == 0 then
+                    y = PlaceLine(emptyLine, emptyText, y)
+                    return y, cardIndex
+                end
+                for _, comp in ipairs(list) do
+                    cardIndex = cardIndex + 1
+                local card = AcquireCompCard(cardIndex)
+                local height = card:Apply(comp, spec, classInfo, math.max(width - 12, 80))
+                    card:ClearAllPoints()
+                    card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+                    y = y - height - 8
+                end
                 return y, cardIndex
             end
-            emptyLine:Hide()
-            for _, comp in ipairs(list) do
-                cardIndex = cardIndex + 1
-                local card = AcquireCompCard(cardIndex)
-                local height = card:Apply(comp, spec, classInfo, width)
-                card:ClearAllPoints()
-                card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
-                y = y - height - 8
+
+            local twos, threes = CompositionLists(spec.compositions)
+            local cardIndex
+            y, cardIndex = DrawCompGroup(comp2Label, "2v2", twos, comp2Empty, "No 2v2 selected yet.", y, 0)
+            y = y - 8
+            y, cardIndex = DrawCompGroup(comp3Label, "3v3", threes, comp3Empty, "No 3v3 selected yet.", y, cardIndex)
+        elseif section == "macros" then
+            y = PlaceHeader(macroHeader, y)
+            local macros = NS:GetClassMacros(classInfo.token, spec.id)
+            if #macros == 0 then
+                macroEmpty:Show()
+                macroEmpty:ClearAllPoints()
+                macroEmpty:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 8, y)
+                macroEmpty:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -8, y)
+                y = y - 22
+            else
+                for index, macro in ipairs(macros) do
+                    local block = blocks[index]
+                    if not block or not block.iconTexture then
+                        block = NS:CreateMacroBlock(detailChild)
+                        blocks[index] = block
+                    end
+                    block:Show()
+                    NS:SetMacroBlock(block, macro, width)
+                    block:ClearAllPoints()
+                    block:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+                    block:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -4, y)
+                    y = y - block:GetHeight() - 8
+                end
             end
-            return y, cardIndex
-        end
-
-        local twos, threes = CompositionLists(spec.compositions)
-        local cardIndex
-        y, cardIndex = DrawCompGroup(comp2Label, "2v2", twos, comp2Empty, "No 2v2 selected yet.", y, 0)
-        y = y - 8
-        y, cardIndex = DrawCompGroup(comp3Label, "3v3", threes, comp3Empty, "No 3v3 selected yet.", y, cardIndex)
-        for index = cardIndex + 1, #compCards do
-            compCards[index]:Hide()
-        end
-
-        y = y - 12
-        macroHeader:ClearAllPoints()
-        macroHeader:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
-        macroHeader:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -4, y)
-        y = y - 26
-
-        local macros = NS:GetClassMacros(classInfo.token, spec.id)
-        if #macros == 0 then
-            macroEmpty:Show()
-            macroEmpty:ClearAllPoints()
-            macroEmpty:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 8, y)
-            macroEmpty:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -8, y)
-            y = y - 22
-        else
-            macroEmpty:Hide()
-        end
-
-        for index, macro in ipairs(macros) do
-            local block = blocks[index]
-            if not block or not block.iconTexture then
-                block = NS:CreateMacroBlock(detailChild)
-                blocks[index] = block
-            end
-            block:Show()
-            NS:SetMacroBlock(block, macro, width)
-            block:ClearAllPoints()
-            block:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
-            block:SetPoint("TOPRIGHT", detailChild, "TOPRIGHT", -4, y)
-            y = y - block:GetHeight() - 8
-        end
-        for index = #macros + 1, #blocks do
-            blocks[index]:Hide()
         end
 
         detailChild.contentHeight = -y + 8
         detailChild:SetHeight(math.max(detailChild.contentHeight, 1))
         NS:UpdateScroll(detailScroll)
         renderingSpec = false
+    end
+
+    local function SetGuideSection(sectionId)
+        if activeGuideSection == sectionId then
+            return
+        end
+        activeGuideSection = sectionId
+        PaintSectionBar()
+        detailScroll:SetVerticalScroll(0)
+        if view == "spec" and currentClass and currentSpec then
+            RenderSpec(currentClass, currentSpec)
+        end
+    end
+
+    for _, button in ipairs(sectionButtons) do
+        button:SetScript("OnClick", function()
+            SetGuideSection(button.sectionId)
+        end)
     end
 
     ShowSpec = function(classInfo, spec)
@@ -1388,7 +1891,10 @@ local function BuildClassesPage(page)
         list:Hide()
         specList:Hide()
         nav:Show()
+        ratingBar:Show()
+        sectionBar:Show()
         detail:Show()
+        PaintSectionBar()
         SetClassCrumb(classInfo)
         specSeparator:Show()
         crumbSpecIcon:Show()
@@ -2961,18 +3467,352 @@ local function BuildDrawPage(page)
 end
 
 local function BuildProfilesPage(page)
+    local accent = NS.COLOR.accent
+    local muted = NS.COLOR.muted
+
     local header = NS:CreateHeader(page, "Profiles")
     header:SetPoint("TOPLEFT", page, "TOPLEFT", 0, -6)
     header:SetPoint("TOPRIGHT", page, "TOPRIGHT", 0, -6)
 
-    local desc = page:CreateFontString(nil, "OVERLAY")
-    NS:ApplyFont(desc, 12)
-    desc:SetTextColor(NS.COLOR.muted[1], NS.COLOR.muted[2], NS.COLOR.muted[3])
-    desc:SetJustifyH("CENTER")
-    desc:SetJustifyV("TOP")
-    desc:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 24, -18)
-    desc:SetPoint("TOPRIGHT", header, "BOTTOMRIGHT", -24, -18)
-    desc:SetText("Profile switching is not wired up yet. This tab is a placeholder for character or spec profiles.")
+    local intro = page:CreateFontString(nil, "OVERLAY")
+    NS:ApplyFont(intro, 11)
+    intro:SetTextColor(muted[1], muted[2], muted[3])
+    intro:SetJustifyH("LEFT")
+    intro:SetJustifyV("TOP")
+    intro:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 8, -10)
+    intro:SetPoint("TOPRIGHT", header, "BOTTOMRIGHT", -8, -10)
+    intro:SetText("Apply individual addon settings from a pro player. Each button only changes that addon — Gladdy, OmniBar, OmniCD, BBF, BBP, or Edit Mode UI — whether you run ArenaUI's copy or the standalone.")
+
+    local scroll, child = NS:CreateScrollArea(page)
+    scroll:ClearAllPoints()
+    scroll:SetPoint("TOPLEFT", page, "TOPLEFT", 0, -72)
+    scroll:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", -8, 8)
+
+    local refreshButtons = {}
+
+    local function GetAddonIcon(addonName)
+        for _, category in ipairs(NS.ADDON_CATEGORIES or {}) do
+            for _, addon in ipairs(category.addons or {}) do
+                if addon.name == addonName and addon.icon then
+                    return addon.icon
+                end
+            end
+        end
+    end
+
+    local function ApplyAddonIcon(texture, icon)
+        if type(icon) == "string" and not icon:find("[\\/]") then
+            texture:SetAtlas(icon)
+        else
+            texture:SetTexture(icon)
+            texture:SetTexCoord(0.07, 0.93, 0.07, 0.93)
+        end
+    end
+
+    local function SetApplyButtonState(btn)
+        local encoded = NS:GetProPlayerAddonString(btn.playerId, btn.addonName)
+        local useDefault = NS:IsProPlayerAddonDefault(btn.playerId, btn.addonName)
+        local available = NS:IsProfileAddonAvailable(btn.addonName)
+        local live = NS:IsProfileAddonLive(btn.addonName)
+        local hasProfile = encoded or useDefault
+        local enabled = hasProfile and available and live
+        local editModeFull
+        if enabled and btn.addonName == "EditMode" and NS.GetEditModeApplyStatus then
+            local canApply, slotErr, _, isReplace, used, max = NS:GetEditModeApplyStatus(btn.playerId)
+            if not canApply then
+                enabled = false
+                editModeFull = slotErr
+            elseif isReplace then
+                btn.editModeHint = "Updates your existing ArenaUI Edit Mode layout."
+            else
+                btn.editModeHint = format("Uses 1 free account slot (%d/%d used).", used or 0, max or 5)
+            end
+        else
+            btn.editModeHint = nil
+        end
+        btn:SetEnabled(enabled and true or false)
+        if enabled then
+            btn.bg:SetColorTexture(accent[1], accent[2], accent[3], 0.22)
+            btn.label:SetTextColor(1, 1, 1)
+            if btn.icon then
+                btn.icon:SetVertexColor(1, 1, 1, 1)
+                if btn.icon.SetDesaturated then
+                    btn.icon:SetDesaturated(false)
+                end
+            end
+            if useDefault then
+                btn.reason = "Resets " .. (btn.addonName or "addon") .. " to stock defaults."
+            else
+                btn.reason = btn.editModeHint
+            end
+        elseif editModeFull then
+            btn.bg:SetColorTexture(1, 1, 1, 0.06)
+            btn.label:SetTextColor(0.55, 0.55, 0.55)
+            if btn.icon then
+                btn.icon:SetVertexColor(0.55, 0.55, 0.55, 1)
+                if btn.icon.SetDesaturated then
+                    btn.icon:SetDesaturated(true)
+                end
+            end
+            btn.reason = editModeFull
+        elseif useDefault and not live then
+            btn.bg:SetColorTexture(1, 1, 1, 0.06)
+            btn.label:SetTextColor(0.55, 0.55, 0.55)
+            if btn.icon then
+                btn.icon:SetVertexColor(0.55, 0.55, 0.55, 1)
+                if btn.icon.SetDesaturated then
+                    btn.icon:SetDesaturated(true)
+                end
+            end
+            btn.reason = NS:GetProfileAddonUnavailableReason(btn.addonName)
+        elseif not hasProfile then
+            btn.bg:SetColorTexture(1, 1, 1, 0.06)
+            btn.label:SetTextColor(0.55, 0.55, 0.55)
+            if btn.icon then
+                btn.icon:SetVertexColor(0.55, 0.55, 0.55, 1)
+                if btn.icon.SetDesaturated then
+                    btn.icon:SetDesaturated(true)
+                end
+            end
+            btn.reason = "Not set yet — export this addon's profile and paste it into Profiles.lua."
+        else
+            btn.bg:SetColorTexture(1, 1, 1, 0.06)
+            btn.label:SetTextColor(0.55, 0.55, 0.55)
+            if btn.icon then
+                btn.icon:SetVertexColor(0.55, 0.55, 0.55, 1)
+                if btn.icon.SetDesaturated then
+                    btn.icon:SetDesaturated(true)
+                end
+            end
+            btn.reason = NS:GetProfileAddonUnavailableReason(btn.addonName)
+        end
+    end
+
+    local function CreateApplyButton(parent, player, addonInfo)
+        local btn = CreateFrame("Button", nil, parent, "BackdropTemplate")
+        btn:SetHeight(26)
+        NS:ApplyBoxBackdrop(btn, 0.32, 0.32, 0.32, 0.9)
+        btn:SetBackdropColor(0.08, 0.08, 0.08, 0.9)
+
+        local bg = btn:CreateTexture(nil, "BACKGROUND")
+        bg:SetAllPoints()
+        bg:SetColorTexture(1, 1, 1, 0.06)
+        btn.bg = bg
+
+        local title = addonInfo.title or addonInfo.name
+        local iconValue = addonInfo.icon or GetAddonIcon(addonInfo.name)
+        local pad = 8
+        local gap = 4
+        local iconSize = 16
+
+        local label = btn:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(label, 11)
+        label:SetText(title)
+        btn.label = label
+
+        if iconValue then
+            local icon = btn:CreateTexture(nil, "ARTWORK")
+            icon:SetSize(iconSize, iconSize)
+            ApplyAddonIcon(icon, iconValue)
+            btn.icon = icon
+
+            local contentWidth = iconSize + gap + (label:GetStringWidth() or 0)
+            local width = math.max(96, math.ceil(pad * 2 + contentWidth))
+            btn:SetWidth(width)
+
+            local left = (width - contentWidth) * 0.5
+            icon:SetPoint("LEFT", btn, "LEFT", left, 0)
+            label:SetPoint("LEFT", icon, "RIGHT", gap, 0)
+        else
+            btn:SetWidth(math.max(96, math.ceil(pad * 2 + (label:GetStringWidth() or 0))))
+            label:SetPoint("CENTER", btn, "CENTER", 0, 0)
+        end
+
+        btn.playerId = player.id
+        btn.addonName = addonInfo.name
+
+        btn:SetScript("OnEnter", function(self)
+            self.bg:SetColorTexture(accent[1], accent[2], accent[3], self:IsEnabled() and 0.35 or 0.10)
+            if self.reason then
+                GameTooltip:SetOwner(self, "ANCHOR_TOP")
+                GameTooltip:SetText(addonInfo.title or addonInfo.name, 1, 1, 1)
+                GameTooltip:AddLine(self.reason, muted[1], muted[2], muted[3], true)
+                GameTooltip:Show()
+            end
+        end)
+        btn:SetScript("OnLeave", function(self)
+            SetApplyButtonState(self)
+            GameTooltip:Hide()
+        end)
+        btn:SetScript("OnClick", function(self)
+            NS:PromptApplyPlayerAddonProfile(self.playerId, self.addonName)
+        end)
+
+        refreshButtons[#refreshButtons + 1] = btn
+        SetApplyButtonState(btn)
+        return btn
+    end
+
+    local y = -4
+    for _, player in ipairs(NS.PRO_PLAYERS or {}) do
+        local card = CreateFrame("Frame", nil, child, "BackdropTemplate")
+        NS:ApplyBoxBackdrop(card, 0.32, 0.32, 0.32, 0.9)
+        card:SetBackdropColor(0.07, 0.07, 0.07, 0.72)
+        card:SetPoint("TOPLEFT", child, "TOPLEFT", 0, y)
+        card:SetPoint("TOPRIGHT", child, "TOPRIGHT", -4, y)
+
+        local bar = card:CreateTexture(nil, "ARTWORK")
+        bar:SetWidth(3)
+        bar:SetPoint("TOPLEFT", card, "TOPLEFT", 1, -1)
+        bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
+        bar:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
+
+        local nameText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(nameText, 14, "THINOUTLINE")
+        nameText:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -10)
+        nameText:SetTextColor(0.96, 0.96, 0.96)
+        nameText:SetText(player.name or player.id or "Player")
+
+        local applyAll = CreateFrame("Button", nil, card, "BackdropTemplate")
+        applyAll:SetSize(128, 24)
+        applyAll:SetPoint("TOPRIGHT", card, "TOPRIGHT", -12, -10)
+        NS:ApplyBoxBackdrop(applyAll, 0.32, 0.32, 0.32, 0.9)
+        applyAll:SetBackdropColor(0.08, 0.08, 0.08, 0.9)
+
+        local applyAllBg = applyAll:CreateTexture(nil, "BACKGROUND")
+        applyAllBg:SetAllPoints()
+        applyAllBg:SetColorTexture(1, 1, 1, 0.06)
+        applyAll.bg = applyAllBg
+
+        local applyAllLabel = applyAll:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(applyAllLabel, 11)
+        applyAllLabel:SetPoint("CENTER", applyAll, "CENTER", 0, 0)
+        applyAllLabel:SetText("Get All Settings")
+        applyAll.label = applyAllLabel
+
+        applyAll.playerId = player.id
+        applyAll.isApplyAll = true
+
+        local function SetApplyAllState(btn)
+            local targets, skipped = NS:GetPlayerApplyAllTargets(btn.playerId)
+            local enabled = #targets > 0
+            btn:SetEnabled(enabled and true or false)
+            if enabled then
+                btn.bg:SetColorTexture(accent[1], accent[2], accent[3], 0.28)
+                btn.label:SetTextColor(1, 1, 1)
+                local names = {}
+                for _, addonInfo in ipairs(targets) do
+                    names[#names + 1] = addonInfo.title or addonInfo.name
+                end
+                btn.reason = "Applies: " .. table.concat(names, ", ")
+                if #skipped > 0 then
+                    local skippedNames = {}
+                    for _, item in ipairs(skipped) do
+                        skippedNames[#skippedNames + 1] = item.title
+                    end
+                    btn.reason = btn.reason .. "\nSkipped: " .. table.concat(skippedNames, ", ")
+                end
+            else
+                btn.bg:SetColorTexture(1, 1, 1, 0.06)
+                btn.label:SetTextColor(0.55, 0.55, 0.55)
+                if #skipped > 0 then
+                    btn.reason = skipped[1].reason or "Nothing available to apply yet."
+                else
+                    btn.reason = "Nothing available to apply yet."
+                end
+            end
+        end
+
+        applyAll:SetScript("OnEnter", function(self)
+            self.bg:SetColorTexture(accent[1], accent[2], accent[3], self:IsEnabled() and 0.42 or 0.10)
+            if self.reason then
+                GameTooltip:SetOwner(self, "ANCHOR_TOP")
+                GameTooltip:SetText("Get All Settings", 1, 1, 1)
+                GameTooltip:AddLine(self.reason, muted[1], muted[2], muted[3], true)
+                GameTooltip:Show()
+            end
+        end)
+        applyAll:SetScript("OnLeave", function(self)
+            SetApplyAllState(self)
+            GameTooltip:Hide()
+        end)
+        applyAll:SetScript("OnClick", function(self)
+            NS:PromptApplyPlayerAllProfiles(self.playerId)
+        end)
+
+        refreshButtons[#refreshButtons + 1] = applyAll
+        applyAll._refreshState = SetApplyAllState
+        SetApplyAllState(applyAll)
+
+        nameText:ClearAllPoints()
+        nameText:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -10)
+        nameText:SetPoint("RIGHT", applyAll, "LEFT", -10, 0)
+        nameText:SetJustifyH("LEFT")
+
+        local noteText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(noteText, 11)
+        noteText:SetPoint("TOPLEFT", nameText, "BOTTOMLEFT", 0, -2)
+        noteText:SetPoint("RIGHT", applyAll, "RIGHT", 0, 0)
+        noteText:SetJustifyH("LEFT")
+        noteText:SetTextColor(muted[1], muted[2], muted[3])
+        noteText:SetText(player.note or "")
+
+        local btnY = -48
+        local btnX = 14
+        local rowHeight = 26
+        local btnGap = 8
+        local buttonsPerRow = 4
+        local rowsUsed = 1
+        for index, addonInfo in ipairs(NS.PROFILE_ADDONS or {}) do
+            local btn = CreateApplyButton(card, player, addonInfo)
+            local col = (index - 1) % buttonsPerRow
+            local row = math.floor((index - 1) / buttonsPerRow)
+            if col == 0 then
+                btnX = 14
+                if row > 0 then
+                    btnY = btnY - rowHeight - btnGap
+                    rowsUsed = rowsUsed + 1
+                end
+            end
+            btn:SetPoint("TOPLEFT", card, "TOPLEFT", btnX, btnY)
+            btnX = btnX + btn:GetWidth() + btnGap
+            rowHeight = btn:GetHeight()
+        end
+
+        local height = 48 + (rowsUsed * rowHeight) + ((rowsUsed - 1) * btnGap) + 14
+        card:SetHeight(height)
+        y = y - height - 10
+    end
+
+    if #(NS.PRO_PLAYERS or {}) == 0 then
+        local empty = child:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(empty, 12)
+        empty:SetPoint("TOPLEFT", child, "TOPLEFT", 8, -8)
+        empty:SetTextColor(muted[1], muted[2], muted[3])
+        empty:SetText("No pro player profiles yet.")
+        y = y - 24
+    end
+
+    child.contentHeight = -y + 8
+    child:SetHeight(math.max(child.contentHeight, 1))
+
+    local function Refresh()
+        for _, btn in ipairs(refreshButtons) do
+            if btn._refreshState then
+                btn._refreshState(btn)
+            else
+                SetApplyButtonState(btn)
+            end
+        end
+        NS:UpdateScroll(scroll)
+    end
+
+    page:HookScript("OnShow", function()
+        Refresh()
+        if C_Timer and C_Timer.After then
+            C_Timer.After(0, Refresh)
+        end
+    end)
 end
 
 NS:RegisterTab("addon", "Addons", BuildAddonPage)

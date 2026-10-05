@@ -15,8 +15,8 @@ function Details:InitializeRunCodeWindow()
     detailsRunCodePanel.Frame = detailsRunCodePanel
     detailsRunCodePanel.__name = "Auto Run Code"
     detailsRunCodePanel.real_name = "DETAILS_RUNCODEWINDOW"
-    --DetailsRunCodePanel.__icon = [[Interface\AddOns\Details\images\lua_logo]]
-    detailsRunCodePanel.__icon = [[Interface\AddOns\Details\images\run_code]]
+    --DetailsRunCodePanel.__icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\lua_logo]]
+    detailsRunCodePanel.__icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\run_code]]
     --DetailsRunCodePanel.__iconcoords = {0, 1, 0, 1}
     detailsRunCodePanel.__iconcoords = {0, 30/32, 0, 25/32}
     detailsRunCodePanel.__iconcoords = {0, 1, 0, 1}
@@ -237,6 +237,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

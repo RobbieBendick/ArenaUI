@@ -29,7 +29,7 @@ function Details:OpenProfiler()
     f:SetPoint("right", UIParent, "right", -5, 0)
 
     local logo = f:CreateTexture(nil, "artwork")
-    logo:SetTexture([[Interface\AddOns\Details\images\logotipo]])
+    logo:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\logotipo]])
     logo:SetSize(256*0.8, 128*0.8)
     logo:SetPoint("center", f, "center", 0, 0)
     logo:SetPoint("top", f, "top", 20, 20)

@@ -50,7 +50,7 @@ if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
 		teleportButton.Icon = teleportButton:CreateTexture("$parentIcon", "overlay")
 		teleportButton.Icon:SetSize(CONST_SCROLL_LINE_HEIGHT - 2, CONST_SCROLL_LINE_HEIGHT - 2)
 		teleportButton.Icon:SetPoint("left", teleportButton, "left", 2, 0)
-		--detailsFramework:SetMask(teleportButton.Icon, [[Interface\AddOns\Details\images\masks\portal_mask.tga]])
+		--detailsFramework:SetMask(teleportButton.Icon, [[Interface\AddOns\ArenaUI\vendored\Details\images\masks\portal_mask.tga]])
 		teleportButton.Text = teleportButton:CreateFontString("$parentText", "overlay", "GameFontNormal")
 		teleportButton.Text:SetPoint("left", teleportButton.Icon, "right", 2, 0)
 		teleportButton.Text:SetTextColor(1, 1, 1, 1)
@@ -354,7 +354,7 @@ if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
                         set = function()end,
                         param = "details",
                         get = function()end,
-                        texture = [[Interface\AddOns\Details\images\minimap]],
+                        texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\minimap]],
                         texcoord = {0, 1, 0, 1},
                         mask = nil,
                         width = 20,
@@ -1158,7 +1158,7 @@ if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
                     blockTeleporterButton.Icon:SetPoint("left", blockTeleporterButton, "left", 2, 0)
                     blockTeleporterButton.Icon:SetAlpha(0.3)
                     blockTeleporterButton.Icon:SetDesaturation(0.8)
-                    detailsFramework:SetMask(blockTeleporterButton.Icon, [[Interface\AddOns\Details\images\masks\portal_mask.tga]])
+                    detailsFramework:SetMask(blockTeleporterButton.Icon, [[Interface\AddOns\ArenaUI\vendored\Details\images\masks\portal_mask.tga]])
                     blockTeleporterButton.Text = blockTeleporterButton:CreateFontString(nil, "overlay", "GameFontNormal")
                     blockTeleporterButton.Text:SetPoint("left", blockTeleporterButton.Icon, "right", 2, 0)
                     blockTeleporterButton.Text:SetAlpha(0.3)
@@ -1582,6 +1582,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

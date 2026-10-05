@@ -249,8 +249,8 @@ local defaultSettings = {
         texture_overlay = "Details Vidro", --the texture used in the statusbar overlay
         texture_overlay_color = {.3, .3, .3, 0}, --the color of the texture overlay used in the statusbar, alpha zero by default to hide it
         icon_enabled = true, --show the player icon on the left side of the line
-        icon_spec = [[Interface\AddOns\Details\images\spec_icons_normal]], --always show the spec if the unit spec is known
-        icon_class = [[Interface\AddOns\Details\images\classes_small]], --fallback to class texture if spec is unknown
+        icon_spec = [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal]], --always show the spec if the unit spec is known
+        icon_class = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], --fallback to class texture if spec is unknown
         icon_line_startafter = true, --places the line left side attached to icon right side, otherwise it attached to the icon left side. transparent icons might want to disable this.
         icon_show_faction = true, --while in a battleground, show the faction icon if the unit is an enemy
         totalbar_enabled = false, --show the total bar
@@ -963,7 +963,7 @@ local createLineForWindow = function(scrollFrame, lineId) --~line
         statusBar.StatusBarTexture = statusBarTexture
 
         local overlayTexture = statusBar:CreateTexture("$parentTextureOverlay", "overlay", nil, 7)
-        overlayTexture:SetTexture([[Interface/AddOns/Details/images/overlay_indicator_1]])
+        overlayTexture:SetTexture([[Interface/AddOns/ArenaUI/vendored/Details/images/overlay_indicator_1]])
         overlayTexture:SetVertexColor(1, 1, 1, 0.2)
         overlayTexture:SetAllPoints()
         overlayTexture:Hide()
@@ -1098,7 +1098,7 @@ function AllInOneWindow:CreateWindowFrame() --~create
     closeButton.Icon = closeButton:CreateTexture("$parentIcon", "artwork")
     closeButton.Icon:SetPoint("center", closeButton, "center", 0, 0)
     closeButton.Icon:SetSize(closeButton:GetSize())
-    closeButton.Icon:SetTexture([[Interface\AddOns\Details\assets\textures\icons\close.png]])
+    closeButton.Icon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\assets\textures\icons\close.png]])
     closeButton:SetFrameLevel(windowFrame:GetFrameLevel()+2)
     closeButton:SetScript("OnClick", function()
         AllInOneWindow:CloseWindow(windowFrame.windowId)
@@ -1111,7 +1111,7 @@ function AllInOneWindow:CreateWindowFrame() --~create
     optionsButton.Icon = optionsButton:CreateTexture("$parentIcon", "artwork")
     optionsButton.Icon:SetPoint("center", optionsButton, "center", 0, 0)
     optionsButton.Icon:SetSize(optionsButton:GetSize())
-    optionsButton.Icon:SetTexture([[Interface\AddOns\Details\assets\textures\icons\wrench.png]])
+    optionsButton.Icon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\assets\textures\icons\wrench.png]])
     optionsButton:SetFrameLevel(windowFrame:GetFrameLevel()+2)
     optionsButton:SetScript("OnClick", function()
         AllInOneWindow:OpenOptionsPanel(windowFrame)
@@ -1327,8 +1327,8 @@ end
         texture_background_colorbyclass = true,
         texture_main_colorbyclass = true, --when enabled, the texture color will be based on the player's class
         texture_main_color = {.3, .3, .3, 0.834}, --the color of the texture used in the statusbar when not colored by class
-        icon_spec = [[Interface\AddOns\Details\images\spec_icons_normal]], --always show the spec if the unit spec is known
-        icon_class = [[Interface\AddOns\Details\images\classes_small]], --fallback to class texture if spec is unknown
+        icon_spec = [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal]], --always show the spec if the unit spec is known
+        icon_class = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], --fallback to class texture if spec is unknown
         icon_show_faction = true, --while in a battleground, show the faction icon if the unit is an enemy
         totalbar_ontop = false, --show the total bar on top of the lines, otherwise it will be below
         totalbar_grouponly = true, --only show the total bar when the player is in a group

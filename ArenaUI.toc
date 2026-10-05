@@ -3,7 +3,7 @@
 ## Notes: All-In-One Arena interface
 ## Author: Mageiden
 ## Version: 0.1.0
-## SavedVariables: ArenaUIDB, OmniBarDB, GladdyXZ, OmniCDDB, ArenaAnalyticsSharedSettingsDB, ArenaAnalyticsDevData, DiminishDB, _detalhes_global, __details_backup, __details_debug, WeakAurasSaved, WeakAurasOptionsSaved, WeakAurasArchive, BetterBlizzPlatesDB, BBPCVarBackupsDB, BetterBlizzFramesDB
+## SavedVariables: ArenaUIDB, OmniBarDB, GladdyXZ, OmniCDDB, ArenaAnalyticsSharedSettingsDB, ArenaAnalyticsDevData, DiminishDB, _detalhes_global, __details_backup, __details_debug, WeakAurasSaved, WeakAurasOptionsSaved, WeakAurasArchive, BetterBlizzPlatesDB, BBPCVarBackupsDB, BetterBlizzFramesDB, BuffOverlayDB
 ## SavedVariablesPerCharacter: ArenaAnalyticsDB, ArenaAnalyticsTransientDB, ArenaAnalyticsMapIconPos, _detalhes_database
 ## DefaultState: enabled
 
@@ -15,10 +15,10 @@ embed\TemplateMap.lua
 Guides.lua
 GuidesTBC.lua
 Core.lua
+Profiles.lua
 Frame.lua
 Tabs.lua
-ActionBarClick.lua
-SpellBookClick.lua
+
 
 StandalonePrep.lua
 
@@ -191,6 +191,7 @@ DiminishOptionsGuard.lua
 
 DetailsPrep.lua
 embed\Details\Libs\libs.xml
+VendoredMediaPrep.lua
 embed\Details\locales\Details-enUS.lua
 embed\Details\locales\Details-deDE.lua
 embed\Details\locales\Details-esES.lua
@@ -568,5 +569,21 @@ embed\BetterBlizzFrames\classics\modules\queueTimer.lua
 embed\BetterBlizzFrames\classics\modules\loc.lua
 embed\BetterBlizzFrames\classics\gui.lua
 embed\BetterBlizzFrames\classics\BetterBlizzFrames.lua
+
+embed\BuffOverlay\ArenaUI_XMLGuard.lua
+embed\BuffOverlay\Border.xml
+embed\BuffOverlay\Embeds.xml
+embed\BuffOverlay\Init.lua
+embed\BuffOverlay\Locales.xml
+embed\BuffOverlay\Spells\Mainline.lua
+embed\BuffOverlay\Spells\Vanilla.lua
+embed\BuffOverlay\Spells\TBC.lua
+embed\BuffOverlay\Spells\Wrath.lua
+embed\BuffOverlay\Spells\Cata.lua
+embed\BuffOverlay\Spells\Mists.lua
+embed\BuffOverlay\Helpers.lua
+embed\BuffOverlay\AddonCompatibility.lua
+embed\BuffOverlay\BuffOverlay.lua
+embed\BuffOverlay\Options.lua
 
 VendoredFinish.lua

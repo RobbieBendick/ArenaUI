@@ -48,7 +48,7 @@ function Details222.EJCache.OnClickEncounterJournalLink(tag, journalTypeString, 
                     gameCooltip:SetOption("LeftPadding", -5)
                     gameCooltip:SetOption("RightPadding", 5)
                     gameCooltip:SetOption("LinePadding", 1)
-                    gameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\Details\images\bar_hyanda]])
+                    gameCooltip:SetOption("StatusBarTexture", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_hyanda]])
 
                     for i = 1, #damageDoneTable do
                         local targetName, damageDone = unpack(damageDoneTable[i])
@@ -59,7 +59,7 @@ function Details222.EJCache.OnClickEncounterJournalLink(tag, journalTypeString, 
                         gameCooltip:AddLine(nameWithoutRealm, formattedDamage)
                         gameCooltip:AddIcon(classTexture, 1, 1, 14, 14, left, right, top, bottom)
 
-                        gameCooltip:AddStatusBar(damageDone / topDamage * 100, 1, .5, .5, .5, 1, false, {value = 100, color = {.2, .2, .2, 0.9}, texture = [[Interface\AddOns\Details\images\bar_hyanda]]})
+                        gameCooltip:AddStatusBar(damageDone / topDamage * 100, 1, .5, .5, .5, 1, false, {value = 100, color = {.2, .2, .2, 0.9}, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_hyanda]]})
                     end
 
                     local abilityString = DF:MakeStringFromSpellId(spellId)

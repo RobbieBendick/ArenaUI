@@ -207,7 +207,7 @@ local createLine = function(self, index) --~line
     line.ExpandButton:Hide()
 
     line.ExpandTexture = line.ExpandButton:CreateTexture("$parentExpandTexture", "artwork")
-    line.ExpandTexture:SetTexture([[Interface\AddOns\Details\images\arrow_face_down]])
+    line.ExpandTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\arrow_face_down]])
     line.ExpandTexture:SetSize(sections.lineHeight - 6, sections.lineHeight - 6)
     line.ExpandTexture:SetPoint("center", line.ExpandButton, "center", 0, 0)
     line.ExpandTexture:SetAlpha(0.8)

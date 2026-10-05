@@ -367,7 +367,7 @@ function DetailsMythicPlusFrame.MergeSegmentsOnEnd() --~merge
             local instance = Details:GetInstance(lower_instance)
             if (instance) then
                 local func = {function() end}
-                instance:InstanceAlert ("Showing Mythic+ Run Segment", {[[Interface\AddOns\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}, 6, func, true)
+                instance:InstanceAlert ("Showing Mythic+ Run Segment", {[[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 16, 16, false, 434/512, 466/512, 243/512, 273/512}, 6, func, true)
             end
         end
 

@@ -3460,7 +3460,7 @@ function BBF.ReduceEditModeAlpha(disable)
     end
 end
 
-local function CreateSmoothSlider(parent, variableToAdjust, title, defaultValue, onChangedCallback)
+local function CreateSmoothSlider(parent, variableToAdjust, title, defaultValue, onChangedCallback, relativeTo)
     local stepSize = 0.05
     local minValue, maxValue = 0, 1
 
@@ -3474,7 +3474,7 @@ local function CreateSmoothSlider(parent, variableToAdjust, title, defaultValue,
     -- Create the slider
     local slider = CreateFrame("Frame", nil, parent, "MinimalSliderWithSteppersTemplate")
     slider:SetSize(235, 20)
-    slider:SetPoint("LEFT", parent, "RIGHT", 10, -2)
+    slider:SetPoint("LEFT", relativeTo or parent, "RIGHT", 10, -2)
 
     -- Label
     local label = slider:CreateFontString(nil, "OVERLAY", "GameFontNormalMed1")
@@ -3502,7 +3502,9 @@ local function CreateSmoothSlider(parent, variableToAdjust, title, defaultValue,
     return slider
 end
 C_Timer.After(1, function()
-    BBF.EditModeAlphaSlider = CreateSmoothSlider(EditModeManagerFrame.LayoutDropdown, "editModeSelectionAlpha", "Edit Mode Transparency", 0.85, BBF.ReduceEditModeAlpha)
+    -- Parent to EditModeManagerFrame (not LayoutDropdown) so Share/Copy menu stays untainted.
+    if not (EditModeManagerFrame and EditModeManagerFrame.LayoutDropdown) then return end
+    BBF.EditModeAlphaSlider = CreateSmoothSlider(EditModeManagerFrame, "editModeSelectionAlpha", "Edit Mode Transparency", 0.85, BBF.ReduceEditModeAlpha, EditModeManagerFrame.LayoutDropdown)
 end)
 
 
@@ -3604,6 +3606,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

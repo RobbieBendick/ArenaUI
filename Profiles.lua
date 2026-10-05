@@ -1,0 +1,691 @@
+local addonName, NS = ...
+
+-- Addons that support one-click apply from a pro player catalog string.
+NS.PROFILE_ADDONS = {
+    { name = "Gladdy", title = "Gladdy" },
+    { name = "OmniBar", title = "OmniBar" },
+    { name = "OmniCD", title = "OmniCD" },
+    { name = "BetterBlizzFrames", title = "BBF" },
+    { name = "BetterBlizzPlates", title = "BBP" },
+    { name = "EditMode", title = "Edit Mode UI", icon = "Interface\\Icons\\Trade_Engineering" },
+}
+
+-- Paste each addon's export string under addons.<Name>.
+-- Leave nil / "" until exported. Use false for intentional addon defaults.
+NS.PRO_PLAYERS = {
+    {
+        id = "mageiden",
+        name = "Mageiden",
+        note = "ArenaUI author settings",
+        addons = {
+            Gladdy = [=[4Xz19T1LBCJ8FFyYZwbxAC7rrDXsNinsrZ4D9MDxAtnSLggZHCczpRT(FYXFUYdjVK8flOUG(c6Mnix7xM9ShlmG4okuvHcv9RxkxEZYRxFyX(dRRp8I9B3FaYy1YRKlV(Z4)9R4)9a8FBwE9X7wTE)VECZxVR5Mn3xF4t1B)4(n7AIf5Mp8XX)(RpS6(6RBoSQz1YRFZB)(3S86BxDSzXQt2LcSlfyxkGUCDSq73gB1DpF7d3TA5RTAHrOdvoVw6TbZYV8Dg9YRVRE12M7UP(3A(e09lV(V)q9HBR318)8yZQMhp(pxEDZQdFTU5nybJdHxVFxZzmNFy)VwFOTD)lF4lF5yDdwI1hE5MJR(826xS5WTBRx(5Uz3x73WINvn9CR5WMD)sDZOwHgOF)H9p(a8N3LgXxfxnHr91B(pQJJaXZmXYUVP((p(42J1Xc8P6)v9HJyBSgNFXbuSjJJaFBVD2R8hwT7R1V4U6B)L2LSLlItrE7ahEVCZH6BB2SF3YRF5h(RxnMc4672)R38R7X0WW6Zpgx)wa)Nx01o)AVM5trQK4WcMhX)(NUF1)99h(PDpE)YRuXb7Jhw9JPDab93VDxt9Hdp(qZFDZ6M7E9QBB2dZGNfwE9UhU5q997XvI4aC)Hnh)yKk9H6M)wQr(oBCLP(3Ey1UJy3V4fVGA23T5yZlR)YQh32altwNta)B9oyRAnSq0ePjE8qDS52UD5vybas9B)Lyx9Qf)WRFDSNoSj2PnFB5vvXF8iuY3(YJX2jUMFLseRrCwrv9kDmtPk4qcdQPJ5OvAjUBOCkLE2ravIlAiyD(aoeKUGYqJHykBSWP2B4OXkRmqwsL2yMD0qL4IgnsPuOPHdwzC4et5WHdKYV8kdLkoSTykRiBiA8k8CRUYjcZoePsC6Hyy0iKQr(sIHwseAHF(LeSex0sI3qligJ3JRhXebA5aBSSPEWIBygJEEIvSax0abRXWElUyyrktHWANNYelXf1FuvYNEvkSd12q18DiwIlRdXQm6ShogIR0fo7rLi1H5DNSAmLewbyRfsL3XwHh3B1XJeU57ySeNEMknJ7ASkqxxPnJoHBco(eUVWXhQex0ImvL8fzf2HwD18urybo1sSFmVnO45Znbsajnv(5xwPsCrlRuvY5nyRiM3Wg68mVHsC6oup1IPc3f9wIvPvQLmRbvS4aNsQvZ5pwr0wvszb2JXcCss6XJhS857TwAV1vyR1nh7b1ucUY3Bv6knDwTYm)snvItoXM4adwHSUZqSg8b)8CgWcCr7RgLuY6feiM(yBK1)sjszfj6MNviwGl6qkwJKsb5Z7OcairUSsRkCeclXf1ZsJKL)hRRLK)JTYO5UNe8yfZlNJkXfqdtviNzCaZskQMFPglWf0zy5Z5qzzg)2OSU5z8dL4c6nQcOeNykjU6cPgjaWrSm8a)LzPSHcCr7V(wwwYOipC7nYFYZmT8HrR8spUa5KZVnd)(fnqGkG0zEB1yE2AINvOQGg)qbo5gGAmplO8qVgv8xfWPVYbhNiLTLvtOohYJjUkylikglXLjUcRsUObd1HbTFEg2ujUO1CQk48VcLuPPukA(htPjzwXuvO29qQygouow8CruipMA0WwsAqyuf0GalWfTkH1G2ZmJLUff5tssRCLeLcL4u0ktiFJQaEynUnPg1XeHr8O68hrXcCr7synqHpkGxSgtygFUe5AOQuM5jmPsCrl5YGQQIPtGkN31oILGRaZySaxGqES8JMMiZbRUGgfybUOLzSgeDvLWr8IfEZygGSY4(4srjoaQ5UU90Cau57SkLmWI3lP9pwIlAsRXl1tI3f(K4DbDFwDK)qoDUXRROPVTWoavIlA0OSAxsiGH2cOwzAP)rgaLU0jwIlqImvHSUtr7j6OOY57oQexcpfScJiWqsCvqw6o8yjUKzxqo6g8wbjKtgmI5vBMkXfTHsvzelAmlPn4kqpJL4IuuNQcErAJwpY4bjMKktbthsL4IMRuvY7qAmOSbFbUYyjUO5QwZgkuyv4zftC5gp4gtyrb3bVrHYTdOvRCP(jNItKopvvyuIL4YwwWQKTSOjvQJS7cLyIaL4s5HggD1qWILqh6kCRxSax08dRbD1mhXYYBvS9aLkVHmpAmLf3i0ENDmzjBUsDbBeIf4Ywm0JSrOInOD8OsHBtqL4YwnWQKjYWrh4vIICRVylekgZTMLpRfQcMbGkXf1FuvitewXkJbPglYqGAMkfkxjdqdL4c4HhRaPnOXec8f2GMiBnpquzr5lHcBYyjUaTYOkKVOtg2tk1IckfHL4sMVyfiJQfidqOMW2lAbj00OCfiYWsCr76uvivdvgAxxjIZz6AsXu0PCOCNAGP1XYnp5iwIlyLHQakRRQso2WQAAlr5vf45HL4IwraR9qpkKpz1Gyks4d1C46Hxb3yYsPgrZiC0JcjafcM)GkuIlAasvHoOIsf1uQXpLhV9evmQW9fXsCzdcSk4GaysqdIyk661qQCQLkw3ixjwZUlMZSBmJzLwtscmQsgZalXf1FuvYztqpnOTatcR4cFMslZIqkcsjZumihrXbNxG5B8swZVztL40dHjuLNQYOfy6XQQQcZlzNkXfjANQsEhspEKYjkyFoQexK(MYqGFDCifVmhtrKZqkYArqkYArqQwRfjhFtAsTtWw(fErnSex2QdwLSvhUdRKLU6ovIt3HJFAlQgzSGDEsVoRSWtnrL4KxCCcHWyfi1oLJ49hzTse6X7xwsJsOexgzawL8vwsh)idLcwPKkXfD4MQs(mK4MvvjQMN2HkXfndHQizbRapAGqhsrY7HuK8EifPvp1jz7(EAuR0HcBcujo1UVzcfsWkKF03ISFmIcgPalWfOVhw(SPwiq81IxbD(dsujUOvFQk5RLKrkuExHRirL4IyvqvjxubrFPRmfyKsL4YiOXQmSd1vKvFQmv655vqL4K8kMGCgRWOfuKAP0tAn3dAn1BaZpNv8kjJ9bOa)qggxHxPelXfTIsvjNNe96abrbTnWcCrDhwdyEgqpgrJjspAKqm6DWLKtY4Hx2BUrcwGlAKuj88DJgPlz8AA8Jgw4kOybUGnzS85SJ1i)FL1wqtsQexWTCI3PISjmvZ8JPc2y86c2UekWfTYI1iBfvGx8nM5d9Cf0yBUz12ZZ1lrNV9D1)R6T0k7aNL8V1ZlkrFYm5wLV(78gVrexJTbt8QEXrXx(oqO2TBi3ofAkAy02g2NjfAJ0yvM6VdOVVloi2cdKboa87F1lF7p8EyLbDe1(dHbov673VUE51p)tV6QN33VEFx9xA(WJnB3SdDW1DpCd46RF4bynawijxHv7sS0QV)B0igwW)YHn17wV9Bt43Rptakj8v0lzvK7V(mbzxNEBX3ovfJLIQiOscvtpE672hp2S)EyuV86yvqpxo(J2Ubs7qRHh4YiFA3tYrUx6EAoWJ3hpzNKNyJCVmDhVNAdCV28KCGBRcpnh4sH5j6i3Ot2W)j2a3RupnziQA9MWNydCT2A1pjh5E5t0LCJ190KTIYeepnvr0lREIsKlsoi3tSbUP1eqpXg4EJu9KCGd277j5apElONOKks)tZdNAvW)0KixAFYE)nXtuP((whC8j2axAEYDJzO8Sb9sg571ENkkmv5TUq8Q0Qayvr)YR3T6(6h2UQP(vDJSvnnh285hBQzZJEdBVuONHYV86BWaKF513VF9MVSP(a8lXk0agdnoxwX2fLIJ(4W5k1enYR3hNut3gQU24lyPAadVpUjEowOF)N)pPNUD6AM1um(VgAPQ5APQlPLmZ1sMlPLSZ1s2lPLCZ1sUlPL8Z1s(lPLcZ1sHlPLOhO7unf8KcNDBbNsi4I4T3UFxF6)(gQV10)RXI9XvRxVz3xbkAglf6GZHNhR3Wd00H50bzKLYymWyzhYiC7gcKnG63I6exJ4Nrmb2jVF1VnrFiP(a6bQEFKaFJvFLGfdMBqcZhqZ1lHyQbMVeqdSa8GrxWbjGGbWqjaVAArkeSxKIl5fC8cVifmVls(di0EglvziGuxqrFk87wRhRPs5JkhtDSJQQcE69fPWAes488pbpfp2yqKbgt4uCVsvqNkNIYhJYjCK7RWCWqicBiia3wKcxiSSgSn0kTlW)IgZXO9v0uky80WbC8cCDqt)I3jWFXlOUbMc0KsQPgdD3)fjF7hhRbQoKNYJnl)lO(i4qjUAsTFviqdBHvqDa4FnlspQk0WwA)lUOrl0X5mnUrxLf7rNHQm62OyRao05coWzxKEdASokdVeQSAkhbn80AVM7alVxhGa3Bb(GJoEgWLf9uPfON(iPbrL0t0fwpraqo0c9tC1XqDfhXm5f52dqoaQCqJcWLUWjJMwh1OFFb54nwmHL2d0wJb774)sZwltUOQi6h6bgXCGEPbFMV(VyxK7nI8mW5TyXUD7QJhbga9F1SrGTs80nMkYXt2Rot)EHTIE73KDWjdiRNKPdWxWW2QdvAM8b(6qoMpHpuiuCKPwS()32V)(iBU23YCmQT81d7)13Vz9AclCG69YAGv38axtpoqmx1jhAd4TITvNsgul28ThIS0)4DF74MBJdDOvLPE4ZupqQt0V4Vz)2V1ROX5HiPtLb9oBsOF)Q864(XGQye96b7OY)8d3UA301q2kTSFfUAf(wYeZFTq1FsG)nOuZOzY1infxlSdg1vx)4UFzxKlEEv)boBAJGf9KMqs7OfGd7p2K1rDDsRSQj3gh(aZ9EK7h6jCJiyiAypiaTNm2oCiAabim4G3TVEnrZHcQ8cdk1FZ6LStjazGEcHWqrdtmb43wlXy62rEMymLNCi5quId5zIg2rbXJtXf73883)8RiTd(x1eFasiy)UJYH8fsf7w6qkoWpcWEj5lKAa)CSuQkShHugkYznvKFZZ99h)0BF113K13KNn01ZAYVMLSJPbO)dfSEveat4RIcfHEmMqIDymHc7pPaIO5OQxyk8FWKWsNusjH)b82cJgCUCm4)DiQibU7Euqk57)8a(9p)7Fv2W1tEUC341ZXRGm5Rms0NXJ))qawrimXGctmUzF5N(H3(YHTBlaZ02WTOddxP)6Z)0NE7h(0WQXqIuBL0uK2mxvmo7qslmdoaeisROAnKV1WTZN(W3)dzRdQq1W9nmdMGPkKiyGL7kkvIGbJWalLQkrIs(n9CKj59Nm1FERM6UOapXsoUKsUQRuLCv3yk2vDTXleo)KR1bQ76TK3pF6kfe6H7fyg8kIxMwr8j3jgJ0gAfXNCNymEQOvexXveiC)Yo6OsXTGg8VpSh1GIUypQbLZiYrjfJCNEY4gsK7ysCBYTOTSxrhvqtuKinbRdDmZohqzyMPEuVn3W9hkhkewavVOqyrxLcHfn7sRqQbCKE(7E(lFBg7Wu0j0n95yly2Jvs9WDdmdyezvjGfr6e8EH01YAqPKuKZjcc)WE5DF4f)xY20Z5(CbaYZP5PLWEHEhU6dCceLedxcKpaA9j2)((lNV5hU6MxLZIAepQtft2Z3ojOwOBbwnyRCA(JIm2gPGszMokk5qwLD6hYbhYgLLpcetXhLnWLhWLJyk(OCmfDugszjPtXuou6KcVSvjACNiJe)Ky33mSPfYrnJCiRLPobORgsld)n01og4aKWLTOZ)GNKJCATWe2sPC0uhU(lRiagZ9bKExAksL7ZvkGDwXtprbx0C4rdkN5O71sdf1YD1bZzU6yD(Hlnw3GtxtTvIxGEirOMjNQuowwzLYlsNUK(sKOjWzO3kehFgZqlKIk8oAHuiDFA9sI3d2LrlG5qr9vWtC2GuU5BiP1iZKPI5qX4HUIjSCiPgSmeftxvycLp0uPrw8QXu7HjkqSJqa1Gb2myc1CBk5IJlgeHZrO1Ixb9ykBeL4DPv5SYPCkCGZQZytIzqsOtacMsqh59Gpjth5nEbFK3ak4GkUOSf1hqxjYo2bzGlvsoWIp9MUpOgsgHzGd1aVm7d8QSpWrQzmHJUZqGVwKhEpaG1uayTaCMcaYFG3yiaomiEHbanbagzkkPVajoh99D7y)Bg78ZWMt7QYLM6QmZpU858F8j(pXejg6aEZHdmRoPQEmLMUnPXmyBzY7qg16ptQjMZ804AXifp4y(vfvhIrSkrq2YA0w(uy21BWmq5MGbhj5MGPYODbJPLy2y5jRcUojrmp4a3KeZrLqQY4QI5qkpzaL81uklnhIPCjfZgCTNjNngtMMUuofQviJXiMbDXat6YzrTW4RlftXcX1ggpnGuAsiUgxS8ukdR)IcI5yerZIsRkPbyB8i2oEAJMWtlBofPD9j0hWiBcc9CX5ggQHbmVbMZy8DwbxmxX7awITaCPdAphsPzJj4HQrQRzD801Wq7XmI7TzJclpkSmEg4y4hYztl7s8NqgPoW4gyaLcWIeb)ykLOedCzGDnUEB5wxb(cor21CekMlmRwog(j0qTYYdvufqEO6tdvfrHOXZSfhQkviBOc5a9CLtAlQ7J2lZUeeMdlWwwLeylnjMgQsuOspOU(q9Pqf4H207t6OfVJkFKjMsMU)gRYVgJn7ct(uWA12pNtOwD6Dqcw7gY8bVbOAzcu70ltGAhZaT09S4qQThBC26qvjRdjKMeGqJ8wnukjX(msw4M9ODlqE3RlgA3QX1jbV0DhTzWHEwwZrfPhYdHYHeVOn8QJyyNpToIsTntsfMdPFNb2dr97mW9XROuAALjMIiqGu8Dcb1KiMmEF7fJWlAdmzIAtRN)g7Go45Ch9SUgGU40gfKQGzhd(HlRWFJZjbFoYQKUKjlKj2voPkXdqQBzxv04fTqlD3OEmUqpBdyDzxKY6QkqohLHNjuqnGh1u6XLWQ5EcDRgqupfBFexphOLfKbEYXwLSqzsKReGQdAXevWg26Ix4P)X9PSlPPsmAGjOojEZPe0qetXuHXumvOdzmAjkohREJU4KYMrMXGG8SN68Y8BLXxekMGzKk1P3UqIhdn4OPkWleaI0suvsFzdC4RgDgN0Uvl5yYD2t2r(856TAnL0BnmsAlIeeQLj0HqVmHyevukfBWSadzmmAtGZsg7iMHIeDnGbDiMdlFY6sYNS(K8PiFESdJsVePnEORPdRwnlW2KBdTjeyRh96q62xhQsfsMWR91HQ0cwQqmvRubvPtQ2S77A5VmdAu))cdseAfhqgmdwloZcTN)Kx0xrag18J68YV0qubFDvXruiJzfMrbMvszMnoLf1UgEQUHJybdrGHKe7ycIqmsKs0Hbu3wlMWMOcffwCuwBwxr5m7bux2UQJ3v9wgqEJjiUvXe62BeN0hwfePxTrZ6dB9(c3sUf9I7TlwzN3WEvIHCTYJ88t3BXLGHmdWmMNmZM)edTal3C0MIqoTjKtPJVHQSR)t5KUKTG1ccCFauhrrGFCxiLMo(kc8J7cAqAkDqoQA0WfeidO)CAflJYlB7orYEs2KvAKq4GJDxusMPG2KwVjJ7eMdltmDL)ykzsMy7T)eduyFQluMBXumds76eBEifRDDmfDnjiLlX4twqhmjIQrdLaPZvgAIxvZmSsNX3TL5LdAY5JG5m7AV0MzCcPvwACRmHqgxemNc0uU8BvFwFhHM7Gr2OiKAoTjX0KTwGJDVIiVYKQAHqjbjwLo3C3k(Mz4B)Prda4twci0QADIUrPklzwMFNK0LBOPGxt6Uhp2rK8(kW6AwmbPeOh5ZHM7q6cjFNaUfa77eESDxIpHdEXgKMg0Ki57eOAalrFNy(JQvzuSvmfRx2EZYaRxOYycL8CKiRRHh8Xm47stRWbFlbHqu6bkymmRB1ejau4UsITvmLQLcR4fEImALICwVYs28tZFIjARKM)arW1zsRV6KzkKczqSCD0IBmrATvjl(C2T4SE3P0e0Op7mwNDp9eaTEAXNeMtoONiuOejKT89qzuOKg(S3Dq4wzPjIXL7Rayonfyhk0QSdxyofQMlB)E0x9H5w8C5EDb72fwqjD8Y4g(t3GfCzw2S1qHSuknzDHyQksvP4DD9LwGKgLjZAXyoZF4lb2T920cL0kt5czDeMtPXxceL7P2t1zunJk3PgWCMFAbo09Wkbzq30rN8VRyQQ0nDuLugsfV2q2bjmNMzyu2IwNDSaopO280sQZiTKjsRKFcztUjKZ2sAztxvLC3hYKbGSaYQ0YIYNuv6CQemN5xX0J8)cDR)xaPOZcqQswViE7ZmT6PCOBvwXIHHufDjbxMIGowpqNJu2kQKaPSviiiTfaLekO5NxygsIIzGIefg(A1IQeaugtL47vn4DcNuGWiZ42AhxLp9IUj9dLWtfWwZwwKnvlAF2B)PkusQwU7nc)nUawX3aXHEXjEJadRoumLTOvEb37p3aokUXbKhNoSaP4MxIpTfj)GDxwTqx2CYY4)ltpDmhK7GgCAdCddGHxAzvdOeh9UAc2jVaR8sCPbJ8o)z203zR2UB8xjR52MsFPw6Q(j)oRmxZqGfz)25pa8roNafP0NPgaMdPgGKPzvc02svukjtLGEJSLsPtwoCap2jfwhPsYTqd)zGjQqQJyZaPizUqkMZya9Ah0iEOx74OZKLMIPpQlDNb0MIBJ2ShmAgOaEo5APpTI9oK4ZFRUjuEYPYDZxmNcJ54DOSzhjXCMNLf4lP5(uSR8dWdFMigWm6p0NnItZSUffP7RqXaJkn5cVl3xcDjxjmMQS(0bWBwhuFmNM515i95rTBLm9TnDUZdsG9FgrIJDUMkTSOJ(g)1h28B1B)y9HVuFBdekny8eDjF7TZcwqoEkA(226Lx)9BxTE93(9F(M9732S5HF)NpS)XDRxoou)(aujOF4fNBwYUtf(nsJcRUiDW1TFYR4aadUOlfMDr6gkI4GViVuWMfPx4q1cUAmlfeUem7)Sq8EqXPwKGI85VirhhEFxHx4iTODZsoO0Gbb99(c6zkC0W(bd8nyncdSqSdPWJdgSyeEbDNLysDnEfCvkaYGHmghIW4GoMFfU1Dfe9kVA7xI9Ft7rqySGbYgUmq(iJCjh8JWybJ2pyGIX9g0Dm4mJTjk2cAdmSbX1am41GkGbBiniynvznBHoGccpOdOiSJw7X4Ze6dmKcXHeg(A42GsXR3yOtIZyuPg6g1F4WT0e7Md73ULsshJHHhgTC4GcdRrCuzzpZGcmqC1gdttCqHX)hosWyzKMTV8WQ6D1B4fWB3)yKyL(JVF3(75KmBaOxXOFeNzyOJI0d4tjIJKum2WH5hUXJH(iSmIr6iUtGHQzIMtZROOxYJ70y4tEfYM8L)6Qd8U7IT73VUDVoXB5MLCaecJeYiz0Mne3Iy7IAwGR7y0EcJtkKvXTw6rNqsE8XnrwkjEjqJJrGkuaePC9jwr0wpy3EAWR5MgJ0vIgiqblbh2M05L3849R2XBQRE8qnNMUBjS(6ixRMd(rChedYrKCbdtwO)OGWKoHiind5i3fNkyazIBsOT(PHJsXhFXWjLoaIb15vgItxEGqMfm1CiGHb3fc9Ot8PIpfmKj(wDbcnd0OhHpL9VMb7aOLxF4)6JRo0uFGqfH)V)VJm)2miA1EZB)(30XreI(XNVBZ9RGGWecz8)fMcAQUaM8fahDOKzHyjhIBY(L9Jm)COfOIgB1hPWTC9bSgWqR3IrhyQ(jyTQpAQMM)VKcq9xS5WTuayYrtjUKTemCAVqd)SKi0fsPxUSNpU)qCTCtZGocJFZVS626)XZxV(d7o(pOE(F827x916J)dQS)e271R)PpV9HEI((A)Uw8mxkCi5WCuNcxsyi0Bnmpo5P1ekOBJKfWAlV33f(U5HN)G5RSxqRkZL1o1geodGFaGb33KIy3y3SDpeUID7UtmlRklEp1YWeLJ6x1jguTD(3z6tn(H9hAJIYNzYgWtrP9IAyFeO1pc5ZhnPoh)uZnu7JZiWFFidzdo7L9ezg15Qky8ZJNeUidVs2asIFSxut)BlFne3JvIq8IKXB0c608LVJWxBSvWrs96R2)I1ZpfYjAAJd5tEyHW1H2v1HXyDI3Zztg(59nn7V)9XvLn7ItQ4XDN14IYlDrXDjOGMNuzhk6yHCHHRDF(Jax3p0Q8iwUE9w8G32AkZwMkz86xuSRfDZ2eBH3ude2KChKiI(t8dLasGWliypp1zI)spIbyumn1NiF1Uh(F0TNXZ3)OS8A3oUosCtkH3bc5WSS3CcP6ErhgC)R9alG39QxFt(5KER58OD4uynE8RfxbK9gnzenTCjgZAzqOC3NJ2RnszL1kcHGe8unGSe(MnnfpoIN4vamTKI6ByOsh0JA5ehQVz12VCg7v7Q)13T6B7FSbz23TX9V)ouUwlFQoo3j4Ba)qP0UM9JzuxTayqNIndo)3hKy6dgcDYM6o(mwFNPel0N(M1h6JqVD859qcQ1hAr7PVlQHFaIOqzLtBH7Uf3Ie9d7(w8M36agMMyr1sNoEjkgyOg1lpF7VU6Bh7ZvBsObGO9scCU(d)WnV7Tx9Q(sQUHizHw6yu4973)VQrDOUnP7vFSWximvoNoEJudymEgl85f1j1kyke5sLWJRjp7FgQdrGLXFuEc3UPBhYcXgEub946Vqh)dyQf6T22XUfh2deN)x6DYEB9Qy)q9w)nNmbrB(Jo27Zoaghi2wC9973hvlf(XHQkEglPThzUirgRp8VXe573UhStdkzy4bXCZLqNNETbmMB8k7gLVQcE9DIdxpeXGBc)uqEXzm5B1vmjRlELTEhrgSspq3YRBWutrKBtOohK4aNOjJ3)zWPLfPCkeXAkuYbucpUqCloutydYGnQR)FeVSw9V)ZV(XTB)9F(VE3MM6mgjCtQzUuDmeHEF8ngPtKTSMJk)9mDuIKqPR0UE7S54ls)tYNXgfjFIVI5)h4VBrGNup8JzsS)u8AN30JDw2cw3UCVv4EYIE(UDXZD3Icmpfxyca(OJ24gWPyfp53)JPmR4zSum4IKJ1rJAWFy3MMK4(2vaG0aVu9IuH7XIhcu1OekiYdcqKqf5dgPF)8QB)LVImGgCxQPhzpWMuio0JA(3UXWAziMqD1CJjmIb2fXFzaJYw6)3U7ijLR9ayoTismnwzVHuo5BFj7H0tpOUvtNVYxz0gVXiukjEnit(xXL)YCyyvNk(eBGoY9nNnLcpSgOosLxyK6QqCOf0SCC4K959X05hJ8KdGtdxjaBg6H4wGAJhpw)H73T52B7W0QX6u1772d)TR5q997hQLSO7QodpW27sN9lmEUJT4ZIoIU2ozmmcEAia79R(n6I4edcyWEk2VeOz1)ga4hBO9hUFfCgnEP(7oYdUxqGg6QV2w8UVBphFZM1jJnTMjOAxa7mcqRiZrmrgPblFceah11hEzSE4mfzqS(qoL)yjkJGyQtFdpIfc3FHEh4)BzhN(Hp274iFm)FldA0dofxKFzS8Pwpr7O5dhyrNoM1DwumDl4rgkeWEUppIF9eniWn7tRirg5gHPNcYiwULBFXHtg0(N9jN)XEQAgfGVB1lI86A64UQm2wHIJOV7UUr3L(WV1Md6ZExeEypmHXCVBWUx96fF7fpEiwPM38qV7Up9O5lyZL0PoKF53E2iBstg)POI2KScOAdbyZ(l6jjJ209T6VDdA4VzSyGRIAfr6y8)7)v6qyHJDlgcWAvqZ0Uz9Db7qTH6w3GnyEXJjx6zITjq1uGZsjRF1ZieV8BrMABqMXTIXgR82TBYnB0FqHUd4N8J5CPJZB0y99o6iALsn1LzMtWlPm2F0bC(YCKm(y9e2gmToBZSo5f1ZhrLV5EMOUgE9qy57DBo20UeIaVh(2Q3ma1Qh8X1SbE7lvv(NG08YGpFzHMXzZ)uYoUNA)GNCYYGpp78fXvQaALB0xz2SY0ZYLNPzUhzw59BoUF3uhREMD5OhiG10gnl(eCitAQig(wzVcaS8wRUnsamFlJ7JmXWn7d1hboP3sFo)wK(gjMii4CWd2iuO3JD7pCSVul0UodQl(Dz86BVlYvfk26Aa3j)YTDmoiwROHlJ)9XU26M7IdR7ImJr9igCx2(YqfefCFTZyEOdfaou9WRE8(ph1GlZWBdfepf)2t8CB8HmE9UeWRNtr827V)XD1z3OpeyIcHA01Zt8WBfH3FudRWlg)qHK5kbYiew1zJgXKitYZlxp83rV21NZ4g2Hl(RpKDz((Vvxslv6Ao5lbhp16Elh6xVDvZq9HgQywsU9WwiTFp4kRekJUiHXOATyuqKlCL8qAecJ6xjmJU6mPNDHGr3GkH50vRj9SlMvCNdmAk7MB5OePkHkLapB0B5umGIQCbY)bLIGMJ7mbe49PyJUKRDbOTygKJH5m)AHuKh5Fcgd)mggGqixGOxNpLZAHouYndCMWIyTQooPY8RCmNUAnjYK6ZCbnkNcBEsRp3)7T(sa4ImEB38aMXXGPJKaOjnLYW(KPxBzFY0N2eJPsBIkylg9wDzvrqVJ8hOHJ4e2Teh7soscJPKuNBrNfYqP0uNhz7fwMIN2cEui5TrdwzXCMTsAPnhsdL2sE)pILAz7f2Q0mRegWboTFwi9J5GUrV2PTLi5rpxBq3J5uGcYgYOfWmkSj6Yc6A4VjVbn5q9v6KdeheS)dhKKxGJOgh4QtiGt5b)dvtXexWxXHexa(YIZrehgX7jWbdYvtjlSfAY2anjSwRIduDFlyCjujyejMYKCHCvb0bb9cRHKi(kvPLoYBihunmNUQnz0AibOtkRZcf7mtoiaHzmpzOXNhnjyof6PQmK9PkHRpcfhCWOxFrR2TIe0kwIGQfyOumWqbmtodFl3NHhSuofO5rFoDWYYqKcDsaaWnkoqDdHnGjJ2rxUOsmNM5fGiYDJCkNcN)1541uw4hofuXaoG3qQkLQuaMzGiKzqpH5m)CcDd7SvVI8Makp)iAXIcTvcPDeALylschflunsqrvjbfAPjxyVCaiwpnoBNJSquofgHgvgY(GzGbBIlGUtnW4KeAhtuI4eDo6bdcmNsBkcDgSSq5uySBTzunygf6lYNPhmeXCM)KGc(G1pCeI5WXQKL0VjQ8zOOMUvUrquUR4URlxHdxlYPfq3Xg1UQkHJ6Xum)WykMHymfhYeov(Y0eXVqvwWpIzGDiG57KazWJWr2VsdRmxmLRvyxbCsfD38bDbMZC1rhxQYJWqNPeImtES(arjyoZ1tvgLpl6PWCWqQWOyG6csv67daOYugLdKdr5GWLbP8rr15n(SO3JYPWHeTih3rfvLcdfkgcYKwmaxgM(YI5NSOCkmav(mWrbZy2LcPlhbbKLHjanc01dMuyonZjzcdhJH0B5yf4eSyQCzxaMYHo94tXByLNJ3W4Lg5JRqy6wIbsiJnFibvTIqcUKeHwmH1dQrtHEQUSa1S1uSDnmgpy543tNqvdRGboClgPaOQwiqB4PujqParQgcukqOQHvbhAE6d6XqeOBsBxyZwqXmi2FT46EOfx3di0osb8xcCZdkEqcb8xj2Ty4nmyTaYOaHCKgmxBorXl2JXwXqIYHOK0jK8nOo2550QS(Ci2Y7kse7Z(q2q8Qui2CqR4AT2u4qx(sItKiwzaixgV4nRepaH40UgbLlOuevECepLkNEvEq3d5uynmhPPgIZutVMiYIkDmd(gGg(SN0MaVhaV(XZEoelcGjSoun)EvK3xwKLhyiyYhy58Xeup4dPVSoiy(BrycJIQ1G3y5lcdmfWlcB80Xq4IULmCGiKBSqmhuOLiWy0oKYZCWKUI3SYlZa3ymJM5LPufY40t5uA0lZ)kJmeIxNwquuCA2KgZPq1GVylzclvdbXOPv8o7Zrac(tWnwbJeq8BzUzayYYM70itM70OsmZ0fzMfCv53mWv(JPs8Q05e76Y3tY485kP48fvsrkRYbTfmhKvHwWaohKIxtG4(V9SvfF2AiAqmH2JIQC7(I5mxDasGCqVYhksRhvvmtmnLdEaYp8R4Z0iWHZMP)jLdA6o1qy3AQnDJnd6hndb5PP7ur(xMikNs7EzbYnhbOrkygP1ScgO1ScgN1IjCSUdopR7aYwXtP8jDhubMPLbHfAw3bqaeR7GQK(sXLTbJoNTeAjgzHNZ8tAlZhaJf0buxyoZp60v5m8PCkStbanxoK8OZHwIXcWYr2YaBKvTYWx2hsvkE))3epdT5wo0MqpCqGFiPoaFhwL3EgGhQqjZVYXq4TzAEV5WeCgkbp1vogbpw9hCtW3OYBYn9UVeiM6ZmJR3v(UgEzg(Ps5q6g3(zAkOLjtdOtObDqZObn8rlReeyeVSFUvhTjJFZG0FmHjP5tR5yreIZsPsMFqoqK10O0B2CcZPWUQtNdl(Agx8DAfBYcHkHXlcLQv7m18OgCWMHdNygZUtcKHUreMfNcySJpOw2IMgsAu5Rwyof6ka1t6xj4VX1k20gYepBpcHtgu5slPLj(klqXTHqbJzcsTYbIelJom6G2vY2nUCmccZOWCJW5GbljyonZYwtfvloB1hZbhQcrUTVNWmMH8P6qyCFk7lKBSCfXqgosw8bPRu5FTqQg((ZtzQDeVmgE2cYPRst)DjPk)l)qvI1TL)sPaPQ4BdOKfLgqWdXqjydNZt((yIr30tuuXEzqKlSeZPWi0kZ)2kj537tRC8NwvFfBZHO4kriXZJ1TXp0qdtiKiKH88ygitvnJwAXeU01J5RtcPKTxpUOMKJypKXDykKDCeeuPAXGk4r0kUI7Yoi4kzL0i9KFeGBYFsdaqdHUCDv8UqfFbQCJDGyuciekuuRkLuKpVXCkmBnz(lHH)uvemjmMdWJx8fummegdFh(KP7Yv1Exovj16vAxoOeI5uyIP1USt9uoZUNe161m6nVmm)P46sfBeaLNOqHuE(H5t4aUs0Id4IwF6GEA2aLcf1GKvNXhZJO(Qz8mWCiLDs2sxsOevfLsZk74nvSYoTJOiLCX92yfZfLG5uOAr(WYCXEEgY5GuSbuC(IM(uwLBFCkhCoB0jt(gtvI2XMT2zpJzpIQnd6CHO4N8xDLp7lQlLtZSYySImCguqKA(kEFnMq2AznDlV2QwlRv4B)GnxLa2Gl6eogQff0lvoYifSnkWalhVPlQJufMtfBBo(7UuGrrhiHHoievFQGH4IeBzo(fLZ87BWV2f1XNHl)coK6eb3DF)ACqKTbEL5ub86uHdEF8hHcXGZlYoPan4mIY2(baX3VD)Vov4MQtbvDWW(OozyVbtXEbfuU7E(YnhRxL5Z7jNGUQVxVZR7J(6X31uVF1x3C7eBhTEt9ZWJL3DYfXj(S1FEWSwAbchvDO0Jx0dFIo56na)nDBnT7H9JwRo3yUxG5nfcymmQGUBZ66fB38F8FS6qCWI(mEE04058)9JgUUOJih(xGJg9IBK0cqkY1(y9H3brpdwxSN6TFni41xE9FhCK8)5V)Z)94SR(F2JeUNRAFS(2d1nlESPz)U)wkcHe5Ho0h3FCZGGUfBQrX4uBCgc)r3YqE8bok2WzVSV)89mpP1lETx184X0H93J8CM9eABSg2p6)zxtFG)ANTlYNsU(Hvh(LZG9u227OGGziXslIwihUZ8J92z6IN)lpavMn0yE1UdR(6K8j6hdsPnOtbGw4cZiEi9Dv)R(UO4lENBYqNmHSmWHKUJJdX4NlAAZ4sar0sbofT11339pt5n8087FS(4XAke(GJSWUxF)QF1yy968dO3ErXNnXYA5eiquVaVoftf)L6dniqk95HqwXzefM951(Y6JXZthI9rpuk6ZJbDaIn2GZtNXP2(hY7nVAxi7oTHBzqu28CiMkraxcJF2tEUFYG9zc(fNAjDmDxlxtkRxB1cJiQYw8IHsVnyymRGxbgdilpmiKrEys0fAqy1njmjnDKYnikDs)6R)H39URFXNE1RU6NE5BF(7(W3VCcW0lb4fJdFJpfNgqmYTyzgsQwsunr7oiey6ffn5AOXfVnyrSjPdNiYzZ1Ba7a3ZcdI6YrSxZ6(8qrA9Hxex9(AKkOgdpLn7UD1dXrrKOcze2l20(Y(d3IOoemK2a)7vsTvqM5oU(UE)9)0XMh3DovtZgT(x2SEx93(PJ3TV5CQMsXE7jiWSoUz3S62F5SQOMFwM7Il6BoEwtndh4epU7yduYFA1x(Y2n3IAbCovpqob5XBJdtcyClvfv8MG9wmpS)8wvmSxPUEZryFC3zvjRKgERRx1C3pD7(nBpVAr(F2fm0WnSZLUW4jRUD)MDRJdQDnh2FEJl(X6IlbROOiUunG4vgQXxQxDM7n4T9B6XKEAemCcKq8RdblGfF4MB(W7ZJVUjbmW(3uk1TNTS0ooBmSlCdNNNnoAV5mEu6UB2t82WYJSuHF7iX27fF4dVJIV9dmdYp32lMXHm7FWw0ljhM8pVw040)j3IEP7p5wuXF9b(ZRfn8hdK)8ArVCuiu)hSfjaW(p3M0O)tJGSjt9KxwdnuDVRnZkY869hqWXi2VjmRErpaaFrh6vVGqo7fjiSoMGGr6f9ar6fjSyErcETx0cjZlgEaVhyd1gn2dvhzEvxgGlKTq9NpP69podo(83au3Xj1bW1AICvDWlytHECp7ynnuZU4SHW2o4D8M9phSYWBhzrH(dsyZd51QEMdWbKExRiEt(wSUSJb5KQTp(USdQqUHegHYJB)4(n7AIZ5B(Wh7D9W6TBHjscpHZV5qF7zS(WjcB5o9zFz9xw94wk03rw8DWVpwiO03xVTMOZXWL)LlbBVJcM7bo(TfIQ2N7vAcJ8B6dF9TfACBJGJqthk1Nv0(nmjuTh4TptzjizVzaUQptXXh9QzzhA0pZiwRDKUETGC(CfgH98MoR3wy1a1Pd0njd(xpIxC7ZPtOjQxB3ToaMjdTvwwC2Fgkbme6zwE9F)wcgB(N)N)73V63(NJUId2vgeaiyJq0)sI9df)CGEihpG6oYVgXniy2)HDW1yF(dpSDZWl3flFpQ7VbWSSrQ8gRqymIkcMLRgEf9(2kQpmz0Ba33CwN26O(PoHpbVjZjmBWMwyrdrd1GacChN3O8mgZH4HupPgR7zGJ4ft6dscNJnZ7yR2Ez70uTdj0GOwa(gF6fWzDFAO85XwA7zJWTTizcCZ6EuhJUxzM6OxK1OgyeU1NWUtJSzs3wd3zJGUR(OkCZYL)))dOg9ni]=],
+            OmniBar = [=[4XzvsfSCJcdd9lk7Keie6XMg6m5qizwto0lQJc4aEQXIX2u62V(vI2n7UJpy5NKF6PNnScQa1GNUzSAj8k6dY(PENzh6Nt3APjyhOc1Ah6nKeFL8nAVefjYgndbj2H96aCfu9JcgtjdY3kYLYOTEA6YWe6BMPRJp5gd6gjxyYmOF0o0Hq5YFKTHj2J1VDXzIGQOS44lGYutof5JgxlOQoCS41h3VVypOMiVDMZAwmn0K7jA0ffapg1n7Wy0Q5Up6(Uk7yVlaL5GACwb3BCk3y0AADG6PIYQIFcklv)23A08PgktxYL0GdrZ765zf)4almMUK1GQZ02X3VlwH(wD8pUYDhLDBkyIgYjwRxBrHNkcuxoCg9SxjvyKTQtN)BfN)hSFD6waEEXMK88nlZtYxNKLKLUfUTqK)hFLnln)HnzRFy72vPl3MKjztb1npRgXBJiOowS)WLJG0sSPrS1sEeevGIWVplpt1JZVRx)FNmoVuCYi1Rg0wR85HrEx7dYiwUIpb)(FaRj(b]=],
+            OmniCD = false, -- uses OmniCD defaults (no custom export)
+            BetterBlizzFrames = [=[!BBF9L1YUXXXvuoMbW2bXadhYHdF4ym2ripqGj0dRKyTrEg(qdne1mGZitPSXDnDxZ0Du1DvP7Eej1IGa)f4fbWzrGrGwL18liqRZIaTj7YI5dibGFb(w1TQUR(He3WM9JQUpo3Z9ux24N33JKs(2gB)s3fjP8W95EuXx8PFA3dJsPXDXB21fUB3Pug)8U(0y6EDpIszDNftPDt5WtJsjUPDdPD)IPCVGzxkA)hxqxqNeesJpJehfenxE9hi2oLepNMEyet(7ElIjhfhqJ8yx6i2SYZomIgEPZY5lcoc2IdJitzupFXgcsC6LhftcPNsIGxLj8jJ(r3CV7E3Rf009jjP9jXNf4L6)xEpXh6I)9e1QpHEr6WfPjbE0NmIN0qVyYVzkjESp)C5B4iAkyKlPXQnzSlHrx91O5nHp5P4hoJdrh9hEmeduRNLbO(mPz953(AC1K(0dGGyIJyDFWcosTc8WPKu5T9fTW9O30eE80ErU(84Bpz4iXwQ9Q2O2AvI0(ITLlo6VNsflsjPb8O95mESt8cbKWPjXp)27DR9UZuW)xaVN0PxetvVZPpO)xo4()NV77(7RSYkdU)))R)6)mCXQRkA5rIF2jau4XrbPQid4iTqxt7Zk7WxSMioikvAOJfug7yVe4EHKl6Vy2m1hkViP3RYT9JpyR37F8sd(q9Ebmab2NrCFglibsjDWNDCOGhNsWLxg2Ce7I2GhT2VBnvWdFiIHGVqhOJ8u5Gb84GxirXShqeVRytxvo54iVaxskxblgteoID0yPJLfhqOmvM3XaTJyB1(a4JEE)bOSjKgLoe8sA6tBiwV0kIyVpSOvmoKWyQGMcWvk0QWZF2p5kc8ctUuqbl99f7KbkRzt3X1xwEmQMQfNVXNKmM8CQNZRGR23N6(mQ3JdCeTXvC)I2lCFOchqrGHiRfZakRc)iAotdKfWljDaz9twDWaAWC)02InIjUbewEuf9Y1dSdM95qAe2U1uWszYsfqcEbuak98Z8dsPY86MIDPxqcfmAx597EV709x6rz0ukWd9R2SFe4VIDpu)k9Q(kI1HOn)8hMvsfedOLRZHK9w4fWbhhWThqNAqU4LjFSyJeavmYqE0h5aCeBqufVL9YMZcUyaLWs9b2cKIzdlCjcA7Xys2nvw)qg4OQDuwXbGHzYRLg6P8Z7fYxeL2WWxueBVMWYOWcYRvBLfzMOn)5uaxhqzEj2LZnPijJNjSpA1BT3Nzi7kdkAPIbzzAmc0ccHj5V1tTH62E7dPjjNea7nfi(STzdGzNkbiRQ6TXWuTpRPnnkU)BMXw3hP5nannrV97QlboTiCf4Sltob5lNInqY6diUrXA7EX0iYJGyScXmec(XahTHCQqYAzX4NFoXIEtYl1ZSPcrUoIpPmp1a4(m5ZaGvKNCFgT6n373Odl1qPUwbUhmUSdEpRwkmssc2xr8XUz)r5op6Ml(I2LBJHn4fBftcs0nSmDItJbDjVbgxSZ4PNE8dgmrSbuFokR9AYiWa5N3w0XlirAVha)IYKovp25Klt8xMZmHzQ25UAHmig2RfVEDj6CFrttVr9YK4CnJoN4EPSMHlJF)Tvme6627QA4AWpyW(x8wsHz3dyGVxJvBi2npaOkKlsiKtDG4dOZrdfzAwjZpw0UKhHH4)9uXpTUeWbySD)daaOOq5VMEz7sOFyZmTLwMznjyCUJvz(isKhnmWfbHnHulIkYyDBvQjYWyxhdnODJsV3V0Drd7Lzsyc8nckSnstpjqaLhncD1yQQZ30(dNmz4jVmKlEmQHkRkr(Lpf9Vgxd2SY5ggPsfnQHg7msQR)dH4UVPMYMayFQmulf62IlsdcbsyfBS8dsCUsRgwYnVTPZRnCUtUnLvxJHZnlSxwzltfqj69CfVQvE5myBbTZSGi6rbxaIOQ4y2u6BuweLAVWoryfa2U4x)wa6ha7ybW(QnAKvfPuxcOHO5pTg14QQOxN8SaD26KK5oV5ZcuG4VsTyz1B4D3UUkd0lxMjfuvgDfcDq(QcPmCL2TAZrRUzByDKcRgxRxQsaxQ1Crvy2nWV5E)2RZ1jIf2)vOZJPouvWijfkukI2XWi2LNqTjnX9PzsiNN6NjPrEKM88c(TQZI0QelQQNz7fgjhvftwP3LkScoEpOm85uPb5FDjF3FzEDTs)Pn5Re8(VEhZXlR4AIMUY9FSpjKeL0NTG686mYC5tKbW7i2GdVUHEsUhaoh4wBxYsEm8ceVSdZwTwB9yQGNeO0sB0u6OpGxTP)2IsAmXZvcg1NxdGT8Hq1hiRzmneu8DkKUcFK(GBfLzGKhnl3H2r30Usy7LIS91VmD)xrJtHvLHhrjlx)vei4wjHFLRIVtzvaC5CjZ5d5epa9m2nMsJ8nuA1ue0wDAi(85mQ6OyOsJTENp4JeBvhoc9Y8tnvJIQFwDtxymNf41hYjZJHU2Eo1iAaRl2QAPSbNvqQNPj1Avg6rM8v7w4BwEkfMaqNSOB)52hI)lB0OHeJCxX6sn6du9Zu9LuSUQ2)JtbhsD0QsdEqRm5n2e)jnEZmPY1RnWrxGZcpWtTeMQL2P6b)T6rwMPlVBKCZE0Iqv3OQTfEY7EDg2vhirIzJm3KQfEwBl2sPYPawZQdwwKQK(l7uxHdJGT8UrTY1QyafWsfugTmtyeoiLLiB8jeypvCXRvG(br9FsngzL9C7AoZvWlEbj2Zx3dXk41IXtsgoBFiteZzAcUDkNjTffyjy6jAbtLufJTNwVss)ru2mqYbvfvrprFQ88En34TiLaa7XPMd(87wMXayM1sHaMM1Chx14plC8OXWLWMvf5mYmWcGT1Q7JrqCDJu6COigcJDknYGjaVSS7JVLu5YZCSqHvXSnQ8XOaXm)b7Ui6w423cHiRxGOfpTWU6w4fUzhBcWc2slRbNoC)d(9CEOt9CXgHe2JrbqVq1KDsUVDkUGid5t0JMLEHmdbTDsG2QIo97F096QhWz3Z4NDVU3EV7cN2Tgcn95f)GktNAWcqoGP7xL24Xph3R(3AVBEZIZqalX7O94hXZ8zfVmOGDW9)2Mn7UYkRuSJGorziwpGkxtVYF9G7)F)(V)FQgm7)dVOo1Jwf0zdTTNz(D1X2AbEnGj7P5zrNNbofTKtz(bq)qrUoSRK3Be2qW5vgmOwBHDusJ3kQbrhc(O3uVfn5WFkBHRiBVyzHnap7FhG1GV0(O98V2PoP4AcW8YrLHc62r(b1ieZhERHGO4iu0XaC5TNexbR0sBxNkEvMONQ2OEYH2d(llpvObeAgBMRXPQa8IJDgTYVr(Fjso15RMTGXgfZNfWO)Wd!BBF]=],
+            BetterBlizzPlates = [=[!BBPL23ASXX15HQv0oMXPbLCj5UKuKIRKFePMubsQ3kYXLlFish(yn5kXK2I6D4UNLZun7mhpZSKIkXPTQfbT)kPcxuKa0uGyK2FLFjK2lqBb6fQa9X)2qe0Yc0wxWeCVxK(aPS(2y0CBv)(opM5CoZqArhbykXzMZRVZ37xo3lxUHvK1x(K)vp2JwEZP9D9dw9wLFTUG)qpvDxRWWf8A4u3kYpyUahIxd3DwRULlPl6a(r2KGLPniLB3S5CoUrKGPN2Moy7qY0TdJ8BvLCVO2bK58dM1J0ANA0(I8JiTINq5e5z1IqDTIiFAYot1oWs88xYMa)Dq8NZ2CYnX8W7IS3WkawqBNgKLRm98WFTgPUVxdRGDQqIcTPfINACEX9jFUFOf8RS5ZMM3LSfXDwxNiYcWG)Sv8dZrpDtX6Smn50TijmCjhp4dTPJKXPFDRO62l6egvJ(tx3kmQSfS5HNh0MgnVZM2UW)HajCDNX3lk(L20sepRnCjlRUD5arNqRihFVA0bQRbuf7pA(zcS203RjBYlDUYLRCEAE9lUpdEK2LDmXrZpH9JqTPHDjadx3gotUWg)5FCDCZbatCNyN(QjKp4(ISc2KefVc8Noa5EK6TbWOXfCFrBuVkEZJWMBtbeoYe1OJsvMagmj(ofWaVrLNz8lm(fXFEXlNJEQM(WXVQ(Qkaf08RzBfbGssJsZmNaeuObPPvB3O5SAqwPDeCIcXv)1UYzDA0DZpAz8GTXmF6sWMiOUFRweVOtIVBWt(fE5oJrlUK1MTdp3ubT2PKFZsWDDPziwnoFNZW(QU)f(sWh1J5RLVDNFa82(xYjiWpO0cTS2Kew6CWmsWXtliXTMgVLyNCo0oFD(1XuUBBTt4kEv9P20rjiTZYK2rbwUCieGxjjuVrxDbxLg3gcW(W1TT82mbNQSFqdb2hq04724neWOfXHphGqUMZ9jdr7)nBtctMTP8QB7huEXzNRkDybwFcoFL2WyruxBAFAKeZYqORfZMaFwz32IDb81auFdRidKunC8o5PdJeQXONS9EihdQrTduWGX72NNoutR6iXs8KUIN7oR7h42WMEgnwbHmostt8yOn8JiUN0OB4WXhhA7V9Y06vDIyNsQvq0ov8D8y87ytwTDTcac4fet0KvxPcTxNwu)GilVOPNEgGioOvT3ULpvU5PdPdL5Ob06mMVvE2XVWLhFYCDrhrWhzzFphj3chaUY(8BuPRXVWLs(bThpkUFGLJyfsyOhib0LzKrtCjGtjd)z52T2GaWXqYsoUUa8kSgDKSjWcJwYVbCQl2aoc46EhRaGFEDYkEl6VPJhERNGijXH6JwKbLINiCsQAhqGzAWy4cIreodPjXl0zlcSh6X86dyazTrOFWggiJD(e0(IVoR6V5MUKW3yJn)3PNn(PRbxAsEKvCT2HeGCUHJQn9fpIp6wTTcA4yHFw)AFgIV4GBYIPE8oWm3ggWhx7niQhs6nxIml(sCBqasO9UHrw1VRJ3MSzWM2J83LFmiI5i2NWYny6ncJjlShlK(vO8WA0tL(fXNyaLmZJgh)4mhXMHVS20XoIVHlpEOm)caThwHb40qQOmR0SP65eXTxffZv1FrstqQ5G6sPvzVmGjUexfKoRLFcGXiNOA2wuBRqNW1aK17opbN5BXzcdVSIZ9iUYzlbxGnn8VLqhXGX70mgUcUxaPrtyoAeZ)DTODqgI51zejKgBSLeCP1KrMH(n9li8W1OcoLifinp(ZWF(5wDHF2xV6B8gxOA15uqMyRQjNV86CJes5j8dRQmh7hjy1X4xtlYHa4rMl1cVxRS1SaDs6RtbhGEf6RfgZx)7FNvB6ATzyHnA1oW1VUniMeLJEZ5EeSpd2HZ3Vq5iyzUs(nYLFZUYhKdKXoWSaBg7sZ6sqb4wULyOI3PtRcD8etsJVrh)cDOQd7a2O2WXRrgFF33CLudG2)CobKJCz6(t(EPhwXBfqaiEqjJTPXcUC6rwqos9fwFGfFP0hTBf43gG5EBMXEm6VnJtgE9IF(ArWk2kJrnyU)P)NPg3dxePa2M4AULoFQp9rGIpTSYcKDUVB69)swEW3ciizmGV1xl13V7AeRGSpTDV43j9Eb0uSH)2nrUggB8Hs9XpUAaPfOax6P(7nw6n(68lA5nfDWekdjFoHWRBq7rqTJVuOSwHmSNykxx7hivihi211ojE26vtQoJU8agX3Aus9K10JwnEhXOV3xNMhwat93zZ1(mr54Cj2Q9gZkbKoWEgQ9X1PNsrtpjFmsdjl0ZsHnNVNLRQ2JlOPlaOMrGLtJwa340NYxw32rKziY1BkVgRz70mcnDBg)T9ufVJC6e2TahehuCqI0vDtdx1F7PAbuorFe6GnOHRWSfzz)P2CZa)yJIZ1fOrwI4OzVhOs(0Uo1V76aTLDodjvZq2i2EtfbVSvJa)lqNh(HlauxKPD9GgQeZK1G6raIZu16Ck8YfFoyrTHnYcg3GT8mWoiznz3Nd29AAVIWqehJoGHCmful4tyBdewJyoaGde)CxKDESGn2sG4atcgmkwzU(1XUtax7bWjBvZlyBv8jR7nLlG4m5exy8DJDJaknZMoSgeCwpxCl3qaElj1E6oKGiyEDNQXVimwKue0HiKeLJoAgeyQg0RRB8Y(rR4nxBx35btWkYnopz3aguc8mbz5ffYFfpOrIcWFSJWbaXpd1qhqQuuMLd8WPaOZuVRyOylOO9jyraNEMbXqO)LP9kjFa9T2QchZzqdmefKQ8mbX06lXe6kaLN10WqnDlMdftdMWkVM50tZ5tKMvQbfvGvpU68lm9NELBxDXfwEwAP4JbJ(j9TwU95MYmD7aUHmOfmx6Q5W)6QxJ2JUYfL3S2(XC8eNJZKLbngkOnIoh15f4NlXGGG9iQxaC9DeEwby2eteIMnQR8MGoj(mkz6WUd7)dt7Lnjo1JjGcrdDy0CO5S4SVIhtrx7ht4i6azk6BT(JDDG0RbCFa0fThffXyZ0daUkRUWTMVk9Cpv(rtIlowkt8nzs3xtR7YWkayviOvBGvKfOAVPWduBpW0z3gVo90z43VBtJNx4IWupwvcQoeGZQg(M7o68KlMYyqc1PoyqyNfS78A2D(016SODNLS7SSDNvS7uXUZRxRZQGXa16uTwNBB35o2DwhSbgPhMHesCj1JIPVwzlsayctnKlP3DrEczivOFdySajShM0BqPJwGbwO5j1OLmqwquOygcmhP051Yp(UXOZC8oMgdYHWCK1l3zSGP3PURVhXqze4nLNdulk9JNCEY9s)0hwX3DhqrhQTX7OLsRdJUORnkVs1QRSenpCrhenLCpZDN1O6w6VK)goUor7Clx)Tb42C5TW1axPn6IoukHkRsc9Bhuh5mJWDGnEv4Vma9i7GRFza9pVHemgzb71x6sVDZyFacOPzigaVcwcVAiXcTqKxROPzYJXxZnI1E)WwwUUOTxmA5ZtZR4LN1CCjE1j12n25YCVsnCwA(WxtGykKaCzSsCqnOjsTuCuqwcapcdKmHy6)u6Ps54vWkSzi1DGDBnqTI0tgd)8zb6oPUoczjAGxMuBDo6ktS9JL2XHhZBORo9o)GuAi35f1)K)M7M2AK8R742OeWyO05w3cfkD3ZRBlYjN4dLEI)NvDvIqrGQ7qb2acNRmqAVrTIhXEFD2)alBlMnSZlv6r4Cr7uEmG7aG7ybu0tyA7mNGnR4du2f2BO9U1oigpIptFuAHSJ1sT9rKxaihlpVyiGVbiMuR6rG97OX8GnIHrOwCACzbb74fZV(gDpAUMOTYmtjbYk4HGWgHbwpaVermIARY4vHctEymsTDzh4vdEY8FLYHGojVs3l9T36bom5tWERZyREhha5UZpYUZ)FCGD(pT78Fn4jFMWop5v(wFTFR9YDc(lyKPxbF7yD(CD(r1c2gPEwXRgaAzesFZtGJl)VjmoWO)TGbctEN3KpXCz(mhzoblEaxxSo99zWVFK)8mxOdwlcyngc4c8dkSS7L7KW)1fFX67THbx9DKJLnYRj4NWMaAVmBrxJMyFzQ5OnmhO9XFrCh)GgWLbAKXmFeyZFptOsFFc2PBz23YoUEWN1w8z4kp5fZbF7g4ncO2j7Rxrclct9DIP4jNhSD93I9v8tXLUoZCmw8tU2E5(q)RRsB7gsEoysElCs(pzlEFFZop5wDFZ1JhjmMRYbc8J)Jxhom2y0nMYbVH1p4)24U78)QiEv(Bfybyt8pmgoPF09WpV4yzErTxUNjZ7MUl(3ZavWraGNhWWEx2Fll5sOdDZ)LzdP0XCjEhLLyVCFKdzwpJgwcd0E9RkWskIooXBtoOI7NNSXvwNnv)d)EkxvxKJpFz8Nxzsy(2lx3Wgz)1D8A0SDWoXhv9z6rDEYuDx8Sh(MAVC)ezV830(dWGk(cXOS99frFtbAedYZknTlb0QrH4ig2vJDoWH(Iigsrrajspcd0K1yJ5LK3jVcGYULyAZ1LeXDtgIR3X8I(LXnsH5c8dJsXd0CFK)pegsJVHCB8ZbBJG3pwr)ESv5JbRsN)JuZ3xHb7doMB5ZNWP4HW0UtYw46xmHrfaQFw20Vf(5WV(H(4sMFGiLTvpH8vL)Zyy(xhh8N89sUI)mWAfDeh39Y9CaVPZ)9(3oC(7ANgbx97)0qPDZp3t1x95pEqM3sNjFxs(7GXSTiaGAZ2KdHMfoOt09IFhvA2lDrMNo6c2JJbR9NN)XCsubkA)phBz)LokKHFz5bfNKT5hGCDXb4IV8N8VMHP)RC4IO2l3ZMPiPUV5dyO7lBH25c47hj6EFVfmKV3yjW0)ayl9fsGPtEz2(6AxKry)CmbtVYFeJ1F1alV3STJ7rW6Fj8ZlCWXNVZmV7tji6fFA)WUV5VXtb339Y9rZMJ7i)Fpwy8JEUJdw6LEQpeJE84lmY3)4TR)PooZE0F7t7UEPDeAYS)DiE(T8BhwAnpR7sYu3XUV5VwtHyWTb9KpemR7W2VFIM4vwFzIux9PhO(tFett3N)vYKdYE5YNnhJc)WNg2y1)jzR5ZNT2sN(39PyoE3Jft4N5DpoFD3f)8hVt9nV3XA6V5xGD87jtPVDx8tDSw8FT3vr63E5699tGxH)1JNW4rE3JAZoY)VJ4T)poMBTr(ZoMBT)9pacig5V4yUi)WpalYl9xZalfYMYDK37dYu(3CKt5)4Xxmt33C7pad60FJNcQZUFP9oYD7)7JhIXOFYFSKE9)5yUA38hNv7M)6)ym6OJjfZOF8JI59OFQJIn7ip5yXN5B9ohZT2jocLap33vIene8r3prs74mIHRnj(tuqfxC8VpiO6zEpy(E8ASSI4qel(qyQLXkUUVhZBECNNxJ2VEUUYD(uo1GhSwKvKtDBAX40fv3JVRYJPWWIuvmjKYlag21Gug9w2aPcT6g(BrQ1z98tOeQlMh2KHerp9uIDV1AVzBRasnApA5n0uUUWmnIrQHTINi1O4rgTh0XzWxwUDeFtABeOCroRMkIZC)3nghKOLqUmNMYZRXg2XPM3meCzBe7dFEQ5118V6F)VZVZ)RtCItm)R(VW)hPJVoFlCQurCrnUKS80v6m8vebWgDd4DDO84LHjngMOrSS(XMoAwPUCCQjJECgaHcpBUqtjSPa6wrzuvt8QyIROr8fy7c7ec(udGphOviTFwNdWCS3hxYBb2jWsgQWdjOKIiDyt5OLsxG2hTqANSJbrWmx8ssN28JtFH4xnJAsUgh1lCfQ8HUYLUWetEzAFklagGh(SpMr44NkmSDlsflxlECbSvtavwm)2vU3zNN(YkL2QUTpCfWiUMla2IX0IaztMozgWasHFGbT)aL7fLm6ooN6IJxFso3LGfXV1Zp((Yq5jcLWEkHzxa3sit)7oiMPs5n5oJUFnYw0N73YIMJEgEG0yJVIm4hQFzO9UEImQve44(vJ1AsENoswXoPSRZ9VVvqdCuzMTQNoRrPsu1NUl7tvicsifhWQKoLSqdks7GoFDAbXLqzR63DtwMxXooVgtC3fv)zx0rAQfYvzc1jISeTyCM(AYjj38V6xUNEkHCqmQvbE(5SPKWsCmgk7fsgGxJ0iAEgLOmzaQmDCs5TcMCV63VGTy4N2dnvQ)pOmbmM3pW5((ygqjt8IEtXHfWjp0emGhS3QPI7iFzsWLLPmGmXEGBjtURYCfwMXI8Py44qELouUSaEv0mPae5TrTDf3qC6YZKKee8DBYSa)XmEoyur5u5fmtvfjCQOE4BIJWFn6GM5YAcMUOOqK5DsSWPHnZZNvJZmKAYWCXsvtm99JZhItLzEav1xep3SeSKetl6PoIuEbo36OUyc8UMtd2IMkXUIrCbYcjhkgY96or2vWRtGV2OMjFReGXWpSHnaMP9HbBn5fM4cxBdZK9ivs5viHPHAfmiZxvzAYiKzNjBsoMXphTyCUlPiDGbHtxafkfnKwk6XOT786Okt6qorYMneRSeK7c5640Iexstm5ljL1Xq6tZQyqsLBRScqkM716rlVILxdslN6O4r4ElJ68koSLXQnSMTdXTrCA7pOoEPa)iUsfU6e5m0EmbvxlTdzj9eWaEWdtnTUOVqilw1SBNP99DB4VTNq1Vv8wMYlCd6zZmnH0rLEaioEnRTyvTrw57mRctQrhOPtKm)Dq07vAI)MDS(D6Hcwic7aorLcVX(ZUQCg9UIkWspDCeu81y4CZPjnVSFeC5OMis3I4ryvrec0)vPJEKP6vhY(j5dbJdWUI8wA27H7GZo5f00mBvF)iTC7OR8BIfYY1U6LYVrUD1kKNHVsNwOhhEGi9MAy)aQa5INekSzqjXao1S3ZQf1LucbbLUXflDUgGO4isPwKZ)4asKLJlFxzVlH93a31qGLjTy5YvUrjbpGsR7V(nkn5fU8fUcB)eZ865P9kkwk68YYGeiJKm4t0S0oj3kv46NQQwaIN4QAPukTkMXFz)iwYtX1fIouMvQfEVJPEqMST4klpqiIRVmfhPcVXdqu)fbKp85aNlB6ynW1CEffeJt8Rf8QSfANHHg9cQiqQeMrvm92Ht1mTXOHx5oZIjlrkLBNdoEMknWnHZ(bwE(Emc5e9veWUrtbGUThc0LjFrpX5ttLTMnt9obQ7ihQAQ)UKtdpejxMoiGbsZ5a82bJzRrpncEILsHCd01n9aodF2UFBhkk6lLQ5cGN4iCwT9JIDOi7bPjwdPz(jpVVuTKOcjsCMdnR6fLzuLEMxfhG1aGn2H2gvikORAtmdgwDnFxNg7RROWqSvKjmGx)OM5nDyCM2zuPiVG2NzKE1X6FmysElAM(GdMkrbJzXxWurNy5g96rzGAwwsjYO8bnfyRudYjQQy(Qb0PNKvWNcaxKdHl5SjMxwaR1(tLEH0TihZClmVEAujYKEnHKFwrf1KsDibxIxqA4UWQV1TjEM1fOk7gvdFvupj2QxJvsjXGhkRYkIL6VLxBXBFl6WcBfIRgjenNREKnpnVfLJ9kOKVqETkjl7haLqunRWfEwfHmA4XWhEUdIvcnJDzmrO0q5(Wef0mP9z60NO7apBoP35btCHjgh)ZJe3bCgQ9w3mjVFu15xyzzElNOcCmjiM)Yr2GTFBANrcfluWHTBaThYszdbUWGIkSSXYKTLCVKOMM5LiRsWGF1wrtZeLWkZyGWTNd2MCw2cvrYQazRSvLFwFw2SRPszIQO27l0aojF48f820YCv81WkxkB6sv7VhkB6twXim6gcDJe4Vk5ljCDy)yUQQZiaBMfohRw(StLZJiZqbV6IAuIviG8gWC1nr2pXKsKgLt0ggwsIAzYiQiBjCYanSYZmbOZJSW40OJzga(2jyyp(ZIcfjIkwVpvVm0uwIHfuD)MAjjwq31nsV0cgYibjO9T41hZGbBnD1Ko5kBD1m7(bPlMNIk0TcLvySWyEKr11lsBOgmLoOcpLvmPVeiuPXefnUcJUQYSeBxLu0HQUSPzBTxUVTA1PQLJOjLe0OMlnqzu1Atq9uHwh6mmJTCCinJAy(tzvCLQJv7P(ymDJbOuM0NsmtAEaw434Fu9Ti3XbfrUBl6JPpLbho0YPlDvGnxbD3AfdDES6g0oBhSGAf0l3R5I(LqCHLmPYgoPONebpyFb22QK6C6lPBmXATWdoBCxIDJ5F13zSX(zoXjorxZ)Q7U7UVZtEYtYWAyLuK1W7RGG08JlZZB1nUTOuryYAyo5kxoZISLJAnKrcY6pLNtlwgBcC0o8C)gfSiEeQbIO5mCOAMZVI7nvLAyY5r1OcZm7w6F1b0gbVaGDb7Y7ToMjDc)qY(rnEjiKOHX2wukttmD10xyMe8M5F1V)nUw7hUwvuczkDh3l3FSjcf)Sa2tCqQc(FatNLZRpGPND5QZUQrX2jk1Al6hoTwxVrJ2GODFVJN6vbcDlmHy4Liwgj2Qiojmn0ZT9PBhGwpH8gTbBeOw1bsTYKOTjepKsCkVgX86vANk45FaJ72vT2w8VStfQerdMXZpOLLRGchBroa35TrfTfsrtPMCcFk9ZOYZZ05kWzjlhqai03D6PNXpsRvhKOGl94Ddaud6iaAbJRFtoRcVOP50FDbM2MrprG5AtFjDYydx8iVsyrq9Y0(qmd(uRargiosgCZtJBkjmvSDcaYRv4v41cZG8gmTyHnFCs0rnFPqJI12P1g(Uzm4BhM4WvZk(uPOYsPY68GSHRXKnacQokNwbw7NTgyk(QTGz9Yi5Ep4H5vvH9RMbTtg6eJHnJFBMC)Hm9eA5BL4l0dVbazN0QuW2zH6hQAQXig7OvbQNa)WqrzFuifAndJ64Hy)WnCIAI62e(fvdeKQkeVC(jSZpPwh5a01Y1bgwd2hmh(bxYo)fzFwIZc0BrgiRXzCcH3SZvWbW)6IA68GXBM)j3j)e1yFsT8xgNCf9B4n8JJyotO3xWRPF63Ra4yc(s)fJOVyGmHSxPHYgtKPOVzqGvq(lOQHcZqspSjHahYdZpBP0Mfliwux2yxbOfyby2Q9i)TK6TcZ8ihwFPryZzMtJTHIgmQbW0YX50PfJRdBUbVkHikNS9QXDSLzqsTt1ITeLv0rD(R9yPnbIMZHUA8Sy9W9DFXuotgF(kE1e6bPh5qayXVw6XujjLcIdDJyLS6yy89s)gC6KUxmRi1YWo6rKHjVEBuxtwKI(4hraM06NAsTa1R6(4AgNNujQbqxOFOmJou6OAC8JAhW1XKx5dSPhLVC5jrJMg)ItayzzWrMpRjruFL61DB3qOP)sGmRoFDApypMylYQaaVfZjR1YmlkqhRk6nB8Y665XOfPeb94qOCTlNlPdJzgkRS8zlMGgXrJx2X2mUTeMTKuECXEhu6rGbe1ip)3LwmAFGbnoqWK2yj7hPe7c1gKtz)7jTd(0PWRsI0mOj5hr2e00JmJ9bgbOOgThPBOI52052GHfLoYOjQwoPgQ6PQlWWz5AbPIaNnRYWE2eQngyCKmccCmXynZ7VenzZSxjQp5Y4)3RcEFs70sBNZF8EN8JPiRkR0OH5zHgFyfxlO5TUAhMIikzJub9dCYj6mhvjHZmQFxHx5(eLyoLmJyyIjBJW6WLS20PUSrcmXf5xLDLwXuKM9N)eMDcogfRP)A5DAfxzGZyqj0BDg67N4x1dITzigUFAnouRM0tSKDJK(LS01mVCxTRlf)PjP)qR0fbkUF0xDYq3YafyRROtvmf6IxDzKxKoYFoN7P2gXKVwXxmV07FGtL9MG80u5uaIBPfUBM7hoWWfv1uuQrs2Rh3(9YncD0mvMpXSOXokj7MEa7kxzY8BG)JRFPlByOLsCkGlAGlJRiChZry1ztO9(XEguYh1qduC4BeIkhsOfsLxmspbNkrwID5WaPAVgmRVpiY02PHZ0uqzVgkvSozHicK52eBTFjoMaDJSoHaxqq(TTcXgaOf2OPwREayGSQIQtXIxhG(kwV8MY(TO2PRzDTwUYWzHDfxV7fu4kTblXeAG7eGn(aPu5VoWi64PXFg2nSngH)J7SqukHCvcs9q7fUml9A4a2Eu4nlaEJLTRYvSL7SzLxoMrDButg5A8W)74IUmnUtcWf8qztvSYpx5QDXffQmQysKK(xHaJrQj8mKqKyb2h142MViYtCL4gZuIoSFwP7GLoKunar7Rl2qf7tYOiHbrX0QCiyKnXfUymmhVP4UQeDm2)XpQel3D)l)QF1)e0vLJMDIig7TsdM(G97yc1otBEfHlIGxV6H(wkrwRpZCyPLSip7YWetUrhJFHlYn6qplN59wrtZ9f2GFW02K63L14C5XGqRvmfZS)60Xq)Iu1q1eU)wyriVwg5ojx73u5UwcF5IMVIH1tIoLcx)uXWuQYXGX4oS0CkjbmTv78A65U(J4DRewgSVRcG8(K8xu0SdnBjVM9xlHXmMcLfnhiDKs(dtfYT59dJCq)lDODNj(vDMyCkAoD6dJIwMfA9QN(oCDyZXvawYwI7OKHITtv20BITuL11WkKDgLcdm7mZ(qcRKMQ)sxC)IhHrDRb3KryoTHyHxlXN6ksy1969RHPdFZDqTlgwZGerV0((cV9NwmbsVDmzW3RA)UtyGvrd(akDq3S7uMvQTlA)3Isndb9vJrmX(fA(RWztkDuCm1tsizKPd3mIQ89StmEQWpQ4Z7dlqzyM3Q2RP1rC6kNqGwgTG6CgxTYaJ9yU1kXHQnlz6PA6YcuYtzOnHSGqKtvsyQs6IOZX7zOPBqmVzNZCY5YUxG2jq8US67NDcLVmJU7zNO4rMUbE2PT8Lz0Ko7SL4Lz0qo7ST4Dz22n7CV4PnDJ2SZoYxMrJ1SZ9fVmJMOzNpNCGz0Ym785JxY0TiZoVL4Lz0rm78fWMDEPKCPcuz82EwrONtrIf8IM1rLhjBnCKDiPH0YCqgMECt0E4Su9roWbt1bUpcEtAnBpow2bjuS8Mh8bnnAM8mWYVWxk9r)fKWSMF00VSK8ggB18PE7zLdnZwOecsZ0xtIsarHLKI7(63iE(CMvbBry5izz0FL0t)(0Z)EKcxiJsaquXuzFnQiXkHLfFZNKMJp3bcV9n7weViMPoN9iKlmRxdPuHRKr1zWWr27KnGl105ztXSqz4(JoRWIl8my2cazPwzFsMP8gwydwWNyTJr9eHKZv8T56GW73NgTfpMxfWag0fTu2atTgwPrkUWSIgpJpRQSbrh1mw2WLgpUsteX8r5)luuqR32hRkKzSLfH2RgThtB4u1dxxDecD4qqTI7yfmvDmenydn02kazQJZuE1lXMYQcmVM)wexGN(Wmiswuqz1iX9i2Dwm)4Dwn)eDwa(7LaBf7RfaC48LIDzXqgPFoBNWIuDVnX6HdtdCuyeM7X1oKgEUADO9a8)7QGxPpQjyzBLa)MGws)3d!BBP]=],
+            EditMode = [=[2 31 0 0 1 6 6 MainMenuBarArtFrame 8.0 4.0 -1 ##$$%/&('))#+#,# 0 1 1 8 7 UIParent -6.0 52.0 -1 ##$$%/&(')(#,# 0 2 1 6 7 UIParent 6.0 52.0 -1 ##$$%/&(')(#,# 0 3 1 5 5 UIParent -2.0 -35.0 -1 #$$$%/&(')(#,# 0 4 1 5 5 UIParent -2.0 -35.0 -1 #$$$%/&(')(#,# 0 5 1 1 4 UIParent 0.0 0.0 -1 ##$$%/&(')(#,# 0 6 1 1 4 UIParent 0.0 -50.0 -1 ##$$%/&(')(#,# 0 7 1 1 4 UIParent 0.0 -100.0 -1 ##$$%/&(')(#,# 0 10 1 6 7 UIParent -470.5 51.0 -1 ##$$&('* 0 11 1 6 7 UIParent -441.0 50.0 -1 ##$$&('+,# 0 12 1 6 7 UIParent -470.5 51.0 -1 ##$$&('* 1 -1 1 4 4 UIParent 0.0 0.0 -1 ##$# 2 -1 1 2 2 UIParent 0.0 0.0 -1 ##$#%( 3 0 0 0 0 UIParent 319.3 -183.4 -1 3# 3 1 0 0 2 PlayerFrame -36.0 0.0 -1 %#3# 3 2 0 4 4 UIParent -170.9 -118.0 -1 %#&$3# 3 3 0 0 0 UIParent 367.1 -263.9 -1 '$(#)#-G.1/#1$3#5#6(7-7$ 3 4 0 0 0 UIParent 353.3 -269.4 -1 ,#-#.)/#0#1#2(5#6(7-7$ 3 7 1 4 4 UIParent 0.0 0.0 -1 3# 5 -1 1 7 7 UIParent 0.0 0.0 -1 # 6 0 1 2 2 UIParent -187.0 -13.0 -1 ##$#%#&.(()( 6 1 1 2 2 UIParent -202.0 -152.0 -1 ##$#%#'+(()( 8 -1 0 6 6 UIParent 42.9 174.8 -1 #&$a%$&6 9 -1 1 6 7 UIParent -470.5 51.0 -1 # 13 -1 1 6 7 MainMenuBarArtFrame 40.0 2.0 -1 ##$#%) 14 -1 1 8 8 MainMenuBarArtFrame -6.0 2.0 -1 ##$#%(&( 15 0 1 7 7 StatusTrackingBarManager 0.0 0.0 -1 &- 15 1 1 7 7 StatusTrackingBarManager 0.0 10.0 -1 &- 16 -1 1 5 5 UIParent 0.0 0.0 -1 #( 18 -1 1 5 5 UIParent 0.0 0.0 -1 #- 24 -1 1 6 7 UIParent -240.0 46.0 -1 #]=],
+        },
+    },
+}
+
+function NS:GetProPlayer(playerId)
+    for _, player in ipairs(self.PRO_PLAYERS or {}) do
+        if player.id == playerId then
+            return player
+        end
+    end
+end
+
+function NS:GetProPlayerAddonEntry(player, addonName)
+    if type(player) == "string" then
+        player = self:GetProPlayer(player)
+    end
+    if not player or type(player.addons) ~= "table" then
+        return nil
+    end
+    return player.addons[addonName]
+end
+
+function NS:GetProPlayerAddonString(player, addonName)
+    local encoded = self:GetProPlayerAddonEntry(player, addonName)
+    if type(encoded) ~= "string" or encoded == "" then
+        return nil
+    end
+    return encoded
+end
+
+-- false in the catalog means "use this addon's stock defaults".
+function NS:IsProPlayerAddonDefault(player, addonName)
+    return self:GetProPlayerAddonEntry(player, addonName) == false
+end
+
+local function GetGladdy()
+    return (LibStub and LibStub("Gladdy", true)) or _G.Gladdy
+end
+
+function NS:IsProfileAddonLive(addonName)
+    if addonName == "OmniBar" then
+        return OmniBar and OmniBar.Decode and OmniBar.ImportProfile and true or false
+    end
+    if addonName == "Gladdy" then
+        local gladdy = GetGladdy()
+        local mod = gladdy and gladdy.modules and gladdy.modules["Export Import"]
+        return mod and mod.Decode and mod.ApplyImport and true or false
+    end
+    if addonName == "OmniCD" then
+        local E = OmniCD and OmniCD[1]
+        if E and E.DB and E.DB.SetProfile and E.DB.ResetProfile then
+            return true
+        end
+        local ps = E and E.ProfileSharing
+        return ps and ps.Decode and ps.CopyProfile and true or false
+    end
+    if addonName == "BetterBlizzFrames" then
+        return BBF and BBF.OldImportProfile and BetterBlizzFramesDB ~= nil and true or false
+    end
+    if addonName == "BetterBlizzPlates" then
+        return BBP and BBP.OldImportProfile and BetterBlizzPlatesDB ~= nil and true or false
+    end
+    if addonName == "EditMode" then
+        return C_EditMode
+            and C_EditMode.ConvertStringToLayoutInfo
+            and C_EditMode.GetLayouts
+            and C_EditMode.SaveLayouts
+            and true or false
+    end
+    return false
+end
+
+-- True when the user can apply settings: standalone on, or ArenaUI's copy is the active one.
+function NS:IsProfileAddonAvailable(addonName)
+    if self:IsProfileAddonLive(addonName) then
+        return true
+    end
+    if self:UsesStandalone(addonName) then
+        return true
+    end
+    if self:IsVendoredCopy(addonName) and self:ModuleEnabled(addonName) and not self:VendoredWasBooted(addonName) then
+        return true
+    end
+    return false
+end
+
+function NS:GetProfileAddonUnavailableReason(addonName)
+    if self:IsProfileAddonLive(addonName) then
+        return nil
+    end
+    if self:UsesStandalone(addonName) then
+        return addonName .. " is enabled but not loaded yet. Relog or wait for load, then try again."
+    end
+    if self:IsVendoredCopy(addonName) and not self:ModuleEnabled(addonName) then
+        return "Enable " .. addonName .. " in the Addons tab (or install the standalone addon)."
+    end
+    if self:IsVendoredCopy(addonName) and self:VendoredWasBooted(addonName) then
+        return addonName .. " needs a reload after enabling. Type /reload and try again."
+    end
+    if self:AddonExists(addonName) and not self:IsAddonEnabled(addonName) then
+        return "Enable the standalone " .. addonName .. " addon, or turn on ArenaUI's copy in the Addons tab."
+    end
+    return "Enable " .. addonName .. " in the Addons tab or install the standalone addon."
+end
+
+local function UniqueOmniCDKey(baseKey)
+    local key = baseKey
+    local n = 1
+    while OmniCDDB and OmniCDDB.profiles and OmniCDDB.profiles[key] do
+        n = n + 1
+        key = format("%s (%d)", baseKey, n)
+    end
+    return key
+end
+
+local function ApplyGladdyProfile(encoded)
+    local Gladdy = GetGladdy()
+    if not (Gladdy and Gladdy.dbi and Gladdy.modules) then
+        return false, "Gladdy is not loaded"
+    end
+    local mod = Gladdy.modules["Export Import"]
+    if not (mod and mod.Decode and mod.ApplyImport) then
+        return false, "Gladdy export/import module is missing"
+    end
+    Gladdy.dbi:ResetProfile(Gladdy.dbi:GetCurrentProfile())
+    local deserialized = mod:Decode(encoded)
+    if not deserialized then
+        return false, "Invalid Gladdy profile string"
+    end
+    mod:ApplyImport(deserialized, Gladdy.db)
+    if Gladdy.Reset then
+        Gladdy:Reset()
+    end
+    if Gladdy.HideFrame then
+        Gladdy:HideFrame()
+    end
+    if Gladdy.ToggleFrame then
+        Gladdy:ToggleFrame(3)
+    end
+    if Gladdy.options and Gladdy.db then
+        local L = LibStub and LibStub("AceLocale-3.0", true) and LibStub("AceLocale-3.0"):GetLocale("Gladdy", true)
+        if L and Gladdy.options.args then
+            if Gladdy.options.args.lock then
+                Gladdy.options.args.lock.name = Gladdy.db.locked and (L["Unlock frame"] or "Unlock frame") or (L["Lock frame"] or "Lock frame")
+            end
+            if Gladdy.options.args.showMover then
+                Gladdy.options.args.showMover.name = Gladdy.db.showMover and (L["Hide Mover"] or "Hide Mover") or (L["Show Mover"] or "Show Mover")
+            end
+        end
+    end
+    local registry = LibStub and LibStub("AceConfigRegistry-3.0", true)
+    if registry and registry.NotifyChange then
+        registry:NotifyChange("Gladdy")
+    end
+    return true
+end
+
+local function ApplyOmniBarProfile(encoded)
+    if not (OmniBar and OmniBar.Decode and OmniBar.ImportProfile) then
+        return false, "OmniBar is not loaded"
+    end
+    local ok, data = pcall(function()
+        return OmniBar:Decode(encoded)
+    end)
+    if not ok or type(data) ~= "table" then
+        return false, "Invalid OmniBar profile string"
+    end
+    local imported = OmniBar:ImportProfile(data)
+    if not imported then
+        return false, "OmniBar import failed"
+    end
+    return true
+end
+
+local function ApplyOmniCDDefaults()
+    local E = OmniCD and OmniCD[1]
+    local db = E and E.DB
+    if not (db and db.SetProfile and db.ResetProfile) then
+        return false, "OmniCD is not loaded"
+    end
+    db:SetProfile("Default")
+    db:ResetProfile()
+    return true
+end
+
+local function ApplyBetterBlizzFramesProfile(encoded)
+    if not (BBF and BBF.OldImportProfile) then
+        return false, "BetterBlizzFrames is not loaded"
+    end
+    if type(BetterBlizzFramesDB) ~= "table" then
+        return false, "BetterBlizzFramesDB is missing"
+    end
+    local profileData, errorMessage = BBF.OldImportProfile(encoded, "fullProfile")
+    if errorMessage or type(profileData) ~= "table" then
+        return false, errorMessage or "Invalid BetterBlizzFrames profile string"
+    end
+    for k in pairs(BetterBlizzFramesDB) do
+        BetterBlizzFramesDB[k] = nil
+    end
+    for k, v in pairs(profileData) do
+        BetterBlizzFramesDB[k] = v
+    end
+    BetterBlizzFramesDB.skipUpdateMsg = true
+    return true, "reload"
+end
+
+local function ApplyBetterBlizzPlatesProfile(encoded)
+    if not (BBP and BBP.OldImportProfile) then
+        return false, "BetterBlizzPlates is not loaded"
+    end
+    if type(BetterBlizzPlatesDB) ~= "table" then
+        return false, "BetterBlizzPlatesDB is missing"
+    end
+    local profileData, errorMessage = BBP.OldImportProfile(encoded, "fullProfile")
+    if errorMessage or type(profileData) ~= "table" then
+        return false, errorMessage or "Invalid BetterBlizzPlates profile string"
+    end
+    for k in pairs(BetterBlizzPlatesDB) do
+        BetterBlizzPlatesDB[k] = nil
+    end
+    for k, v in pairs(profileData) do
+        BetterBlizzPlatesDB[k] = v
+    end
+    BetterBlizzPlatesDB.skipUpdateMsg = true
+    if BetterBlizzPlatesDB.NamePlateVerticalScale ~= nil and C_CVar and C_CVar.SetCVar then
+        C_CVar.SetCVar("NamePlateVerticalScale", BetterBlizzPlatesDB.NamePlateVerticalScale)
+    end
+    return true, "reload"
+end
+
+local function GetEditModeMaxLayoutsPerType()
+    if Constants and Constants.EditModeConsts and Constants.EditModeConsts.EditModeMaxLayoutsPerType then
+        return Constants.EditModeConsts.EditModeMaxLayoutsPerType
+    end
+    return 5
+end
+
+local function GetEditModeAccountLayoutType()
+    return (Enum and Enum.EditModeLayoutType and Enum.EditModeLayoutType.Account) or 1
+end
+
+local function CountEditModeLayoutsOfType(layouts, layoutType)
+    local count = 0
+    for _, layout in ipairs(layouts or {}) do
+        if layout.layoutType == layoutType then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+local function FindEditModeLayoutIndexByName(layouts, layoutName)
+    for i, layout in ipairs(layouts or {}) do
+        if layout.layoutName == layoutName then
+            return i, layout
+        end
+    end
+end
+
+-- ok, err, layoutName, isReplace, used, max
+local function CanApplyEditModeLayout(playerName)
+    if not (C_EditMode and C_EditMode.GetLayouts) then
+        return false, "Edit Mode is not available"
+    end
+    local layouts = C_EditMode.GetLayouts()
+    if type(layouts) ~= "table" or type(layouts.layouts) ~= "table" then
+        return false, "Could not read Edit Mode layouts"
+    end
+
+    local layoutName = format("[ArenaUI] %s", playerName or "Import")
+    local layoutType = GetEditModeAccountLayoutType()
+    local max = GetEditModeMaxLayoutsPerType()
+    local used = CountEditModeLayoutsOfType(layouts.layouts, layoutType)
+    local _, existing = FindEditModeLayoutIndexByName(layouts.layouts, layoutName)
+    if existing then
+        return true, nil, layoutName, true, used, max
+    end
+    if used >= max then
+        return false, format(
+            "Edit Mode account layouts are full (%d/%d). Delete one in Edit Mode (Esc → Edit Mode), then try again.",
+            used,
+            max
+        ), layoutName, false, used, max
+    end
+    return true, nil, layoutName, false, used, max
+end
+
+function NS:GetEditModeApplyStatus(playerId)
+    local player = self:GetProPlayer(playerId)
+    if not player then
+        return false, "Unknown player profile"
+    end
+    return CanApplyEditModeLayout(player.name or playerId)
+end
+
+local function ApplyEditModeLayout(encoded, playerName)
+    if not (C_EditMode and C_EditMode.ConvertStringToLayoutInfo and C_EditMode.GetLayouts and C_EditMode.SaveLayouts) then
+        return false, "Edit Mode is not available"
+    end
+    encoded = tostring(encoded or ""):match("^%s*(.-)%s*$") or ""
+    if encoded == "" then
+        return false, "Empty Edit Mode layout string"
+    end
+
+    local canApply, slotErr, layoutName = CanApplyEditModeLayout(playerName)
+    if not canApply then
+        return false, slotErr
+    end
+
+    local layoutInfo = C_EditMode.ConvertStringToLayoutInfo(encoded)
+    if type(layoutInfo) ~= "table" or type(layoutInfo.systems) ~= "table" then
+        return false, "Invalid Edit Mode layout string"
+    end
+
+    local layoutType = GetEditModeAccountLayoutType()
+    layoutInfo.layoutName = layoutName
+    layoutInfo.layoutType = layoutType
+
+    local layouts = C_EditMode.GetLayouts()
+    if type(layouts) ~= "table" or type(layouts.layouts) ~= "table" then
+        return false, "Could not read Edit Mode layouts"
+    end
+
+    for i = #layouts.layouts, 1, -1 do
+        if layouts.layouts[i].layoutName == layoutName then
+            table.remove(layouts.layouts, i)
+        end
+    end
+
+    -- Re-check after removals in case another layout filled the last slot concurrently.
+    local used = CountEditModeLayoutsOfType(layouts.layouts, layoutType)
+    local max = GetEditModeMaxLayoutsPerType()
+    if used >= max then
+        return false, format(
+            "Edit Mode account layouts are full (%d/%d). Delete one in Edit Mode (Esc → Edit Mode), then try again.",
+            used,
+            max
+        )
+    end
+
+    table.insert(layouts.layouts, layoutInfo)
+
+    local saveOk, saveErr = pcall(C_EditMode.SaveLayouts, layouts)
+    if not saveOk then
+        return false, "Edit Mode save failed: " .. tostring(saveErr)
+    end
+
+    layouts = C_EditMode.GetLayouts()
+    local pos = FindEditModeLayoutIndexByName(layouts.layouts, layoutName)
+    if pos and C_EditMode.SetActiveLayout then
+        local presetCount = (Enum and Enum.EditModePresetLayoutsMeta and Enum.EditModePresetLayoutsMeta.NumValues) or 2
+        pcall(C_EditMode.SetActiveLayout, presetCount + pos)
+    end
+    return true, "reload"
+end
+
+local function ApplyOmniCDProfile(encoded, playerName)
+    local E = OmniCD and OmniCD[1]
+    local ps = E and E.ProfileSharing
+    if not (ps and ps.Decode and ps.CopyProfile) then
+        return false, "OmniCD is not loaded"
+    end
+    local profileType, profileKey, profileData = ps:Decode(encoded)
+    if not profileData then
+        return false, (ps.errorMsg and tostring(ps.errorMsg)) or "Invalid OmniCD profile string"
+    end
+    if E.FixOldProfile then
+        E.FixOldProfile(profileData)
+    end
+    if profileType == "cds" then
+        if ps.CopyCustomSpells then
+            ps:CopyCustomSpells(profileData)
+            return true
+        end
+        return false, "OmniCD cooldown-list imports are not supported here"
+    end
+    local baseKey = format("[ArenaUI] %s", playerName or profileKey or "Import")
+    local key = UniqueOmniCDKey(baseKey)
+    ps:CopyProfile(profileType, key, profileData)
+    return true
+end
+
+-- Returns ok, errMessage (errMessage may be "reload" when opts.deferReload)
+function NS:ApplyPlayerAddonProfile(playerId, addonName, opts)
+    opts = opts or {}
+    local player = self:GetProPlayer(playerId)
+    if not player then
+        return false, "Unknown player profile"
+    end
+    if not self:IsProfileAddonLive(addonName) then
+        return false, self:GetProfileAddonUnavailableReason(addonName) or (addonName .. " is not available")
+    end
+
+    local useDefault = self:IsProPlayerAddonDefault(player, addonName)
+    local encoded = self:GetProPlayerAddonString(player, addonName)
+    if not useDefault and not encoded then
+        return false, player.name .. " has no " .. addonName .. " profile string yet"
+    end
+
+    local ok, err
+    local needsReload
+    if addonName == "Gladdy" then
+        ok, err = ApplyGladdyProfile(encoded)
+    elseif addonName == "OmniBar" then
+        ok, err = ApplyOmniBarProfile(encoded)
+    elseif addonName == "OmniCD" then
+        if useDefault then
+            ok, err = ApplyOmniCDDefaults()
+        else
+            ok, err = ApplyOmniCDProfile(encoded, player.name)
+        end
+    elseif addonName == "BetterBlizzFrames" then
+        ok, err = ApplyBetterBlizzFramesProfile(encoded)
+        if ok and err == "reload" then
+            needsReload = true
+            err = nil
+        end
+    elseif addonName == "BetterBlizzPlates" then
+        ok, err = ApplyBetterBlizzPlatesProfile(encoded)
+        if ok and err == "reload" then
+            needsReload = true
+            err = nil
+        end
+    elseif addonName == "EditMode" then
+        ok, err = ApplyEditModeLayout(encoded, player.name)
+        if ok and err == "reload" then
+            needsReload = true
+            err = nil
+        end
+    else
+        return false, "No import adapter for " .. tostring(addonName)
+    end
+
+    if ok then
+        if not opts.silent then
+            if useDefault then
+                print("|cFFFF8C33ArenaUI|r Reset " .. addonName .. " to defaults (" .. player.name .. ").")
+            else
+                print("|cFFFF8C33ArenaUI|r Applied " .. player.name .. "'s " .. addonName .. " settings.")
+            end
+        end
+        if needsReload then
+            if opts.deferReload then
+                return true, "reload"
+            end
+            print("|cFFFF8C33ArenaUI|r Reloading UI to finish " .. addonName .. " import...")
+            ReloadUI()
+        end
+        return true
+    end
+    return false, err or "Import failed"
+end
+
+function NS:GetPlayerApplyAllTargets(playerId)
+    local player = self:GetProPlayer(playerId)
+    if not player then
+        return {}, { { title = "Player", reason = "Unknown player profile" } }
+    end
+
+    local targets, skipped = {}, {}
+    for _, addonInfo in ipairs(self.PROFILE_ADDONS or {}) do
+        local title = addonInfo.title or addonInfo.name
+        local useDefault = self:IsProPlayerAddonDefault(player, addonInfo.name)
+        local encoded = self:GetProPlayerAddonString(player, addonInfo.name)
+        if not useDefault and not encoded then
+            skipped[#skipped + 1] = { title = title, reason = "Not set yet" }
+        elseif not self:IsProfileAddonLive(addonInfo.name) then
+            skipped[#skipped + 1] = {
+                title = title,
+                reason = self:GetProfileAddonUnavailableReason(addonInfo.name) or "Not available",
+            }
+        elseif addonInfo.name == "EditMode" then
+            local canApply, slotErr = CanApplyEditModeLayout(player.name or playerId)
+            if canApply then
+                targets[#targets + 1] = addonInfo
+            else
+                skipped[#skipped + 1] = { title = title, reason = slotErr or "No free Edit Mode slot" }
+            end
+        else
+            targets[#targets + 1] = addonInfo
+        end
+    end
+    return targets, skipped
+end
+
+function NS:ApplyPlayerAllProfiles(playerId)
+    local player = self:GetProPlayer(playerId)
+    if not player then
+        return false, "Unknown player profile"
+    end
+
+    local targets, skipped = self:GetPlayerApplyAllTargets(playerId)
+    if #targets == 0 then
+        for _, item in ipairs(skipped) do
+            print("|cFFFF8C33ArenaUI|r Skipped " .. item.title .. ": " .. (item.reason or "unavailable"))
+        end
+        return false, "Nothing available to apply for " .. (player.name or playerId)
+    end
+
+    local applied, failed = {}, {}
+    local needsReload
+    for _, addonInfo in ipairs(targets) do
+        local ok, err = self:ApplyPlayerAddonProfile(playerId, addonInfo.name, {
+            deferReload = true,
+            silent = true,
+        })
+        local title = addonInfo.title or addonInfo.name
+        if ok then
+            applied[#applied + 1] = title
+            if err == "reload" then
+                needsReload = true
+            end
+        else
+            failed[#failed + 1] = title .. " (" .. (err or "failed") .. ")"
+        end
+    end
+
+    if #applied > 0 then
+        print("|cFFFF8C33ArenaUI|r Applied " .. player.name .. "'s settings: " .. table.concat(applied, ", ") .. ".")
+    end
+    for _, item in ipairs(failed) do
+        print("|cFFFF8C33ArenaUI|r Failed: " .. item)
+    end
+    for _, item in ipairs(skipped) do
+        print("|cFFFF8C33ArenaUI|r Skipped " .. item.title .. ": " .. (item.reason or "unavailable"))
+    end
+
+    if needsReload then
+        print("|cFFFF8C33ArenaUI|r Reloading UI to finish imports...")
+        ReloadUI()
+    end
+    return #applied > 0, (#applied == 0) and "No profiles were applied" or nil
+end
+
+StaticPopupDialogs["ARENAUI_CONFIRM_APPLY_PROFILE"] = {
+    text = "%s",
+    button1 = "Apply",
+    button2 = "Cancel",
+    OnAccept = function(dialog, data)
+        data = data or (dialog and dialog.data)
+        if not data then
+            return
+        end
+        local ok, err
+        if data.applyAll then
+            ok, err = NS:ApplyPlayerAllProfiles(data.playerId)
+        else
+            ok, err = NS:ApplyPlayerAddonProfile(data.playerId, data.addonName)
+        end
+        if not ok then
+            print("|cFFFF8C33ArenaUI|r " .. (err or "Could not apply profile."))
+        end
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+}
+
+function NS:PromptApplyPlayerAddonProfile(playerId, addonName)
+    local player = self:GetProPlayer(playerId)
+    if not player then
+        print("|cFFFF8C33ArenaUI|r Unknown player profile.")
+        return
+    end
+    local useDefault = self:IsProPlayerAddonDefault(player, addonName)
+    if not useDefault and not self:GetProPlayerAddonString(player, addonName) then
+        print("|cFFFF8C33ArenaUI|r " .. player.name .. " has no " .. addonName .. " profile string yet.")
+        return
+    end
+    if not self:IsProfileAddonLive(addonName) then
+        print("|cFFFF8C33ArenaUI|r " .. (self:GetProfileAddonUnavailableReason(addonName) or (addonName .. " is not available")))
+        return
+    end
+
+    local message
+    if useDefault then
+        message = format(
+            "Reset %s to defaults?\n%s uses stock %s settings.",
+            addonName,
+            player.name or playerId,
+            addonName
+        )
+    elseif addonName == "BetterBlizzFrames" then
+        message = format(
+            "Apply %s's BetterBlizzFrames settings?\nThis replaces your BBF settings and reloads the UI.",
+            player.name or playerId
+        )
+    elseif addonName == "BetterBlizzPlates" then
+        message = format(
+            "Apply %s's BetterBlizzPlates settings?\nThis replaces your BBP settings and reloads the UI.",
+            player.name or playerId
+        )
+    elseif addonName == "EditMode" then
+        local canApply, slotErr, layoutName, isReplace, used, max = CanApplyEditModeLayout(player.name or playerId)
+        if not canApply then
+            print("|cFFFF8C33ArenaUI|r " .. (slotErr or "No free Edit Mode layout slot."))
+            return
+        end
+        if isReplace then
+            message = format(
+                "Update %s's Edit Mode UI layout?\nThis replaces your existing \"%s\" layout and reloads the UI.",
+                player.name or playerId,
+                layoutName
+            )
+        else
+            message = format(
+                "Apply %s's Edit Mode UI layout?\nThis creates \"%s\" using 1 of your free account slots (%d/%d used) and reloads the UI.",
+                player.name or playerId,
+                layoutName,
+                used or 0,
+                max or GetEditModeMaxLayoutsPerType()
+            )
+        end
+    else
+        message = format(
+            "Apply %s's %s settings?\nThis will overwrite your current %s profile.",
+            player.name or playerId,
+            addonName,
+            addonName
+        )
+    end
+    StaticPopup_Show("ARENAUI_CONFIRM_APPLY_PROFILE", message, nil, {
+        playerId = playerId,
+        addonName = addonName,
+    })
+end
+
+function NS:PromptApplyPlayerAllProfiles(playerId)
+    local player = self:GetProPlayer(playerId)
+    if not player then
+        print("|cFFFF8C33ArenaUI|r Unknown player profile.")
+        return
+    end
+
+    local targets, skipped = self:GetPlayerApplyAllTargets(playerId)
+    if #targets == 0 then
+        local reason = (#skipped > 0 and skipped[1].reason) or "Nothing available to apply"
+        print("|cFFFF8C33ArenaUI|r " .. reason)
+        return
+    end
+
+    local names = {}
+    for _, addonInfo in ipairs(targets) do
+        names[#names + 1] = addonInfo.title or addonInfo.name
+    end
+
+    local message = format(
+        "Apply all of %s's available settings?\n%s\nThis may reload the UI.",
+        player.name or playerId,
+        table.concat(names, ", ")
+    )
+    if #skipped > 0 then
+        local skippedNames = {}
+        for _, item in ipairs(skipped) do
+            skippedNames[#skippedNames + 1] = item.title
+        end
+        message = message .. format("\n\nSkipped: %s", table.concat(skippedNames, ", "))
+    end
+
+    StaticPopup_Show("ARENAUI_CONFIRM_APPLY_PROFILE", message, nil, {
+        playerId = playerId,
+        applyAll = true,
+    })
+end

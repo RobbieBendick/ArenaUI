@@ -430,7 +430,7 @@ function Details:CreateCurrentDpsFrame(parent, name)
 			barFrame.splitBar:SetPoint("center", barFrame, "center", 0, 0)
 			barFrame.splitBar.fontsize = 10
 			barFrame.splitBar:SetTexture(SharedMedia:Fetch("statusbar", "Details Flat"))
-			barFrame.splitBar:SetBackgroundTexture([[Interface/AddOns/Details/images/bar_textures/chess]])
+			barFrame.splitBar:SetBackgroundTexture([[Interface/AddOns/ArenaUI/vendored/Details/images/bar_textures/chess]])
 			barFrame.splitBar:SetBackgroundColor(1, 0, 0, 1)
 			barFrame.splitBar.SparkAlwaysShow = true
 

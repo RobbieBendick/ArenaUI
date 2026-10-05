@@ -19,7 +19,7 @@ local minor = green .. "+"
 local bar_color = {.5, .5, .5, .4} -- bar of the second and 3rd player
 local bar_color_on_enter = {.9, .9, .9, .9}
 
-local frame_backdrop = {edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true}
+local frame_backdrop = {edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true}
 local frame_backdrop_color = {0, 0, 0, 0.35}
 local frame_backdrop_border_color = {0, 0, 0, 0}
 
@@ -1417,7 +1417,7 @@ local compare_create = function(tab, frame)
         bar.index = index
         bar:SetPoint("topleft", spellicon, "topright", 0, 0)
         bar:SetPoint("topright", parent, "topright", -4, y)
-        bar:SetStatusBarTexture([[Interface\AddOns\Details\images\bar_serenity]])
+        bar:SetStatusBarTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]])
         bar:SetStatusBarColor(.5, .5, .5, 1)
         bar:SetAlpha(ALPHA_BLEND_AMOUNT)
 
@@ -1482,7 +1482,7 @@ local compare_create = function(tab, frame)
 
         Details.gump:CreateBorder (tooltip)
 
-        tooltip:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+        tooltip:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
         tooltip:SetBackdropColor(0, 0, 0, 1)
         tooltip:SetBackdropBorderColor(0, 0, 0, 1)
         tooltip:SetSize(275, 77)
@@ -1564,7 +1564,7 @@ local compare_create = function(tab, frame)
         tooltip.uptime_label3:SetJustifyH("right")
 
         local bg_color = {0.5, 0.5, 0.5}
-        local bg_texture = [[Interface\AddOns\Details\images\bar_background]]
+        local bg_texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background]]
         local bg_alpha = 1
         local bg_height = 12
         local colors = {{26/255, 26/255, 26/255}, {19/255, 19/255, 19/255}, {26/255, 26/255, 26/255}, {34/255, 39/255, 42/255}, {42/255, 51/255, 60/255}}
@@ -1584,7 +1584,7 @@ local compare_create = function(tab, frame)
 
     local create_tooltip_target = function(name)
         local tooltip = CreateFrame("frame", name, UIParent,"BackdropTemplate")
-        tooltip:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+        tooltip:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
         tooltip:SetBackdropColor(0, 0, 0, 1)
         tooltip:SetBackdropBorderColor(0, 0, 0, 1)
         tooltip:SetSize(175, 67)
@@ -1628,7 +1628,7 @@ local compare_create = function(tab, frame)
             bar.index = index
             bar:SetPoint("topleft", spellicon, "topright", 0, 0)
             bar:SetPoint("topright", parent, "topright", -1, y)
-            bar:SetStatusBarTexture([[Interface\AddOns\Details\images\bar_serenity]])
+            bar:SetStatusBarTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]])
             bar:SetStatusBarColor(unpack(bar_color))
             bar:SetMinMaxValues(0, 100)
             bar:SetValue(0)
@@ -1668,7 +1668,7 @@ local compare_create = function(tab, frame)
             bar.righttext2:SetTextColor(1, 1, 1, 1)
 
             local bg_line1 = bar:CreateTexture(nil, "artwork")
-            bg_line1:SetTexture([[Interface\AddOns\Details\images\bar_background]])
+            bg_line1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background]])
             bg_line1:SetAllPoints()
             bg_line1:SetAlpha(0.7)
             if (index % 2 == 0) then
@@ -1874,7 +1874,7 @@ end
 
 -- ~compare
 local iconTableCompare = {
-    texture = [[Interface\AddOns\Details\images\icons]],
+    texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
     --coords = {363/512, 381/512, 0/512, 17/512},
     coords = {383/512, 403/512, 0/512, 15/512},
     width = 16,

@@ -856,7 +856,7 @@
 --panels
 
 --cooltip presets
-	local preset3_backdrop = {bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]], edgeFile = [[Interface\AddOns\Details\images\border_3]], tile=true,
+	local preset3_backdrop = {bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]], edgeFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\border_3]], tile=true,
 	edgeSize = 16, tileSize = 64, insets = {left = 3, right = 3, top = 4, bottom = 4}}
 
 	Details.cooltip_preset3_backdrop = preset3_backdrop
@@ -865,7 +865,7 @@
 	local black_table = {0, 0, 0, 1}
 	local gray_table = {0.37, 0.37, 0.37, 0.95}
 
-	local preset2_backdrop = {bgFile = [[Interface\AddOns\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], tile=true,
+	local preset2_backdrop = {bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], tile=true,
 	edgeSize = 1, tileSize = 64, insets = {left = 0, right = 0, top = 0, bottom = 0}}
 	Details.cooltip_preset2_backdrop = preset2_backdrop
 
@@ -1118,9 +1118,9 @@
 			local label = gump:CreateLabel(panel, Loc ["STRING_FEEDBACK_PREFERED_SITE"])
 			label:SetPoint("topleft", panel, "topleft", 15, -60)
 
-			local wowi = gump:NewImage(panel, [[Interface\AddOns\Details\images\icons2]], 101, 34, "artwork", {0/512, 101/512, 163/512, 200/512})
-			local curse = gump:NewImage(panel, [[Interface\AddOns\Details\images\icons2]], 101, 34, "artwork", {0/512, 101/512, 201/512, 242/512})
-			local mmoc = gump:NewImage(panel, [[Interface\AddOns\Details\images\icons2]], 101, 34, "artwork", {0/512, 101/512, 243/512, 285/512})
+			local wowi = gump:NewImage(panel, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], 101, 34, "artwork", {0/512, 101/512, 163/512, 200/512})
+			local curse = gump:NewImage(panel, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], 101, 34, "artwork", {0/512, 101/512, 201/512, 242/512})
+			local mmoc = gump:NewImage(panel, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], 101, 34, "artwork", {0/512, 101/512, 243/512, 285/512})
 			wowi:SetDesaturated(true)
 			curse:SetDesaturated(true)
 			mmoc:SetDesaturated(true)
@@ -1202,7 +1202,7 @@
 	f.logo = f:CreateTexture(nil, "overlay")
 	f.logo:SetPoint("center", f, "center", 0, 0)
 	f.logo:SetPoint("top", f, "top", 25, 56)
-	f.logo:SetTexture([[Interface\AddOns\Details\images\logotipo]])
+	f.logo:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\logotipo]])
 	f.logo:SetSize(256, 128)
 	--InterfaceOptions_AddCategory (f)
 
@@ -1263,7 +1263,7 @@
 
 			updatewindow_frame.gnoma = updatewindow_frame:CreateTexture(nil, "artwork")
 			updatewindow_frame.gnoma:SetPoint("topright", updatewindow_frame, "topright", -3, -59)
-			updatewindow_frame.gnoma:SetTexture("Interface\\AddOns\\Details\\images\\icons2")
+			updatewindow_frame.gnoma:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons2")
 			updatewindow_frame.gnoma:SetSize(105*1.05, 107*1.05)
 			updatewindow_frame.gnoma:SetTexCoord(0.2021484375, 0, 0.7919921875, 1)
 
@@ -1316,7 +1316,7 @@
 		if LDB then
 			local databroker = LDB:NewDataObject ("Details", {
 				type = "data source",
-				icon = [[Interface\AddOns\Details\images\minimap]],
+				icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\minimap]],
 				text = "0",
 
 				HotCornerIgnore = true,
@@ -1381,7 +1381,7 @@
 						--nova instancia
 						GameCooltip:AddMenu (1, Details.CriarInstancia, true, nil, nil, Loc ["STRING_MINIMAPMENU_NEWWINDOW"], nil, true)
 						--GameCooltip:AddIcon ([[Interface\Buttons\UI-AttributeButton-Encourage-Up]], 1, 1, 10, 10, 4/16, 12/16, 4/16, 12/16)
-						GameCooltip:AddIcon ([[Interface\AddOns\Details\images\icons]], 1, 1, 12, 11, 462/512, 473/512, 1/512, 11/512)
+						GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], 1, 1, 12, 11, 462/512, 473/512, 1/512, 11/512)
 
 						--reopen all windows
 						GameCooltip:AddMenu (1, Details.ReabrirTodasInstancias, true, nil, nil, Loc ["STRING_MINIMAPMENU_REOPENALL"], nil, true)
@@ -1503,7 +1503,7 @@
 				--frame _G name
 				"DetailsLeftCornerButton",
 				--icon
-				[[Interface\AddOns\Details\images\minimap]],
+				[[Interface\AddOns\ArenaUI\vendored\Details\images\minimap]],
 				--tooltip
 				tooltip_hotcorner,
 				--click function
@@ -1533,7 +1533,7 @@ function Details:InitializeAPIWindow()
 	DetailsAPI2Frame.Frame = DetailsAPI2Frame
 	DetailsAPI2Frame.__name = "API"
 	DetailsAPI2Frame.real_name = "DETAILS_APIWINDOW"
-	DetailsAPI2Frame.__icon = [[Interface\AddOns\Details\images\icons]]
+	DetailsAPI2Frame.__icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
 	DetailsAPI2Frame.__iconcoords = {449/512, 480/512, 62/512, 83/512}
 	DetailsAPI2Frame.__iconcolor = "DETAILS_API_ICON"
 	DetailsPluginContainerWindow.EmbedPlugin(DetailsAPI2Frame, DetailsAPI2Frame, true)
@@ -1605,7 +1605,7 @@ end
 
 
 function Details:FormatBackground(frame) --deprecated I guess
-	frame:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+	frame:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
 	frame:SetBackdropColor(.5, .5, .5, .5)
 	frame:SetBackdropBorderColor(0, 0, 0, 1)
 
@@ -1613,7 +1613,7 @@ function Details:FormatBackground(frame) --deprecated I guess
 		frame.__background = frame:CreateTexture(nil, "background")
 	end
 
-	frame.__background:SetTexture([[Interface\AddOns\Details\images\background]], true)
+	frame.__background:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\background]], true)
 	frame.__background:SetAlpha(0.7)
 	frame.__background:SetVertexColor(0.27, 0.27, 0.27)
 	frame.__background:SetVertTile(true)
@@ -1671,7 +1671,7 @@ function Details:SkinCloseButton(closeButton, parent)
     closeButton:SetSize(32, 32)
     closeButton:SetAlpha(0)
 
-    local closeTexture = [[Interface\AddOns\Details\images\close_rounded.png]]
+    local closeTexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\close_rounded.png]]
     local clampMethod = "CLAMP"
     local filterMethod = "TRILINEAR"
 

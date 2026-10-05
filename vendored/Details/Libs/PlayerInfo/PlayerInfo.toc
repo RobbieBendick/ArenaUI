@@ -3,7 +3,7 @@
 ## Title: Player Info
 ## Notes: Show information about players in your group.
 ## Version: #Details.20260811.15275.172
-## IconTexture: Interface\AddOns\Details\images\minimap
+## IconTexture: Interface\AddOns\ArenaUI\vendored\Details\images\minimap
 ## AddonCompartmentFunc: Details_OpenDefaultOptionsWindow
 
 ## X-Curse-Project-ID: 61284

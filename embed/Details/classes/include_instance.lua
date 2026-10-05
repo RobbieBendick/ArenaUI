@@ -166,8 +166,8 @@ _detalhes.instance_defaults = {
 	--left to right or right to left bars
 		bars_inverted = false,
 	--toolbar icons file
-		--toolbar_icon_file = [[Interface\AddOns\Details\images\toolbar_icons_grayscale]],
-		toolbar_icon_file = [[Interface\AddOns\Details\images\toolbar_icons]],
+		--toolbar_icon_file = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons_grayscale]],
+		toolbar_icon_file = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]],
 	--menus:
 		--anchor store the anchor point of main menu
 		menu_anchor = {5, 1, side = 1}, --mode segment attribute report on top position
@@ -308,7 +308,7 @@ _detalhes.instance_defaults = {
 				texture = "Details D'ictum",
 				texture_custom = "",
 			--bar texture name
-				texture_file = [[Interface\AddOns\Details\images\bar4]],
+				texture_file = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4]],
 				texture_custom_file = "Interface\\",
 			--bar overlay texture file
 				overlay_texture = "Details D'ictum",
@@ -318,7 +318,7 @@ _detalhes.instance_defaults = {
 			--bar background texture
 				texture_background = "Details D'ictum",
 			--bar background file
-				texture_background_file = [[Interface\AddOns\Details\images\bar4]],
+				texture_background_file = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4]],
 			--bar background class color
 				texture_background_class_color = true,
 			--fixed texture color for background texture
@@ -328,7 +328,7 @@ _detalhes.instance_defaults = {
 				row_offsets = {left = 0, right = 0, top = 0, bottom = 0},
 			--icon file
 				icon_size_offset = 0,
-				icon_file = [[Interface\AddOns\Details\images\classes_small]],
+				icon_file = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]],
 				no_icon = false,
 				start_after_icon = true,
 				icon_grayscale = false,
@@ -357,7 +357,7 @@ _detalhes.instance_defaults = {
 				fast_ps_update = false,
 			--show spec icons
 				use_spec_icons = false,
-				spec_file = [[Interface\AddOns\Details\images\spec_icons_normal]],
+				spec_file = [[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal]],
 			--show faction icon
 				show_faction_icon = true,
 				faction_icon_size_offset = -10,
@@ -506,6 +506,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

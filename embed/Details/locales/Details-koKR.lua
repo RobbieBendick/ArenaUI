@@ -1684,9 +1684,9 @@ L["STRING_WELCOME_31"] = [=[창의 아무 곳이나 |cFFFFFF00오른쪽 클릭|r
 
 |cFFFFFF00다시 오른쪽 클릭|r 하여 창을 닫거나 아이콘을 클릭하여 다른 디스플레이를 선택합니다.
 
-|TInterface\AddOns\Details\images\key_shift:14:30:0:0:64:64:0:64:0:40|t + 오른쪽 클릭으로 북마크 대신 세분화를 엽니다.
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_shift:14:30:0:0:64:64:0:64:0:40|t + 오른쪽 클릭으로 북마크 대신 세분화를 엽니다.
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + 오른쪽 클릭으로 창을 닫습니다.]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + 오른쪽 클릭으로 창을 닫습니다.]=]
 L["STRING_WELCOME_32"] = "인터페이스 사용하기: 창 그룹"
 L["STRING_WELCOME_34"] = "인터페이스 사용하기: 툴팁 확장"
 L["STRING_WELCOME_36"] = "인터페이스 사용하기: 플러그인"
@@ -1778,6 +1778,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

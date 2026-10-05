@@ -101,13 +101,13 @@ local create_deathrecap_line = function(parent, n)
 	lifeStatusBar:SetPoint("bottomleft", line, "bottomleft")
 	lifeStatusBar:SetColorTexture(0.5, 0.5, 0.5, 0.4)
 
-	backgroundTexture:SetTexture([[Interface\AddOns\Details\images\deathrecap_background]])
+	backgroundTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\deathrecap_background]])
 	backgroundTexture:SetTexCoord(0, 1, 0, 1)
 	backgroundTexture:SetVertexColor(.1, .1, .1, .3)
 
 	--top border
 	local TopFader = line:CreateTexture(nil, "border")
-	TopFader:SetTexture([[Interface\AddOns\Details\images\deathrecap_background_top]])
+	TopFader:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\deathrecap_background_top]])
 	TopFader:SetTexCoord(0, 1, 0, 1)
 	TopFader:SetVertexColor(.1, .1, .1, .3)
 	TopFader:SetPoint("bottomleft", backgroundTexture, "topleft", 0, -0)
@@ -119,7 +119,7 @@ local create_deathrecap_line = function(parent, n)
 	if (n == 10) then
 		--bottom fader
 		local backgroundTexture2 = line:CreateTexture(nil, "border")
-		backgroundTexture2:SetTexture([[Interface\AddOns\Details\images\deathrecap_background_bottom]])
+		backgroundTexture2:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\deathrecap_background_bottom]])
 		backgroundTexture2:SetTexCoord(0, 1, 0, 1)
 		backgroundTexture2:SetVertexColor(.1, .1, .1, .3)
 		backgroundTexture2:SetPoint("topleft", backgroundTexture, "bottomleft", 0, 0)
@@ -731,6 +731,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

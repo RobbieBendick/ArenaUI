@@ -74,7 +74,7 @@ function Details:OpenClassColorsConfig()
                 y = y - 33
             end
 
-            local backgroundTexture = DF:CreateImage(panel, [[Interface\AddOns\Details\images\bar_skyline]], 135, 30, "artwork")
+            local backgroundTexture = DF:CreateImage(panel, [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_skyline]], 135, 30, "artwork")
             backgroundTexture:SetPoint("left", icon, "right", -32, 0)
 
             local button = DF:CreateButton(panel, set_color, 135, 30, className, className, index)
@@ -245,6 +245,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

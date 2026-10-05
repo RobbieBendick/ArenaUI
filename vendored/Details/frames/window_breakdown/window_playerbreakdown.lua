@@ -547,7 +547,7 @@ function Details:OpenBreakdownWindow(instanceObject, actorObject, bFromAttribute
 		actorClass = "monster"
 	end
 
-	breakdownWindowFrame.classIcon:SetTexture("Interface\\AddOns\\Details\\images\\classes") --top left
+	breakdownWindowFrame.classIcon:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes") --top left
 	breakdownWindowFrame.SetClassIcon(actorObject, actorClass)
 
 	Details.FadeHandler.Fader(breakdownWindowFrame, 0)
@@ -787,7 +787,7 @@ function breakdownWindowFrame.SetClassIcon(actorObject, class)
 		breakdownWindowFrame.classIcon:SetTexCoord(.1, .9, .1, .9)
 
 	elseif (actorObject.spec and _detalhes.class_specs_coords[actorObject.spec]) then
-		breakdownWindowFrame.classIcon:SetTexture([[Interface\AddOns\Details\images\spec_icons_normal_alpha]])
+		breakdownWindowFrame.classIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\spec_icons_normal_alpha]])
 		breakdownWindowFrame.classIcon:SetTexCoord(unpack(_detalhes.class_specs_coords[actorObject.spec]))
 	else
 		local coords = CLASS_ICON_TCOORDS[class]
@@ -797,7 +797,7 @@ function breakdownWindowFrame.SetClassIcon(actorObject, class)
 			breakdownWindowFrame.classIcon:SetTexCoord(l+0.01953125, r-0.01953125, t+0.01953125, b-0.01953125)
 		else
 			local c = _detalhes.class_coords ["MONSTER"]
-			breakdownWindowFrame.classIcon:SetTexture("Interface\\AddOns\\Details\\images\\classes")
+			breakdownWindowFrame.classIcon:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes")
 			breakdownWindowFrame.classIcon:SetTexCoord(c[1], c[2], c[3], c[4])
 		end
 	end

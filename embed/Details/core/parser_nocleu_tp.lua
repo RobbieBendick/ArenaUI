@@ -294,7 +294,7 @@ local getTooltipFrame = function() --~tooltip
         ---@cast statusBar statusbar
         --statusBar:SetAllPoints()
         --ponit and size update dynamically in the refresFunc
-        statusBar:SetStatusBarTexture([[Interface\AddOns\Details\images\bar_background_dark_withline]])
+        statusBar:SetStatusBarTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background_dark_withline]])
 
         local background = statusBar:CreateTexture("$parentBackground", "background")
         background:SetAllPoints()
@@ -855,6 +855,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

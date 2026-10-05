@@ -58,7 +58,7 @@ local descriptionTextTemplate = DF:InstallTemplate("font", "SMALLDESC_FONT_TEMPL
     color = {.6, .6, .6, 1}, size = 10
 }, subSectionTitleTextTemplate)
 
-local font_select_icon, font_select_texcoord = [[Interface\AddOns\Details\images\icons]], {472/512, 513/512, 186/512, 230/512}
+local font_select_icon, font_select_texcoord = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], {472/512, 513/512, 186/512, 230/512}
 
 --store the current instance being edited
 local currentInstance
@@ -224,9 +224,9 @@ do
             end
 
             local eraseDataOptions = {
-                {value = 1, label = Loc ["STRING_OPTIONS_ED1"], onclick = onSelectEraseData, icon = [[Interface\Addons\Details\Images\reset_button2]]},
-                {value = 2, label = Loc ["STRING_OPTIONS_ED2"], onclick = onSelectEraseData, icon = [[Interface\Addons\Details\Images\reset_button2]]},
-                {value = 3, label = Loc ["STRING_OPTIONS_ED3"], onclick = onSelectEraseData, icon = [[Interface\Addons\Details\Images\reset_button2]]},
+                {value = 1, label = Loc ["STRING_OPTIONS_ED1"], onclick = onSelectEraseData, icon = [[Interface\AddOns\ArenaUI\vendored\Details\Images\reset_button2]]},
+                {value = 2, label = Loc ["STRING_OPTIONS_ED2"], onclick = onSelectEraseData, icon = [[Interface\AddOns\ArenaUI\vendored\Details\Images\reset_button2]]},
+                {value = 3, label = Loc ["STRING_OPTIONS_ED3"], onclick = onSelectEraseData, icon = [[Interface\AddOns\ArenaUI\vendored\Details\Images\reset_button2]]},
             }
             local buildEraseDataMenu = function()
                 return eraseDataOptions
@@ -510,7 +510,7 @@ do
                 func = function(self)
                     currentInstance:UngroupInstance()
                 end,
-                icontexture = [[Interface\AddOns\Details\images\icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
                 icontexcoords = {160/512, 179/512, 142/512, 162/512},
                 name = Loc ["STRING_OPTIONS_WC_UNSNAP"],
                 desc = Loc ["STRING_OPTIONS_WC_UNSNAP_DESC"],
@@ -543,7 +543,7 @@ do
                 func = function(self)
                     Details:OpenClassColorsConfig()
                 end,
-                icontexture = [[Interface\AddOns\Details\images\icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
                 icontexcoords = {432/512, 464/512, 276/512, 309/512},
                 name = Loc ["STRING_OPTIONS_CHANGE_CLASSCOLORS"],
                 desc = Loc ["STRING_OPTIONS_CHANGE_CLASSCOLORS_DESC"],
@@ -752,7 +752,7 @@ do
             local buildSkinMenu = function()
                 local skinOptions = {}
                 for skin_name, skin_table in pairs(Details.skins) do
-                    local file = skin_table.file:gsub([[Interface\AddOns\Details\images\skins\]], "")
+                    local file = skin_table.file:gsub([[Interface\AddOns\ArenaUI\vendored\Details\images\skins\]], "")
                     local desc = "Author: |cFFFFFFFF" .. skin_table.author .. "|r\nVersion: |cFFFFFFFF" .. skin_table.version .. "|r\nSite: |cFFFFFFFF" .. skin_table.site .. "|r\n\nDesc: |cFFFFFFFF" .. skin_table.desc .. "|r\n\nFile: |cFFFFFFFF" .. file .. ".tga|r"
                     skinOptions [#skinOptions+1] = {value = skin_name, label = skin_name, onclick = onSelectSkin, icon = "Interface\\GossipFrame\\TabardGossipIcon", desc = desc}
                 end
@@ -1133,7 +1133,7 @@ do
 
     --select texture
     local texture_icon = [[Interface\TARGETINGFRAME\UI-PhasingIcon]]
-    local texture_icon = [[Interface\AddOns\Details\images\icons]]
+    local texture_icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
     local texture_icon_size = {14, 14}
     local texture_texcoord = {469/512, 505/512, 249/512, 284/512}
 
@@ -2743,10 +2743,10 @@ do
 
         local buildIconStyleMenu = function()
             local iconMenu = {
-                {value = "Interface\\AddOns\\Details\\images\\toolbar_icons", label = "Set 1", icon = "Interface\\AddOns\\Details\\images\\toolbar_icons", texcoord = {0, 0.125, 0, 1}, onclick = on_select_icon_set},
-                {value = "Interface\\AddOns\\Details\\images\\toolbar_icons_shadow", label = "Set 2", icon = "Interface\\AddOns\\Details\\images\\toolbar_icons_shadow", texcoord = {0, 0.125, 0, 1}, onclick = on_select_icon_set},
-                {value = "Interface\\AddOns\\Details\\images\\toolbar_icons_2", label = "Set 3", icon = "Interface\\AddOns\\Details\\images\\toolbar_icons_2", texcoord = {0, 0.125, 0, 1}, onclick = on_select_icon_set},
-                {value = "Interface\\AddOns\\Details\\images\\toolbar_icons_2_shadow", label = "Set 4", icon = "Interface\\AddOns\\Details\\images\\toolbar_icons_2_shadow", texcoord = {0, 0.125, 0, 1}, onclick = on_select_icon_set},
+                {value = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons", label = "Set 1", icon = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons", texcoord = {0, 0.125, 0, 1}, onclick = on_select_icon_set},
+                {value = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons_shadow", label = "Set 2", icon = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons_shadow", texcoord = {0, 0.125, 0, 1}, onclick = on_select_icon_set},
+                {value = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons_2", label = "Set 3", icon = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons_2", texcoord = {0, 0.125, 0, 1}, onclick = on_select_icon_set},
+                {value = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons_2_shadow", label = "Set 4", icon = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\toolbar_icons_2_shadow", texcoord = {0, 0.125, 0, 1}, onclick = on_select_icon_set},
             }
             return iconMenu
         end
@@ -2842,7 +2842,7 @@ do
                 inline = true,
                 name = "",
                 --desc = "",
-                icontexture = [[Interface\AddOns\Details\images\toolbar_icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]],
                 icontexcoords = {0/256, 32/256, 0, 1},
             },
 
@@ -2857,7 +2857,7 @@ do
                 inline = true,
                 name = "",
                 --desc = "",
-                icontexture = [[Interface\AddOns\Details\images\toolbar_icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]],
                 icontexcoords = {33/256, 64/256, 0, 1},
             },
 
@@ -2872,7 +2872,7 @@ do
                 inline = true,
                 name = "",
                 --desc = "",
-                icontexture = [[Interface\AddOns\Details\images\toolbar_icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]],
                 icontexcoords = {64/256, 96/256, 0, 1},
             },
 
@@ -2887,7 +2887,7 @@ do
                 inline = true,
                 name = "",
                 --desc = "",
-                icontexture = [[Interface\AddOns\Details\images\toolbar_icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]],
                 icontexcoords = {96/256, 128/256, 0, 1},
             },
 
@@ -2902,7 +2902,7 @@ do
                 inline = true,
                 name = "",
                 --desc = "",
-                icontexture = [[Interface\AddOns\Details\images\toolbar_icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]],
                 icontexcoords = {128/256, 160/256, 0, 1},
             },
 
@@ -2917,7 +2917,7 @@ do
                 inline = true,
                 name = "",
                 --desc = "",
-                icontexture = [[Interface\AddOns\Details\images\toolbar_icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\toolbar_icons]],
                 icontexcoords = {160/256, 192/256, 0, 1},
             },
 
@@ -5476,25 +5476,25 @@ do
 
             --background grid
             local icon1 = DF:NewImage(sectionFrame, nil, 128, 64, "artwork", nil, nil, "$parentIcon1")
-            icon1:SetTexture("Interface\\AddOns\\Details\\images\\icons")
+            icon1:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons")
             icon1:SetPoint("topleft", sectionFrame, "topleft", previewX, previewY)
             icon1:SetDrawLayer("artwork", 1)
             icon1:SetTexCoord(0.337890625, 0.5859375, 0.59375, 0.716796875-0.0009765625) --173 304 300 367
 
             local icon2 = DF:NewImage(sectionFrame, nil, 128, 64, "artwork", nil, nil, "$parentIcon2")
-            icon2:SetTexture("Interface\\AddOns\\Details\\images\\icons")
+            icon2:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons")
             icon2:SetPoint("left", icon1.widget, "right", -1, 0)
             icon2:SetDrawLayer("artwork", 1)
             icon2:SetTexCoord(0.337890625, 0.5859375, 0.59375, 0.716796875-0.0009765625) --173 304 300 367
 
             local icon3 = DF:NewImage(sectionFrame, nil, 128, 64, "artwork", nil, nil, "$parentIcon3")
-            icon3:SetTexture("Interface\\AddOns\\Details\\images\\icons")
+            icon3:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons")
             icon3:SetPoint("top", icon1.widget, "bottom")
             icon3:SetDrawLayer("artwork", 1)
             icon3:SetTexCoord(0.337890625, 0.5859375, 0.59375+0.0009765625, 0.716796875) --173 304 300 367
 
             local icon4 = DF:NewImage(sectionFrame, nil, 128, 64, "artwork", nil, nil, "$parentIcon4")
-            icon4:SetTexture("Interface\\AddOns\\Details\\images\\icons")
+            icon4:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons")
             icon4:SetPoint("left", icon3.widget, "right", -1, 0)
             icon4:SetDrawLayer("artwork", 1)
             icon4:SetTexCoord(0.337890625, 0.5859375, 0.59375+0.0009765625, 0.716796875) --173 304 300 367
@@ -5509,7 +5509,7 @@ do
 
             local L1 = sectionFrame:CreateTexture(nil, "overlay")
             L1:SetPoint("topleft", preview, "topleft")
-            L1:SetTexture("Interface\\AddOns\\Details\\images\\icons")
+            L1:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons")
             L1:SetTexCoord(0.13671875+0.0009765625, 0.234375, 0.29296875, 0.1953125+0.0009765625)
             L1:SetSize(w, h)
             L1:SetDrawLayer("overlay", 2)
@@ -5517,7 +5517,7 @@ do
 
             local L2 = sectionFrame:CreateTexture(nil, "overlay")
             L2:SetPoint("bottomleft", preview, "bottomleft")
-            L2:SetTexture("Interface\\AddOns\\Details\\images\\icons")
+            L2:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons")
             L2:SetTexCoord(0.13671875+0.0009765625, 0.234375, 0.1953125+0.0009765625, 0.29296875)
             L2:SetSize(w, h)
             L2:SetDrawLayer("overlay", 2)
@@ -5525,7 +5525,7 @@ do
 
             local L3 = sectionFrame:CreateTexture(nil, "overlay")
             L3:SetPoint("bottomright", preview, "bottomright", 0, 0)
-            L3:SetTexture("Interface\\AddOns\\Details\\images\\icons")
+            L3:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons")
             L3:SetTexCoord(0.234375, 0.13671875-0.0009765625, 0.1953125+0.0009765625, 0.29296875)
             L3:SetSize(w, h)
             L3:SetDrawLayer("overlay", 5)
@@ -5533,7 +5533,7 @@ do
 
             local L4 = sectionFrame:CreateTexture(nil, "overlay")
             L4:SetPoint("topright", preview, "topright", 0, 0)
-            L4:SetTexture("Interface\\AddOns\\Details\\images\\icons")
+            L4:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\icons")
             L4:SetTexCoord(0.234375, 0.13671875-0.0009765625, 0.29296875, 0.1953125+0.0009765625)
             L4:SetSize(w, h)
             L4:SetDrawLayer("overlay", 5)
@@ -5687,7 +5687,7 @@ do
                     if (value) then
                         --first time using a wallpaper
                         if (not currentInstance.wallpaper.texture) then
-                            currentInstance.wallpaper.texture = "Interface\\AddOns\\Details\\images\\background"
+                            currentInstance.wallpaper.texture = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\background"
                         end
                         editInstanceSetting(currentInstance, "InstanceWallpaper", true)
                     else
@@ -5743,7 +5743,7 @@ do
                 func = function(self)
                     startImageEdit()
                 end,
-                icontexture = [[Interface\AddOns\Details\images\icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
                 icontexcoords = {469/512, 505/512, 290/512, 322/512},
                 name = Loc ["STRING_OPTIONS_EDITIMAGE"],
                 desc = Loc ["STRING_OPTIONS_EDITIMAGE"],
@@ -5757,7 +5757,7 @@ do
                 func = function(self)
                     loadImage()
                 end,
-                icontexture = [[Interface\AddOns\Details\images\icons]],
+                icontexture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
                 icontexcoords = {437/512, 467/512, 191/512, 239/512},
                 name = Loc ["STRING_OPTIONS_WALLPAPER_LOAD"],
                 desc = Loc ["STRING_OPTIONS_WALLPAPER_LOAD"],
@@ -6721,7 +6721,7 @@ do
 			streamerTitleDesc:SetJustifyV ("top")
 			streamerTitleDesc:SetPoint("topleft", sectionFrame.streamerPluginAnchor, "bottomleft", 0, -4)
 
-			local streamerTitleImage = DF:CreateImage(sectionFrame, [[Interface\AddOns\Details\images\icons2.blp]], 268*0.75, 59*0.75, "overlay", {0, 268/512, 454/512, 1})
+			local streamerTitleImage = DF:CreateImage(sectionFrame, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2.blp]], 268*0.75, 59*0.75, "overlay", {0, 268/512, 454/512, 1})
 			streamerTitleImage:SetPoint("topleft", sectionFrame.streamerPluginAnchor, "bottomleft", 0, -40)
 
 			--get the plugin object
@@ -6811,7 +6811,7 @@ do
 			eventTrackerTitleDesc:SetSize(270, 40)
 			eventTrackerTitleDesc:SetPoint("topleft", sectionFrame.eventTrackerAnchor, "bottomleft", 0, -4)
 
-			local eventTrackerTitleImage = DF:CreateImage(sectionFrame, [[Interface\AddOns\Details\images\icons2]], 256, 50, "overlay", {0.5, 1, 134/512, 184/512})
+			local eventTrackerTitleImage = DF:CreateImage(sectionFrame, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], 256, 50, "overlay", {0.5, 1, 134/512, 184/512})
 			eventTrackerTitleImage:SetPoint("topleft", sectionFrame.eventTrackerAnchor, "bottomleft", 0, -40)
 
             local enableEventTracker = function()
@@ -6853,7 +6853,7 @@ do
 			currentDPSTitleDesc:SetSize(270, 40)
 			currentDPSTitleDesc:SetPoint("topleft", sectionFrame.currentDPSAnchor, "bottomleft", 0, -4)
 
-			local currentDPSTitleImage = DF:CreateImage(sectionFrame, [[Interface\AddOns\Details\images\icons2]], 256, 32, "overlay", {0/512, 256/512, 421/512, 453/512})
+			local currentDPSTitleImage = DF:CreateImage(sectionFrame, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], 256, 32, "overlay", {0/512, 256/512, 421/512, 453/512})
 			currentDPSTitleImage:SetPoint("topleft", sectionFrame.currentDPSAnchor, "bottomleft", 0, -40)
 
             local enableArenaDPS = function()
@@ -7191,7 +7191,7 @@ do
     local big_code_editor = DF:NewSpecialLuaEditorEntry(sectionFrame, 683, 422, "bigCodeEditor", "$parentBigCodeEditor")
     big_code_editor:SetPoint("topleft", sectionFrame, "topleft", startX, startY - 70)
     big_code_editor:SetFrameLevel(sectionFrame:GetFrameLevel()+6)
-    big_code_editor:SetBackdrop({bgFile = [[Interface\AddOns\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1,tile = 1, tileSize = 16})
+    big_code_editor:SetBackdrop({bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1,tile = 1, tileSize = 16})
     DF:ReskinSlider(big_code_editor.scroll)
     big_code_editor:SetBackdropColor(0.5, 0.5, 0.5, 0.95)
     big_code_editor:SetBackdropBorderColor(0, 0, 0, 1)
@@ -7261,7 +7261,7 @@ do
     local big_code_editor2 = DF:NewSpecialLuaEditorEntry(sectionFrame, 643, 402, "exportEditor", "$parentExportEditor", true)
     big_code_editor2:SetPoint("topleft", sectionFrame, "topleft", 7, -70)
     big_code_editor2:SetFrameLevel(sectionFrame:GetFrameLevel()+6)
-    big_code_editor2:SetBackdrop({bgFile = [[Interface\AddOns\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1,tile = 1, tileSize = 16})
+    big_code_editor2:SetBackdrop({bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1,tile = 1, tileSize = 16})
     DF:ReskinSlider(big_code_editor2.scroll)
     big_code_editor2:SetBackdropColor(0.5, 0.5, 0.5, 0.95)
     big_code_editor2:SetBackdropBorderColor(0, 0, 0, 1)
@@ -7364,7 +7364,7 @@ do
         addframe:SetFrameLevel(7)
         addframe:Hide()
 
-        addframe:SetBackdrop({bgFile = [[Interface\AddOns\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1,tile = 1, tileSize = 16})
+        addframe:SetBackdrop({bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1,tile = 1, tileSize = 16})
         addframe:SetBackdropColor(0.5, 0.5, 0.5, 0.95)
         addframe:SetBackdropBorderColor(0, 0, 0, 1)
 
@@ -7430,7 +7430,7 @@ do
         importframe.editbox:SetFont(font, 9, flag)
         importframe:SetPoint("topleft", sectionFrame, "topleft", startX, startY - 70)
         importframe:SetFrameLevel(sectionFrame:GetFrameLevel()+6)
-        importframe:SetBackdrop({bgFile = [[Interface\AddOns\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1,tile = 1, tileSize = 16})
+        importframe:SetBackdrop({bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1,tile = 1, tileSize = 16})
         DF:ReskinSlider(importframe.scroll)
         importframe:SetBackdropColor(0.5, 0.5, 0.5, 0.95)
         importframe:SetBackdropBorderColor(0, 0, 0, 1)

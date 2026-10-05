@@ -912,11 +912,11 @@ function atributo_energy:ToolTipRegenRecebido (instancia, numero, barra, keydown
 
 	local ismaximized = false
 	if (keydown == "shift" or TooltipMaximizedMethod == 2 or TooltipMaximizedMethod == 3) then
-		GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
+		GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
 		_detalhes:AddTooltipHeaderStatusbar (r, g, b, 1)
 		ismaximized = true
 	else
-		GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
+		GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
 		_detalhes:AddTooltipHeaderStatusbar (r, g, b, barAlha)
 	end
 
@@ -973,11 +973,11 @@ function atributo_energy:ToolTipRegenRecebido (instancia, numero, barra, keydown
 
 	local ismaximized = false
 	if (keydown == "ctrl" or TooltipMaximizedMethod == 2 or TooltipMaximizedMethod == 4) then
-		GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
+		GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
 		_detalhes:AddTooltipHeaderStatusbar (r, g, b, 1)
 		ismaximized = true
 	else
-		GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
+		GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
 		_detalhes:AddTooltipHeaderStatusbar (r, g, b, barAlha)
 	end
 
@@ -1008,7 +1008,7 @@ function atributo_energy:ToolTipRegenRecebido (instancia, numero, barra, keydown
 		if (classe == "UNKNOW") then
 			GameCooltip:AddIcon ("Interface\\LFGFRAME\\LFGROLE_BW", nil, nil, icon_size.W, icon_size.H, .25, .5, 0, 1)
 		else
-			GameCooltip:AddIcon ("Interface\\AddOns\\Details\\images\\classes_small", nil, nil, icon_size.W, icon_size.H, _unpack(_detalhes.class_coords [classe]))
+			GameCooltip:AddIcon ("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small", nil, nil, icon_size.W, icon_size.H, _unpack(_detalhes.class_coords [classe]))
 		end
 
 	end
@@ -1307,7 +1307,7 @@ function atributo_energy:MontaDetalhesRegenRecebido (nome, barra)
 		barra.lineText4:SetText(_detalhes:comma_value (tabela[2]) .." (" .. _cstr("%.1f", tabela[2] / total_regenerado * 100) .."%)")
 
 		barra.textura:SetStatusBarColor(_unpack(_detalhes.class_colors [tabela[3]]))
-		barra.icone:SetTexture("Interface\\AddOns\\Details\\images\\classes_small")
+		barra.icone:SetTexture("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small")
 
 		barra.icone:SetTexCoord(_unpack(_detalhes.class_coords [tabela[3]]))
 

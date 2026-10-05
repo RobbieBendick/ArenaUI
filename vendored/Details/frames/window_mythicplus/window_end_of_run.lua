@@ -269,7 +269,7 @@ local createLootSquare = function(playerBanner, name, parent, lootIndex)
 	end)
 
 	local shadowTexture = playerBanner:CreateTexture("$parentShadowTexture", "artwork")
-	shadowTexture:SetTexture([[Interface\AddOns\Details\images\end_of_mplus_banner_mask.png]])
+	shadowTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus_banner_mask.png]])
 	shadowTexture:SetTexCoord(441/512, 511/512, 81/512, 151/512)
 	shadowTexture:SetSize(32, 32)
 	shadowTexture:SetVertexColor(0.05, 0.05, 0.05, 0.6)
@@ -351,7 +351,7 @@ local createPlayerBanner = function(parent, name, index)
 		---@cast playerBanner playerbanner
 		local backgroundBannerTexture = playerBanner:CreateTexture("$parentBannerTexture", "background", nil, -1)
 		---@cast backgroundBannerTexture animatedtexture
-		backgroundBannerTexture:SetTexture([[Interface\AddOns\Details\images\end_of_mplus_banner_mask.png]])
+		backgroundBannerTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus_banner_mask.png]])
 		backgroundBannerTexture:SetSize(playerBannerSettings.background_width, playerBannerSettings.background_height)
 		backgroundBannerTexture:SetPoint("topright", playerBanner, "topleft", playerBanner:GetHeight()/2, 0)
 		backgroundBannerTexture:SetPoint("bottomright", playerBanner, "bottomleft", playerBanner:GetHeight()/2, 0)
@@ -361,7 +361,7 @@ local createPlayerBanner = function(parent, name, index)
 
 		--backdrop gradient from bottom to top
 		local maskTexture = playerBanner:CreateMaskTexture("$parentBackgroundBannerMaskTexture", "artwork")
-		maskTexture:SetTexture([[Interface\AddOns\Details\images\end_of_mplus_banner_mask.png]])
+		maskTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus_banner_mask.png]])
 		maskTexture:SetPoint("topright", backgroundBannerTexture, "topright", 0, 0)
 		maskTexture:SetSize(backgroundBannerTexture:GetSize())
 		playerBanner.BackgroundBannerMaskTexture = maskTexture
@@ -398,7 +398,7 @@ local createPlayerBanner = function(parent, name, index)
 		---@type animatedtexture
 		local bannerFlash = playerBanner:CreateTexture("$parentBannerTexture", "background", nil, 0)
 		bannerFlash:SetAlpha(0)
-		bannerFlash:SetTexture([[Interface\AddOns\Details\images\end_of_mplus_banner_mask.png]])
+		bannerFlash:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus_banner_mask.png]])
 		bannerFlash:SetSize(playerBannerSettings.background_width, playerBannerSettings.background_height)
 		bannerFlash:SetPoint("topright", playerBanner, "topleft", playerBanner:GetHeight()/2, 0)
 		bannerFlash:SetPoint("bottomright", playerBanner, "bottomleft", playerBanner:GetHeight()/2, 0)
@@ -480,7 +480,7 @@ local createPlayerBanner = function(parent, name, index)
 	playerBanner.KeyStoneDungeonTexture = keyStoneDungeonTexture
 
     local dungeonBorderTexture = playerBanner:CreateTexture("$parentDungeonBorder", "border")
-    dungeonBorderTexture:SetTexture([[Interface\AddOns\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
+    dungeonBorderTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
 	dungeonBorderTexture:SetTexCoord(441/512, 511/512, 81/512, 151/512)
     dungeonBorderTexture:SetDrawLayer("border", 0)
     dungeonBorderTexture:ClearAllPoints()
@@ -1022,7 +1022,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 		readyFrame:Hide()
 
 		local backgroundGradient = readyFrame:CreateTexture("$parentBackgroundGradient", "background", nil, 0)
-		backgroundGradient:SetTexture([[Interface\AddOns\Details\images\gradient_black_transparent.png]], nil, nil, "TRILINEAR")
+		backgroundGradient:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\gradient_black_transparent.png]], nil, nil, "TRILINEAR")
 		backgroundGradient:SetPoint("topleft", readyFrame, "topleft", 0, 0)
 		backgroundGradient:SetPoint("bottomright", readyFrame, "bottomright", 0, 0)
 		backgroundGradient:SetWidth(readyFrame:GetWidth())
@@ -1062,7 +1062,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 		downloadFrame.DownloadButton = downloadButton
 
 		local previewImage = downloadFrame:CreateTexture("$parentPreviewImage", "overlay")
-		previewImage:SetTexture([[Interface\AddOns\Details\images\mythicp_plugin_panel.png]], nil, nil, "TRILINEAR")
+		previewImage:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\mythicp_plugin_panel.png]], nil, nil, "TRILINEAR")
 		previewImage:SetSize(readyFrame:GetWidth() - 20, 160)
 		previewImage:SetPoint("bottomright", downloadButton.widget, "topright", 0, 36)
 
@@ -1141,7 +1141,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 		readyFrame.entryAnimationDuration = 0.1
 
 		local headerTexture = readyFrame:CreateTexture("$parentHeaderTexture", "artwork", nil, 1)
-		headerTexture:SetTexture([[Interface\AddOns\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
+		headerTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
 		headerTexture:SetTexCoord(320/512, 498/512, 161/512, 192/512)
 		headerTexture:SetSize(178, 31)
 		headerTexture:SetVertexColor(0.251, 0.251, 0.251, 0.823)
@@ -1155,7 +1155,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 
 		--clock texture and icon to show the total time elapsed
 		local elapsedTimeIcon = readyFrame:CreateTexture("$parentClockIcon", "artwork", nil, 2)
-		elapsedTimeIcon:SetTexture([[Interface\AddOns\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
+		elapsedTimeIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
 		elapsedTimeIcon:SetTexCoord(172/512, 235/512, 84/512, 147/512)
 		readyFrame.ElapsedTimeIcon = elapsedTimeIcon
 
@@ -1168,7 +1168,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 
 		--another clock texture and icon to show the wasted time (time out of combat)
 		local outOfCombatIcon = readyFrame:CreateTexture("$parentClockIcon2", "artwork", nil, 2)
-		outOfCombatIcon:SetTexture([[Interface\AddOns\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
+		outOfCombatIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
 		outOfCombatIcon:SetTexCoord(172/512, 235/512, 84/512, 147/512)
 		outOfCombatIcon:SetVertexColor(detailsFramework:ParseColors("orangered"))
 		readyFrame.OutOfCombatIcon = outOfCombatIcon
@@ -1183,7 +1183,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 
 		--create the sandtime icon and a text to show the keystone level
 		local sandTimeIcon = readyFrame:CreateTexture("$parentSandTimeIcon", "artwork", nil, 2)
-		sandTimeIcon:SetTexture([[Interface\AddOns\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
+		sandTimeIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
 		sandTimeIcon:SetTexCoord(81/512, 137/512, 83/512, 143/512)
 		readyFrame.SandTimeIcon = sandTimeIcon
 
@@ -1196,7 +1196,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 
 		--create a strong arm texture and a text to show the ranting of the player
 		local strongArmIcon = readyFrame:CreateTexture("$parentStrongArmIcon", "artwork", nil, 2)
-		strongArmIcon:SetTexture([[Interface\AddOns\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
+		strongArmIcon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
 		strongArmIcon:SetTexCoord(84/512, 145/512, 151/512, 215/512)
 		readyFrame.StrongArmIcon = strongArmIcon
 
@@ -1305,12 +1305,12 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 		readyFrame.ConfigButton:SetSize(closeButton:GetSize())
 
 		local normalTexture = readyFrame.ConfigButton:CreateTexture(nil, "overlay")
-		normalTexture:SetTexture([[Interface\AddOns\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
+		normalTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
 		normalTexture:SetTexCoord(79/512, 113/512, 0/512, 36/512)
 		normalTexture:SetDesaturated(true)
 
 		local pushedTexture = readyFrame.ConfigButton:CreateTexture(nil, "overlay")
-		pushedTexture:SetTexture([[Interface\AddOns\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
+		pushedTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], nil, nil, "TRILINEAR")
 		pushedTexture:SetTexCoord(114/512, 148/512, 0/512, 36/512)
 		pushedTexture:SetDesaturated(true)
 
@@ -1327,7 +1327,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 		waitingForLootLabel:Hide()
 
 		--auto close time bar
-		local autoCloseTimeBar = detailsFramework:CreateTimeBar(contentFrame, [[Interface\AddOns\Details\images\bar_serenity]])
+		local autoCloseTimeBar = detailsFramework:CreateTimeBar(contentFrame, [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]])
 		autoCloseTimeBar:SetHook("OnTimerEnd", function()
 			readyFrame:Hide()
 		end)
@@ -1359,7 +1359,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 		PixelUtil.SetPoint(readyFrame.ShowBreakdownButton, "topleft", readyFrame, "topleft", 31, -30)
 		PixelUtil.SetSize(readyFrame.ShowBreakdownButton, 145, 32)
 		--readyFrame.ShowBreakdownButton:SetBackdrop(nil)
-		readyFrame.ShowBreakdownButton:SetIcon([[Interface\AddOns\Details\images\icons2.png]], 16, 16, "overlay", {84/512, 120/512, 153/512, 187/512}, {.7, .7, .7, 1}, nil, 0, 0)
+		readyFrame.ShowBreakdownButton:SetIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\icons2.png]], 16, 16, "overlay", {84/512, 120/512, 153/512, 187/512}, {.7, .7, .7, 1}, nil, 0, 0)
 		readyFrame.ShowBreakdownButton.textcolor = textColor
         detailsFramework:AddRoundedCornersToFrame(readyFrame.ShowBreakdownButton.widget, roundedCornerPreset)
 		leftAnchor = readyFrame.ShowBreakdownButton
@@ -1377,7 +1377,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 		--set the template
 		--readyFrame.ShowChartButton:SetTemplate(detailsFramework:GetTemplate("button", "OPTIONS_BUTTON_TEMPLATE"))
 		--readyFrame.ShowChartButton:SetBackdrop(nil)
-		readyFrame.ShowChartButton:SetIcon([[Interface\AddOns\Details\images\end_of_mplus.png]], 16, 16, "overlay", {153/512, 185/512, 0, 32/512}, {1, 1, 1, 1}, nil, 0, 0)
+		readyFrame.ShowChartButton:SetIcon([[Interface\AddOns\ArenaUI\vendored\Details\images\end_of_mplus.png]], 16, 16, "overlay", {153/512, 185/512, 0, 32/512}, {1, 1, 1, 1}, nil, 0, 0)
 		readyFrame.ShowChartButton.textcolor = textColor
         --detailsFramework:AddRoundedCornersToFrame(readyFrame.ShowChartButton.widget, roundedCornerPreset)
 
@@ -1484,7 +1484,7 @@ function mythicDungeonFrames.ShowEndOfMythicPlusPanel()
 		--beat the timer
 		PlaySound(SOUNDKIT.UI_70_CHALLENGE_MODE_KEYSTONE_UPGRADE)
 		C_Timer.After(0.020, function()
-			--PlaySoundFile([[Interface\AddOns\Details\sounds\bassdrop2.mp3]])
+			--PlaySoundFile([[Interface\AddOns\ArenaUI\vendored\Details\sounds\bassdrop2.mp3]])
 		end)
 	else
 		--did not beat the timer

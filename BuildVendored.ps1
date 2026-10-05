@@ -184,7 +184,8 @@ $addons = @(
     "Details_RaidCheck", "Details_Streamer", "Details_TinyThreat", "Details_Vanguard",
     "ArenaAnalytics", "WeakAuras", "WeakAurasOptions", "WeakAurasModelPaths",
     "WeakAurasTemplates", "WeakAurasArchive",
-    "BetterBlizzPlates", "BetterBlizzFrames"
+    "BetterBlizzPlates", "BetterBlizzFrames",
+    "BuffOverlay"
 )
 
 if ($Only -and $Only.Count -gt 0) {
@@ -274,8 +275,8 @@ foreach ($name in $addons) {
             $body = $body.Replace("Interface/AddOns/$name/", "Interface/AddOns/ArenaUI/vendored/$name/")
             $body = [regex]::Replace(
                 $body,
-                '(?i)Interface([\\/])Addons\1' + [regex]::Escape($name) + '\1',
-                ('Interface${1}AddOns\ArenaUI\vendored\' + $name + '${1}')
+                '(?i)Interface([/\\]+)AddOns\1' + [regex]::Escape($name) + '\1',
+                ('Interface${1}AddOns${1}ArenaUI${1}vendored${1}' + $name + '${1}')
             )
             $wrapped = "if ArenaUI_VendoredSkip and ArenaUI_VendoredSkip[`"$name`"] then return end`r`n" +
                 "ArenaUI_LoadingVendored = `"$name`"`r`n" +
@@ -302,6 +303,18 @@ foreach ($name in $addons) {
                 "  end,`r`n" +
                 "}, {`r`n" +
                 "  __index = function(_, key)`r`n" +
+                "    if key == `"C_AddOns`" and ArenaUI_VendoredC_AddOns then`r`n" +
+                "      return ArenaUI_VendoredC_AddOns`r`n" +
+                "    end`r`n" +
+                "    if key == `"GetAddOnMetadata`" and ArenaUI_VendoredGetAddOnMetadata then`r`n" +
+                "      return ArenaUI_VendoredGetAddOnMetadata`r`n" +
+                "    end`r`n" +
+                "    if key == `"IsAddOnLoaded`" and ArenaUI_VendoredIsAddOnLoaded then`r`n" +
+                "      return ArenaUI_VendoredIsAddOnLoaded`r`n" +
+                "    end`r`n" +
+                "    if key == `"LoadAddOn`" and ArenaUI_VendoredLoadAddOn then`r`n" +
+                "      return ArenaUI_VendoredLoadAddOn`r`n" +
+                "    end`r`n" +
                 "    if __aui_frames and __aui_frames[key] then`r`n" +
                 "      local frame = _G[__aui_frames[key]]`r`n" +
                 "      if frame ~= nil then return frame end`r`n" +

@@ -22,7 +22,7 @@ Details.TextureAtlas = {
     },
 
     ["segment-icon-mythicplus"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 14,
         height = 10,
         leftTexCoord = 479/512,
@@ -36,7 +36,7 @@ Details.TextureAtlas = {
     },
 
     ["segment-icon-empty"] = {
-        file = [[Interface\AddOns\Details\images\empty16]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\empty16]],
         width = 12,
         height = 12,
         nativeWidth = 16,
@@ -44,7 +44,7 @@ Details.TextureAtlas = {
     },
 
     ["segment-icon-broom"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 14,
         height = 16,
         leftTexCoord = 14/512,
@@ -58,7 +58,7 @@ Details.TextureAtlas = {
     },
 
     ["segment-icon-training-dummy"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 14,
         height = 16,
         leftTexCoord = 275/512,
@@ -72,7 +72,7 @@ Details.TextureAtlas = {
     },
 
     ["segment-icon-training-dummy-zoom"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 12,
         height = 16,
         leftTexCoord = 298/512,
@@ -100,7 +100,7 @@ Details.TextureAtlas = {
     },
 
     ["segment-icon-skull"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 16,
         height = 16,
         leftTexCoord = 0.96875,
@@ -114,7 +114,7 @@ Details.TextureAtlas = {
     },
 
     ["segment-icon-arena"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 16,
         height = 12,
         leftTexCoord = 0.251953125,
@@ -128,7 +128,7 @@ Details.TextureAtlas = {
     },
 
     ["segment-icon-boss"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 16,
         height = 16,
         leftTexCoord = 0.96875,
@@ -235,7 +235,7 @@ Details.TextureAtlas = {
     },
 
     ["broom"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 44,
         height = 68,
         leftTexCoord = 14/512,
@@ -257,13 +257,13 @@ Details.TextureAtlas = {
         height = 9,
         tilesVertically = false,
         tilesHorizontally = false,
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         nativeWidth = 512,
         nativeHeight = 512,
     },
 
     ["breakdown-icon-reportbutton"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         leftTexCoord = 249/512,
         rightTexCoord = 270/512,
         topTexCoord = 110/512,
@@ -276,7 +276,7 @@ Details.TextureAtlas = {
     },
 
     ["breakdown-icon-optionsbutton"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         leftTexCoord = 211/512,
         rightTexCoord = 243/512,
         topTexCoord = 110/512,
@@ -303,7 +303,7 @@ Details.TextureAtlas = {
     },
 
     ["small-clock"] = {
-        file = [[Interface\AddOns\Details\images\icons]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
         width = 16,
         height = 16,
         leftTexCoord = 211/512,
@@ -317,7 +317,7 @@ Details.TextureAtlas = {
     },
 
     ["iconmask"] = {
-        file = [[Interface\AddOns\Details\images\common-iconmask.png]],
+        file = [[Interface\AddOns\ArenaUI\vendored\Details\images\common-iconmask.png]],
         width = 64,
         height = 64,
         leftTexCoord = 0,

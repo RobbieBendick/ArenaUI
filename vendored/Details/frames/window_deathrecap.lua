@@ -98,13 +98,13 @@ local create_deathrecap_line = function(parent, n)
 	lifeStatusBar:SetPoint("bottomleft", line, "bottomleft")
 	lifeStatusBar:SetColorTexture(0.5, 0.5, 0.5, 0.4)
 
-	backgroundTexture:SetTexture([[Interface\AddOns\Details\images\deathrecap_background]])
+	backgroundTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\deathrecap_background]])
 	backgroundTexture:SetTexCoord(0, 1, 0, 1)
 	backgroundTexture:SetVertexColor(.1, .1, .1, .3)
 
 	--top border
 	local TopFader = line:CreateTexture(nil, "border")
-	TopFader:SetTexture([[Interface\AddOns\Details\images\deathrecap_background_top]])
+	TopFader:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\deathrecap_background_top]])
 	TopFader:SetTexCoord(0, 1, 0, 1)
 	TopFader:SetVertexColor(.1, .1, .1, .3)
 	TopFader:SetPoint("bottomleft", backgroundTexture, "topleft", 0, -0)
@@ -116,7 +116,7 @@ local create_deathrecap_line = function(parent, n)
 	if (n == 10) then
 		--bottom fader
 		local backgroundTexture2 = line:CreateTexture(nil, "border")
-		backgroundTexture2:SetTexture([[Interface\AddOns\Details\images\deathrecap_background_bottom]])
+		backgroundTexture2:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\deathrecap_background_bottom]])
 		backgroundTexture2:SetTexCoord(0, 1, 0, 1)
 		backgroundTexture2:SetVertexColor(.1, .1, .1, .3)
 		backgroundTexture2:SetPoint("topleft", backgroundTexture, "bottomleft", 0, 0)

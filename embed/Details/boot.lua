@@ -1128,10 +1128,10 @@ do
 			}
 			_detalhes.tooltip_border_color = {1, 1, 1, 1}
 			_detalhes.tooltip_spell_icon = {file = [[Interface\CHARACTERFRAME\UI-StateIcon]], coords = {36/64, 58/64, 7/64, 26/64}}
-			_detalhes.tooltip_target_icon = {file = [[Interface\Addons\Details\images\icons]], coords = {0, 0.03125, 0.126953125, 0.15625}}
+			_detalhes.tooltip_target_icon = {file = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]], coords = {0, 0.03125, 0.126953125, 0.15625}}
 
 		--icons
-			_detalhes.attribute_icons = [[Interface\AddOns\Details\images\atributos_icones]]
+			_detalhes.attribute_icons = [[Interface\AddOns\ArenaUI\vendored\Details\images\atributos_icones]]
 			function _detalhes:GetAttributeIcon (attribute)
 				return _detalhes.attribute_icons, 0.125 * (attribute - 1), 0.125 * attribute, 0, 1
 			end
@@ -1541,54 +1541,54 @@ do
 		---@type table
 		local SharedMedia = LibStub:GetLibrary ("LibSharedMedia-3.0")
 		--default bars
-		SharedMedia:Register("statusbar", "Details Hyanda Reverse", [[Interface\AddOns\Details\images\bar_textures\bar_hyanda_reverse.png]])
-		SharedMedia:Register("statusbar", "You Are the Best!", [[Interface\AddOns\Details\images\bar_textures\bar_best.png]])
-		SharedMedia:Register("statusbar", "Details Hyanda", [[Interface\AddOns\Details\images\bar_hyanda]])
+		SharedMedia:Register("statusbar", "Details Hyanda Reverse", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\bar_hyanda_reverse.png]])
+		SharedMedia:Register("statusbar", "You Are the Best!", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\bar_best.png]])
+		SharedMedia:Register("statusbar", "Details Hyanda", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_hyanda]])
 
-		SharedMedia:Register("statusbar", "Details D'ictum", [[Interface\AddOns\Details\images\bar4]])
-		SharedMedia:Register("statusbar", "Details Vidro", [[Interface\AddOns\Details\images\bar4_vidro]])
-		SharedMedia:Register("statusbar", "Details D'ictum (reverse)", [[Interface\AddOns\Details\images\bar4_reverse]])
+		SharedMedia:Register("statusbar", "Details D'ictum", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4]])
+		SharedMedia:Register("statusbar", "Details Vidro", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4_vidro]])
+		SharedMedia:Register("statusbar", "Details D'ictum (reverse)", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4_reverse]])
 
 		--flat bars
-		SharedMedia:Register("statusbar", "Skyline", [[Interface\AddOns\Details\images\bar_skyline]])
+		SharedMedia:Register("statusbar", "Skyline", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_skyline]])
 
-		SharedMedia:Register("statusbar", "Details Serenity", [[Interface\AddOns\Details\images\bar_serenity]])
-		SharedMedia:Register("statusbar", "BantoBar", [[Interface\AddOns\Details\images\BantoBar]])
-		SharedMedia:Register("statusbar", "Skyline Compact", [[Interface\AddOns\Details\images\bar_textures\bar_skyline_compact.png]])
+		SharedMedia:Register("statusbar", "Details Serenity", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]])
+		SharedMedia:Register("statusbar", "BantoBar", [[Interface\AddOns\ArenaUI\vendored\Details\images\BantoBar]])
+		SharedMedia:Register("statusbar", "Skyline Compact", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\bar_skyline_compact.png]])
 		SharedMedia:Register("statusbar", "WorldState Score", [[Interface\WorldStateFrame\WORLDSTATEFINALSCORE-HIGHLIGHT]])
 		SharedMedia:Register("statusbar", "AlwaysWork", [[Interface\WorldStateFrame\WORLDSTATEFINALSCORE-HIGHLIGHT]])
-		SharedMedia:Register("statusbar", "DGround", [[Interface\AddOns\Details\images\bar_background]])
-		SharedMedia:Register("statusbar", "Details Flat", [[Interface\AddOns\Details\images\bar_background]])
-		SharedMedia:Register("statusbar", "Splitbar", [[Interface\AddOns\Details\images\bar_textures\split_bar]])
-		SharedMedia:Register("statusbar", "Details2020", [[Interface\AddOns\Details\images\bar_textures\texture2020]])
-		SharedMedia:Register("statusbar", "Left White Gradient", [[Interface\AddOns\Details\images\bar_textures\gradient_white_10percent_left]])
-		SharedMedia:Register("statusbar", "Details! Slash", [[Interface\AddOns\Details\images\bar_textures\bar_of_bars.png]])
+		SharedMedia:Register("statusbar", "DGround", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background]])
+		SharedMedia:Register("statusbar", "Details Flat", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background]])
+		SharedMedia:Register("statusbar", "Splitbar", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\split_bar]])
+		SharedMedia:Register("statusbar", "Details2020", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\texture2020]])
+		SharedMedia:Register("statusbar", "Left White Gradient", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\gradient_white_10percent_left]])
+		SharedMedia:Register("statusbar", "Details! Slash", [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\bar_of_bars.png]])
 
 		--window bg and bar order
-		SharedMedia:Register("background", "Details Ground", [[Interface\AddOns\Details\images\background]])
-		SharedMedia:Register("border", "Details BarBorder 1", [[Interface\AddOns\Details\images\border_1]])
-		SharedMedia:Register("border", "Details BarBorder 2", [[Interface\AddOns\Details\images\border_2]])
-		SharedMedia:Register("border", "Details BarBorder 3", [[Interface\AddOns\Details\images\border_3]])
+		SharedMedia:Register("background", "Details Ground", [[Interface\AddOns\ArenaUI\vendored\Details\images\background]])
+		SharedMedia:Register("border", "Details BarBorder 1", [[Interface\AddOns\ArenaUI\vendored\Details\images\border_1]])
+		SharedMedia:Register("border", "Details BarBorder 2", [[Interface\AddOns\ArenaUI\vendored\Details\images\border_2]])
+		SharedMedia:Register("border", "Details BarBorder 3", [[Interface\AddOns\ArenaUI\vendored\Details\images\border_3]])
 		SharedMedia:Register("border", "1 Pixel", [[Interface\Buttons\WHITE8X8]])
 
 		--misc fonts
-		SharedMedia:Register("font", "Oswald", [[Interface\Addons\Details\fonts\Oswald-Regular.ttf]])
-		SharedMedia:Register("font", "Nueva Std Cond", [[Interface\Addons\Details\fonts\Nueva Std Cond.ttf]])
-		SharedMedia:Register("font", "Accidental Presidency", [[Interface\Addons\Details\fonts\Accidental Presidency.ttf]])
-		SharedMedia:Register("font", "TrashHand", [[Interface\Addons\Details\fonts\TrashHand.TTF]])
-		SharedMedia:Register("font", "Harry P", [[Interface\Addons\Details\fonts\HARRYP__.TTF]])
-		SharedMedia:Register("font", "FORCED SQUARE", [[Interface\Addons\Details\fonts\FORCED SQUARE.ttf]])
-		SharedMedia:Register("font", "Expressway", [[Interface\Addons\Details\fonts\Expressway.TTF]])
+		SharedMedia:Register("font", "Oswald", [[Interface\AddOns\ArenaUI\vendored\Details\fonts\Oswald-Regular.ttf]])
+		SharedMedia:Register("font", "Nueva Std Cond", [[Interface\AddOns\ArenaUI\vendored\Details\fonts\Nueva Std Cond.ttf]])
+		SharedMedia:Register("font", "Accidental Presidency", [[Interface\AddOns\ArenaUI\vendored\Details\fonts\Accidental Presidency.ttf]])
+		SharedMedia:Register("font", "TrashHand", [[Interface\AddOns\ArenaUI\vendored\Details\fonts\TrashHand.TTF]])
+		SharedMedia:Register("font", "Harry P", [[Interface\AddOns\ArenaUI\vendored\Details\fonts\HARRYP__.TTF]])
+		SharedMedia:Register("font", "FORCED SQUARE", [[Interface\AddOns\ArenaUI\vendored\Details\fonts\FORCED SQUARE.ttf]])
+		SharedMedia:Register("font", "Expressway", [[Interface\AddOns\ArenaUI\vendored\Details\fonts\Expressway.TTF]])
 
-		SharedMedia:Register("sound", "Details Gun1", [[Interface\Addons\Details\sounds\sound_gun2.ogg]])
-		SharedMedia:Register("sound", "Details Gun2", [[Interface\Addons\Details\sounds\sound_gun3.ogg]])
-		SharedMedia:Register("sound", "Details Jedi1", [[Interface\Addons\Details\sounds\sound_jedi1.ogg]])
-		SharedMedia:Register("sound", "Details Whip1", [[Interface\Addons\Details\sounds\sound_whip1.ogg]])
-		SharedMedia:Register("sound", "Details Horn", [[Interface\Addons\Details\sounds\Details Horn.ogg]])
+		SharedMedia:Register("sound", "Details Gun1", [[Interface\AddOns\ArenaUI\vendored\Details\sounds\sound_gun2.ogg]])
+		SharedMedia:Register("sound", "Details Gun2", [[Interface\AddOns\ArenaUI\vendored\Details\sounds\sound_gun3.ogg]])
+		SharedMedia:Register("sound", "Details Jedi1", [[Interface\AddOns\ArenaUI\vendored\Details\sounds\sound_jedi1.ogg]])
+		SharedMedia:Register("sound", "Details Whip1", [[Interface\AddOns\ArenaUI\vendored\Details\sounds\sound_whip1.ogg]])
+		SharedMedia:Register("sound", "Details Horn", [[Interface\AddOns\ArenaUI\vendored\Details\sounds\Details Horn.ogg]])
 
-		SharedMedia:Register("sound", "Details Warning", [[Interface\Addons\Details\sounds\Details Warning 100.ogg]])
-		SharedMedia:Register("sound", "Details Truck", [[Interface\Addons\Details\sounds\Details Truck.ogg]])
-		SharedMedia:Register("sound", "Details Bass Drop", [[Interface\Addons\Details\sounds\bassdrop2.mp3]])
+		SharedMedia:Register("sound", "Details Warning", [[Interface\AddOns\ArenaUI\vendored\Details\sounds\Details Warning 100.ogg]])
+		SharedMedia:Register("sound", "Details Truck", [[Interface\AddOns\ArenaUI\vendored\Details\sounds\Details Truck.ogg]])
+		SharedMedia:Register("sound", "Details Bass Drop", [[Interface\AddOns\ArenaUI\vendored\Details\sounds\bassdrop2.mp3]])
 
 	--dump table contents over chat panel
 		function Details.VarDump(t)
@@ -2289,6 +2289,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

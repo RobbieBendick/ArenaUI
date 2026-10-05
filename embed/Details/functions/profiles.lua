@@ -622,7 +622,7 @@ local default_profile = {
 	window2_data = {},
 
 	--class icons and colors
-	class_icons_small = [[Interface\AddOns\Details\images\classes_small]],
+	class_icons_small = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]],
 	class_coords = {
 		["DEMONHUNTER"] = {
 			0.73828126 / 2, -- [1]
@@ -1567,7 +1567,7 @@ local default_global_data = {
 
 		statusbar_background_color = {.15, .15, .15},
 		statusbar_background_alpha = 0.7,
-		statusbar_texture = [[Interface\AddOns\Details\images\bar_skyline]],
+		statusbar_texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_skyline]],
 		statusbar_alpha = 0.70,
 
 		blockspell_height = 67,
@@ -2320,6 +2320,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

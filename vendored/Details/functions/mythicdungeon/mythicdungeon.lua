@@ -310,7 +310,7 @@ function DetailsMythicPlusFrame.EventListener.OnDetailsEvent(contextObject, even
                 C_Timer.After(3, function()
                     --if (lowerInstance:IsEnabled()) then
                         --todo, need localization
-                        --lowerInstance:InstanceAlert("Details!" .. " " .. "Damage" .. " " .. "Meter", {[[Interface\AddOns\Details\images\minimap]], 16, 16, false}, 3, {function() end}, false, true)
+                        --lowerInstance:InstanceAlert("Details!" .. " " .. "Damage" .. " " .. "Meter", {[[Interface\AddOns\ArenaUI\vendored\Details\images\minimap]], 16, 16, false}, 3, {function() end}, false, true)
                     --end
                 end)
             end

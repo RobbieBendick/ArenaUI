@@ -1400,7 +1400,7 @@ L["STRING_WELCOME_29"] = [=[- El |cffffff00#numero|r en el botón de la ventana 
 - El botón muestra un menú de las |cffffff00ventanas cerradas|r, que se puedan mostrar de nuevo en cualquier momento.]=]
 L["STRING_WELCOME_3"] = "Seleconniar un método de cálculo para DPS y HPS:"
 L["STRING_WELCOME_30"] = "Uso de la interfaz: marcadores"
-L["STRING_WELCOME_31"] = [=[|cFFFFFF00Clic derecho|r en cualquier lugar de la ventana muestra el panel |cFFFFAA00Marcador|r.  |cFFFFFF00Clic derecho de nuevo|r cierra el panel o elige otra pantalla si se hace clic en un icono.  |cFFFFFF00Clic derecho|r en la barra de título para abrir el panel 'Todas las pantallas'.  |TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + haga clic derecho para cerrar la ventana.
+L["STRING_WELCOME_31"] = [=[|cFFFFFF00Clic derecho|r en cualquier lugar de la ventana muestra el panel |cFFFFAA00Marcador|r.  |cFFFFFF00Clic derecho de nuevo|r cierra el panel o elige otra pantalla si se hace clic en un icono.  |cFFFFFF00Clic derecho|r en la barra de título para abrir el panel 'Todas las pantallas'.  |TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + haga clic derecho para cerrar la ventana.
 
 ]=]
 L["STRING_WELCOME_32"] = "Usar la interfaz: Agrupar ventanas"

@@ -119,7 +119,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --npc healing taken
 
---local npchealingtaken_tooltip_background = {value = 100, color = {0.1960, 0.1960, 0.1960, 0.9097}, texture = [[Interface\AddOns\Details\images\bar_background2]]}
+--local npchealingtaken_tooltip_background = {value = 100, color = {0.1960, 0.1960, 0.1960, 0.9097}, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background2]]}
 
 --tooltip function
 
@@ -1137,11 +1137,11 @@ function healingClass:ToolTip_HealingDenied (instancia, numero, barra, keydown)
 
 		local ismaximized = false
 		if (keydown == "shift" or TooltipMaximizedMethod == 2 or TooltipMaximizedMethod == 3) then
-			--GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
+			--GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
 			--_detalhes:AddTooltipHeaderStatusbar (r, g, b, 1)
 			ismaximized = true
 		else
-			--GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
+			--GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
 			--_detalhes:AddTooltipHeaderStatusbar (r, g, b, barAlha)
 		end
 
@@ -1178,11 +1178,11 @@ function healingClass:ToolTip_HealingDenied (instancia, numero, barra, keydown)
 
 		local ismaximized = false
 		if (keydown == "ctrl" or TooltipMaximizedMethod == 2 or TooltipMaximizedMethod == 4) then
-			GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
+			GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
 			_detalhes:AddTooltipHeaderStatusbar (r, g, b, 1)
 			ismaximized = true
 		else
-			GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
+			GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
 			_detalhes:AddTooltipHeaderStatusbar (r, g, b, barAlha)
 		end
 
@@ -1207,7 +1207,7 @@ function healingClass:ToolTip_HealingDenied (instancia, numero, barra, keydown)
 				if (classe == "UNKNOW") then
 					GameCooltip:AddIcon ("Interface\\LFGFRAME\\LFGROLE_BW", nil, nil, 14, 14, .25, .5, 0, 1)
 				else
-					GameCooltip:AddIcon ("Interface\\AddOns\\Details\\images\\classes_small", nil, nil, 14, 14, _unpack(_detalhes.class_coords [classe]))
+					GameCooltip:AddIcon ("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small", nil, nil, 14, 14, _unpack(_detalhes.class_coords [classe]))
 				end
 			end
 
@@ -1272,7 +1272,7 @@ function healingClass:ToolTip_HealingDenied (instancia, numero, barra, keydown)
 				if (classe == "UNKNOW") then
 					GameCooltip:AddIcon ("Interface\\LFGFRAME\\LFGROLE_BW", nil, nil, 14, 14, .25, .5, 0, 1)
 				else
-					GameCooltip:AddIcon ("Interface\\AddOns\\Details\\images\\classes_small", nil, nil, 14, 14, _unpack(_detalhes.class_coords [classe]))
+					GameCooltip:AddIcon ("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small", nil, nil, 14, 14, _unpack(_detalhes.class_coords [classe]))
 				end
 			end
 	end
@@ -1315,11 +1315,11 @@ function healingClass:ToolTip_HealingTaken (instancia, numero, barra, keydown)
 	local ismaximized = false
 
 	if (keydown == "shift" or TooltipMaximizedMethod == 2 or TooltipMaximizedMethod == 3) then
-		--GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
+		--GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
 		--_detalhes:AddTooltipHeaderStatusbar (r, g, b, 1)
 		ismaximized = true
 	else
-		--GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
+		--GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
 		--_detalhes:AddTooltipHeaderStatusbar (r, g, b, barAlha)
 	end
 
@@ -1356,7 +1356,7 @@ function healingClass:ToolTip_HealingTaken (instancia, numero, barra, keydown)
 				local texture, l, r, t, b = _detalhes:GetSpecIcon (specID, false)
 				GameCooltip:AddIcon (texture, 1, 1, lineHeight, lineHeight, l, r, t, b)
 			else
-				GameCooltip:AddIcon ("Interface\\AddOns\\Details\\images\\classes_small", nil, nil, lineHeight, lineHeight, _unpack(_detalhes.class_coords [classe]))
+				GameCooltip:AddIcon ("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small", nil, nil, lineHeight, lineHeight, _unpack(_detalhes.class_coords [classe]))
 			end
 		end
 
@@ -1368,7 +1368,7 @@ function healingClass:ToolTip_HealingTaken (instancia, numero, barra, keydown)
 end
 
 ---------HEALING DONE / HPS / OVERHEAL
-local background_heal_vs_absorbs = {value = 100, color = {1, 1, 0, .25}, specialSpark = false, texture = [[Interface\AddOns\Details\images\bar4_glass]]}
+local background_heal_vs_absorbs = {value = 100, color = {1, 1, 0, .25}, specialSpark = false, texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar4_glass]]}
 
 function healingClass:ToolTip_HealingDone (instance, numero, barra, keydown)
 	local owner = self.owner
@@ -1468,11 +1468,11 @@ function healingClass:ToolTip_HealingDone (instance, numero, barra, keydown)
 
 	local ismaximized = false
 	if (keydown == "shift" or TooltipMaximizedMethod == 2 or TooltipMaximizedMethod == 3) then
-		--GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
+		--GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
 		--_detalhes:AddTooltipHeaderStatusbar (r, g, b, 1)
 		ismaximized = true
 	else
-		--GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
+		--GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_shift]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
 		--_detalhes:AddTooltipHeaderStatusbar (r, g, b, barAlha)
 	end
 
@@ -1559,11 +1559,11 @@ function healingClass:ToolTip_HealingDone (instance, numero, barra, keydown)
 
 		local ismaximized = false
 		if (keydown == "ctrl" or TooltipMaximizedMethod == 2 or TooltipMaximizedMethod == 4) then
-			GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
+			GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
 			_detalhes:AddTooltipHeaderStatusbar (r, g, b, 1)
 			ismaximized = true
 		else
-			GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
+			GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_ctrl]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
 			_detalhes:AddTooltipHeaderStatusbar (r, g, b, barAlha)
 		end
 
@@ -1595,7 +1595,7 @@ function healingClass:ToolTip_HealingDone (instance, numero, barra, keydown)
 				if (classe == "UNKNOW") then
 					GameCooltip:AddIcon ("Interface\\LFGFRAME\\LFGROLE_BW", nil, nil, icon_size.W, icon_size.H, .25, .5, 0, 1)
 				else
-					GameCooltip:AddIcon ("Interface\\AddOns\\Details\\images\\classes_small", nil, nil, icon_size.W, icon_size.H, _unpack(_detalhes.class_coords [classe]))
+					GameCooltip:AddIcon ("Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small", nil, nil, icon_size.W, icon_size.H, _unpack(_detalhes.class_coords [classe]))
 				end
 			end
 		end
@@ -1655,10 +1655,10 @@ function healingClass:ToolTip_HealingDone (instance, numero, barra, keydown)
 					_detalhes:AddTooltipSpellHeaderText (Loc ["STRING_PETS"], headerColor, #totais, [[Interface\COMMON\friendship-heart]], 0.21875, 0.78125, 0.09375, 0.6875)
 
 					if (ismaximized) then
-						GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_alt]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
+						GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_alt]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay2)
 						_detalhes:AddTooltipHeaderStatusbar (r, g, b, 1)
 					else
-						GameCooltip:AddIcon ([[Interface\AddOns\Details\images\key_alt]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
+						GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\key_alt]], 1, 2, _detalhes.tooltip_key_size_width, _detalhes.tooltip_key_size_height, 0, 1, 0, 0.640625, _detalhes.tooltip_key_overlay1)
 						_detalhes:AddTooltipHeaderStatusbar (r, g, b, barAlha)
 					end
 
@@ -1674,7 +1674,7 @@ function healingClass:ToolTip_HealingDone (instance, numero, barra, keydown)
 					GameCooltip:AddLine(n, FormatTooltipNumber (_, _table [2]) .. " (" .. _math_floor(_table [2]/self.total*100) .. "%)")
 				end
 				_detalhes:AddTooltipBackgroundStatusbar()
-				GameCooltip:AddIcon ([[Interface\AddOns\Details\images\classes_small]], 1, 1, icon_size.W, icon_size.H, 0.25, 0.49609375, 0.75, 1)
+				GameCooltip:AddIcon ([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]], 1, 1, icon_size.W, icon_size.H, 0.25, 0.49609375, 0.75, 1)
 			end
 		end
 	end
@@ -1904,7 +1904,7 @@ function healingClass:MontaInfoHealTaken()
 		end
 
 		local formated_value = SelectedToKFunction (_, _math_floor(tabela[2]))
-		self:UpdadeInfoBar(barra, index, tabela[1], tabela[1], tabela[2], formated_value, max_, tabela[3], "Interface\\AddOns\\Details\\images\\classes_small", true, texCoords)
+		self:UpdadeInfoBar(barra, index, tabela[1], tabela[1], tabela[2], formated_value, max_, tabela[3], "Interface\\AddOns\\ArenaUI\\vendored\\Details\\images\\classes_small", true, texCoords)
 	end
 
 end
@@ -2034,7 +2034,7 @@ function healingClass:MontaInfoOverHealing() --this should be deprecated now
 		barra.lineText1:SetWidth(barra:GetWidth() - barra.lineText4:GetStringWidth() - 30)
 
 		-- icon
-		barra.icone:SetTexture([[Interface\AddOns\Details\images\classes_small]])
+		barra.icone:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]])
 
 		local texCoords = _detalhes.class_coords [tabela[4]]
 		if (not texCoords) then

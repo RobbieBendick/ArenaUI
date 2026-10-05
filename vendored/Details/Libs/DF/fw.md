@@ -136,7 +136,7 @@ If you need to write code that runs across all flavors, call **these** rather th
 | `DF.GlobalWidgetControlNames` | Map of widget kind → global meta-table name (e.g. `button = "DF_ButtonMetaFunctions"`). Used by `AddMemberForWidget`. |
 | `DF.LabelNameCounter`, `DF.PictureNameCounter`, `DF.BarNameCounter`, `DF.DropDownCounter`, `DF.PanelCounter`, `DF.SimplePanelCounter`, `DF.ButtonCounter`, `DF.SliderCounter`, `DF.SwitchCounter`, `DF.SplitBarCounter` | Seeded with `math.random(1, 1000000)` so widget-creation calls that need a unique `$parent…` global name don't collide across reloads. |
 
-`DF.folder` is computed once from `debugstack` and stores the full path to the framework root (`Interface\AddOns\Details\Libs\DF\` for the bundled copy). Use `DF:GetFrameworkFolder()` to read it.
+`DF.folder` is computed once from `debugstack` and stores the full path to the framework root (`Interface\AddOns\ArenaUI\vendored\Details\Libs\DF\` for the bundled copy). Use `DF:GetFrameworkFolder()` to read it.
 
 ---
 
@@ -848,7 +848,7 @@ end
 5. **The `Toc` integer is the version gate.** Don't suggest `WOW_PROJECT_ID` checks where the framework already does a clean `Toc` range — use `IsDragonflightAndBeyond()` etc.
 6. **Pools return `(object, bIsNew)`.** Don't drop the second return when a freshly-allocated object needs first-time wiring.
 7. **`SetTemplate` re-hooks `OnEnter`/`OnLeave` on every call** for color keys it hasn't seen on this frame. Apply templates once, not in an update loop.
-8. **The framework caches `DF.folder` from `debugstack`.** Don't recommend hardcoding `Interface\AddOns\Details\Libs\DF\` in a consumer — use `DF:GetFrameworkFolder()`.
+8. **The framework caches `DF.folder` from `debugstack`.** Don't recommend hardcoding `Interface\AddOns\ArenaUI\vendored\Details\Libs\DF\` in a consumer — use `DF:GetFrameworkFolder()`.
 9. **Hardcoded `specInformation` may not cover newly-released specs.** If `GetSpecInfoFromSpecId` returns nil for a "current" spec, the table needs an update; don't recommend the lookup as authoritative.
 10. **The "secure environment" is not a sandbox.** Don't pitch `DF:MakeFunctionSecure` as a security boundary — it's a guard against accidental damage.
 

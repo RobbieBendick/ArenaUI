@@ -569,7 +569,7 @@ bar:SetTimer(15, true)
 -- From window_end_of_run.lua:
 local autoCloseTimeBar = detailsFramework:CreateTimeBar(
     contentFrame,
-    [[Interface\AddOns\Details\images\bar_serenity]]
+    [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_serenity]]
 )
 
 -- Later, when showing the panel:

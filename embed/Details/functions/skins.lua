@@ -77,7 +77,7 @@ local addonName, Details222 = ...
 
 	--install wow interface skin:
 	_detalhes:InstallSkin ("WoW Interface", {
-		file = [[Interface\AddOns\Details\images\skins\default_skin.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\default_skin.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -317,7 +317,7 @@ local addonName, Details222 = ...
 	end
 
 	_detalhes:InstallSkin ("Minimalistic", {
-		file = [[Interface\AddOns\Details\images\skins\classic_skin_v1]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin_v1]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -483,7 +483,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = true,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Accidental Presidency.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Accidental Presidency.ttf",
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["font_size"] = 16,
 				["height"] = 21,
@@ -550,7 +550,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("Minimalistic v2", {
-		file = [[Interface\AddOns\Details\images\skins\classic_skin.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -776,7 +776,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("Serenity", {
-		file = [[Interface\AddOns\Details\images\skins\flat_skin.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\flat_skin.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -915,7 +915,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = true,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Accidental Presidency.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Accidental Presidency.ttf",
 				["textL_custom_text"] = "{data1} - {data3}{data2}",
 				["models"] = {
 					["upper_model"] = "Spells\\AcidBreath_SuperGreen.M2",
@@ -1097,7 +1097,7 @@ local addonName, Details222 = ...
 	end
 
 	_detalhes:InstallSkin ("Forced Square", {
-		file = [[Interface\AddOns\Details\images\skins\simplygray_skin.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\simplygray_skin.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -1292,7 +1292,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = false,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\FORCED SQUARE.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\FORCED SQUARE.ttf",
 				["backdrop"] = {
 					["enabled"] = false,
 					["size"] = 12,
@@ -1363,7 +1363,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("ElvUI Frame Style", {
-		file = [[Interface\AddOns\Details\images\skins\elvui.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\elvui.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -1494,7 +1494,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = true,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\FORCED SQUARE.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\FORCED SQUARE.ttf",
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["font_size"] = 16,
 				["height"] = 21,
@@ -1618,7 +1618,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("ElvUI Style II", {
-		file = [[Interface\AddOns\Details\images\skins\elvui_opaque.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\elvui_opaque.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -1806,7 +1806,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("Dark Theme", {
-		file = [[Interface\AddOns\Details\images\skins\darktheme.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\darktheme.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -1913,7 +1913,7 @@ local addonName, Details222 = ...
 					0, -- [3]
 					1, -- [4]
 				},
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Oswald-Regular.otf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Oswald-Regular.otf",
 				["backdrop"] = {
 					["enabled"] = false,
 					["texture"] = "Details BarBorder 2",
@@ -2296,7 +2296,7 @@ local addonName, Details222 = ...
 	})
 
 	_detalhes:InstallSkin ("New Gray", {
-		file = [[Interface\AddOns\Details\images\skins\classic_skin_v1.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin_v1.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -2489,7 +2489,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = false,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Accidental Presidency.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Accidental Presidency.ttf",
 				["textL_custom_text"] = "{data1}. {data3}{data2}",
 				["font_size"] = 16,
 				["height"] = 21,
@@ -2561,7 +2561,7 @@ local addonName, Details222 = ...
 
 
 		_detalhes:InstallSkin ("Safe Skin Legion Beta", {
-		file = [[Interface\AddOns\Details\images\skins\classic_skin_v1.blp]],
+		file = [[Interface\AddOns\ArenaUI\vendored\Details\images\skins\classic_skin_v1.blp]],
 		author = "Details!",
 		version = "1.0",
 		site = "unknown",
@@ -2690,7 +2690,7 @@ local addonName, Details222 = ...
 				},
 				["texture_background_class_color"] = false,
 				["start_after_icon"] = true,
-				["font_face_file"] = "Interface\\Addons\\Details\\fonts\\Accidental Presidency.ttf",
+				["font_face_file"] = "Interface\\AddOns\\ArenaUI\\vendored\\Details\\fonts\\Accidental Presidency.ttf",
 				["backdrop"] = {
 					["enabled"] = false,
 					["size"] = 12,
@@ -2871,6 +2871,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

@@ -266,6 +266,70 @@ function NS:GetSpecRaces(spec, classToken)
     return list
 end
 
+function NS:GetProfession(name)
+    if not name then
+        return nil
+    end
+    return self.PROFESSIONS and self.PROFESSIONS[name]
+end
+
+-- Specs store professions as:
+-- { verdict?, list = { { name = "Enchanting", recommended = true, note = "optional override" } } }
+-- Names resolve through NS.PROFESSIONS. Optional note (and other fields) on a list entry override the shared copy.
+-- First Aid is always appended when missing.
+function NS:GetSpecProfessions(spec)
+    local professions = spec and spec.professions
+    local picks = professions and (professions.list or professions) or {}
+    if type(picks) ~= "table" then
+        picks = {}
+    end
+
+    local list = {}
+    local hasFirstAid = false
+    for _, pick in ipairs(picks) do
+        local name = type(pick) == "string" and pick or (pick and pick.name)
+        if name then
+            local shared = self:GetProfession(name) or {}
+            local entry = {
+                name = name,
+                kind = shared.kind,
+                icon = shared.icon,
+                note = shared.note,
+                benefits = shared.benefits,
+                recommended = shared.recommended,
+            }
+            if type(pick) == "table" then
+                if pick.kind ~= nil then entry.kind = pick.kind end
+                if pick.icon ~= nil then entry.icon = pick.icon end
+                if pick.note ~= nil then entry.note = pick.note end
+                if pick.benefits ~= nil then entry.benefits = pick.benefits end
+                if pick.recommended ~= nil then entry.recommended = pick.recommended end
+            end
+            list[#list + 1] = entry
+            if name == "First Aid" then
+                hasFirstAid = true
+            end
+        end
+    end
+
+    if not hasFirstAid then
+        local shared = self:GetProfession("First Aid") or {}
+        list[#list + 1] = {
+            name = "First Aid",
+            kind = shared.kind,
+            icon = shared.icon,
+            note = shared.note,
+            benefits = shared.benefits,
+            recommended = shared.recommended,
+        }
+    end
+
+    return {
+        verdict = professions and professions.verdict,
+        list = list,
+    }
+end
+
 function NS:MacroMatchesSpec(macro, specID)
     if not specID or not macro.specs then
         return true

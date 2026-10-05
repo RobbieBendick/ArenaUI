@@ -48,7 +48,7 @@ immersionFrame:SetScript("OnEvent", function(_, event, ...)
 end)
 
 --store the GUID of the npc or player and point to the coords there the icon is
-local iconPath1 = [[Interface\AddOns\Details\images\special_bar_icons]]
+local iconPath1 = [[Interface\AddOns\ArenaUI\vendored\Details\images\special_bar_icons]]
 Details.Immersion.IconDatabase = {
     ["167826"] = {file = iconPath1, iconId = 1, interest = true, class = "MAGE"}, --lady jaina proudmoore
     ["167827"] = {file = iconPath1, iconId = 2, interest = true, class = "SHAMAN"}, --Thrall

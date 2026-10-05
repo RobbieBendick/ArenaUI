@@ -1,0 +1,16 @@
+embed\BuffOverlay\ArenaUI_XMLGuard.lua
+embed\BuffOverlay\Border.xml
+embed\BuffOverlay\Embeds.xml
+embed\BuffOverlay\Init.lua
+embed\BuffOverlay\Locales.xml
+embed\BuffOverlay\Spells\Mainline.lua
+embed\BuffOverlay\Spells\Vanilla.lua
+embed\BuffOverlay\Spells\TBC.lua
+embed\BuffOverlay\Spells\Wrath.lua
+embed\BuffOverlay\Spells\Cata.lua
+embed\BuffOverlay\Spells\Mists.lua
+embed\BuffOverlay\Helpers.lua
+embed\BuffOverlay\AddonCompatibility.lua
+embed\BuffOverlay\BuffOverlay.lua
+embed\BuffOverlay\Options.lua
+

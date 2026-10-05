@@ -123,7 +123,7 @@ local updateTargetBar = function(targetBar, index, combatObject, scrollFrame, he
 			if (targetActorObject) then
 				Details.SetClassIcon(targetActorObject, targetBar.Icon, spellsTab.GetInstance(), targetActorObject:Class())
 			else
-				targetBar.Icon:SetTexture([[Interface\AddOns\Details\images\classes_small_alpha]])
+				targetBar.Icon:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small_alpha]])
 				---@type {key1: number, key2: number, key3: number, key4: number}
 				local texCoords = Details.class_coords["ENEMY"]
 				targetBar.Icon:SetTexCoord(unpack(texCoords))
@@ -631,6 +631,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

@@ -411,7 +411,7 @@ local createGenericBar = function(self, index) --~create ~generic ~creategeneric
 
 	---@type texture overlay texture to use when the spellbar is selected
 	local statusBarOverlayTexture = statusBar:CreateTexture("$parentTextureOverlay", "overlay", nil, 7)
-	statusBarOverlayTexture:SetTexture([[Interface/AddOns/Details/images/overlay_indicator_1]])
+	statusBarOverlayTexture:SetTexture([[Interface/AddOns/ArenaUI/vendored/Details/images/overlay_indicator_1]])
 	statusBarOverlayTexture:SetVertexColor(1, 1, 1, 0.2)
 	statusBarOverlayTexture:SetAllPoints()
 	statusBarOverlayTexture:Hide()

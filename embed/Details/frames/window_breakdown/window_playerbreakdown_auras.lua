@@ -90,7 +90,7 @@ local createAuraTabOnBreakdownWindow = function(tab, frame)
         receivedTexture:SetPoint("topright", line, "topright", 0, 0)
         receivedTexture:SetPoint("bottomright", line, "bottomright", 0, 0)
         receivedTexture:SetWidth(line:GetWidth())
-        receivedTexture:SetTexture([[Interface\AddOns\Details\images\bar_textures\gradient_white_10percent_left]])
+        receivedTexture:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_textures\gradient_white_10percent_left]])
         receivedTexture:SetTexCoord(0, 1, 0, 1)
         receivedTexture:SetVertexColor(0, .8, 0, 0.7)
         receivedTexture:Hide()
@@ -294,7 +294,7 @@ local aurasTabFillCallback = function(tab, player, combat)
 end
 
 local iconTableAuras = {
-    texture = [[Interface\AddOns\Details\images\icons]],
+    texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
     coords = {257/512, 278/512, 0/512, 19/512},
     width = 16,
     height = 16,
@@ -344,6 +344,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

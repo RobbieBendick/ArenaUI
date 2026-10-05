@@ -34,7 +34,7 @@ end
 DetailsSpellBreakdownTab = spellsTab
 
 local iconTableSummary = {
-    texture = [[Interface\AddOns\Details\images\icons]],
+    texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]],
     coords = {238/512, 255/512, 0, 18/512},
     width = 16,
     height = 16,
@@ -606,7 +606,7 @@ function spellsTab.OnCreateTabCallback(tabButton, tabFrame) --~init
 
 		--backdrop
 		ROB:SetBackdrop({
-			edgeFile = [[Interface\AddOns\Details\images\border_2]],
+			edgeFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\border_2]],
 			edgeSize = 16,
 		})
 

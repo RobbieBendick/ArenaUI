@@ -54,7 +54,7 @@ function Details:OpenNewsWindow(textToShow, dumpValues, keeptext)
 			--show textures
 			if (Details.build_counter == 8154) then
 				newsFrame.imageFrame:Show()
-				newsFrame.imageFrame.texture:SetTexture([[interface/addons/details/images/news_images]])
+				newsFrame.imageFrame.texture:SetTexture([[Interface/AddOns/ArenaUI/vendored/Details/images/news_images]])
 				newsFrame.imageFrame.texture:SetSize(279, 452)
 				newsFrame.imageFrame.texture:SetTexCoord(0, 279/512, 0, 452/512)
 			end

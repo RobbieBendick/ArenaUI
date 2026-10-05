@@ -8,6 +8,7 @@ if dialog and dialog.Open and SlashCmdList then
 end
 
 local media = LibStub and LibStub("LibSharedMedia-3.0", true)
+-- Prefer VendoredMediaPrep (loads before embeds). Keep this as a late fallback.
 if media and media.Register and not media.ArenaUIWrapped then
     media.ArenaUIWrapped = true
     local register = media.Register
@@ -93,7 +94,7 @@ end
 
 if AceAddon then
     local host = AceAddon:NewAddon("ArenaUIModules")
-    local moduleNames = { "OmniBar", "Gladdy", "OmniCD", "ArenaAnalytics", "Diminish", "Details", "WeakAuras", "BetterBlizzPlates", "BetterBlizzFrames" }
+    local moduleNames = { "OmniBar", "Gladdy", "OmniCD", "ArenaAnalytics", "Diminish", "Details", "WeakAuras", "BetterBlizzPlates", "BetterBlizzFrames", "BuffOverlay" }
     local omni = host:NewModule("OmniBar")
     local gladdy = host:NewModule("Gladdy")
     local omnicd = host:NewModule("OmniCD")
@@ -103,6 +104,7 @@ if AceAddon then
     local weakauras = host:NewModule("WeakAuras")
     local betterBlizzPlates = host:NewModule("BetterBlizzPlates")
     local betterBlizzFrames = host:NewModule("BetterBlizzFrames")
+    local buffOverlay = host:NewModule("BuffOverlay")
 
     -- Stay off until login confirms the original addon is not loaded.
     for _, name in ipairs(moduleNames) do
@@ -113,27 +115,32 @@ if AceAddon then
     end
 
     function host:OnInitialize()
-        if NS:ModuleEnabled("OmniBar") or NS:StandaloneIsOn("OmniBar") then
-            return
+        if not (NS:ModuleEnabled("OmniBar") or NS:StandaloneIsOn("OmniBar")) then
+            local bar = AceAddon:GetAddon("OmniBar", true)
+            if bar then
+                omni.events = copyListeners(AceEvent and AceEvent.events, bar)
+                omni.messages = copyListeners(AceEvent and AceEvent.messages, bar)
+                omni.comms = copyListeners(AceComm and AceComm.callbacks, bar)
+                if bar.UnregisterAllEvents then
+                    bar:UnregisterAllEvents()
+                end
+                if bar.UnregisterAllMessages then
+                    bar:UnregisterAllMessages()
+                end
+                if bar.UnregisterAllComm then
+                    bar:UnregisterAllComm()
+                end
+                bar:SetEnabledState(false)
+                omni.didDisable = true
+            end
         end
-        local bar = AceAddon:GetAddon("OmniBar", true)
-        if not bar then
-            return
+        if not (NS:ModuleEnabled("BuffOverlay") or NS:StandaloneIsOn("BuffOverlay")) then
+            local addon = AceAddon:GetAddon("BuffOverlay", true) or _G.BuffOverlay
+            if addon and addon.SetEnabledState then
+                addon:SetEnabledState(false)
+                buffOverlay.didDisable = true
+            end
         end
-        omni.events = copyListeners(AceEvent and AceEvent.events, bar)
-        omni.messages = copyListeners(AceEvent and AceEvent.messages, bar)
-        omni.comms = copyListeners(AceComm and AceComm.callbacks, bar)
-        if bar.UnregisterAllEvents then
-            bar:UnregisterAllEvents()
-        end
-        if bar.UnregisterAllMessages then
-            bar:UnregisterAllMessages()
-        end
-        if bar.UnregisterAllComm then
-            bar:UnregisterAllComm()
-        end
-        bar:SetEnabledState(false)
-        omni.didDisable = true
     end
 
     local function applyVendoredModules()
@@ -1040,4 +1047,145 @@ if AceAddon then
             print("|A:gmchat-icon-blizz:16:16|a Better|cff00c0ffBlizz|rFrames is disabled in ArenaUI.")
         end
     end
+
+    local function getBuffOverlay()
+        return AceAddon:GetAddon("BuffOverlay", true) or _G.BuffOverlay
+    end
+
+    local function buffOverlayMinimapButton()
+        local LDBIcon = LibStub and LibStub("LibDBIcon-1.0", true)
+        if LDBIcon and LDBIcon.GetMinimapButton then
+            local button = LDBIcon:GetMinimapButton("BuffOverlay")
+            if button then
+                return button
+            end
+        end
+        return _G.LibDBIcon10_BuffOverlay
+    end
+
+    local function setBuffOverlayMinimapShown(show)
+        local addon = getBuffOverlay()
+        local db = addon and addon.db and addon.db.profile and addon.db.profile.minimap
+        local LDBIcon = LibStub and LibStub("LibDBIcon-1.0", true)
+        if show then
+            if db and buffOverlay.minimapSavedHide ~= nil then
+                db.hide = buffOverlay.minimapSavedHide and true or false
+                buffOverlay.minimapSavedHide = nil
+            end
+            local wantShow = not (db and db.hide)
+            pinMinimapButton(buffOverlayMinimapButton(), false)
+            if wantShow then
+                if LDBIcon and LDBIcon.Show then
+                    pcall(LDBIcon.Show, LDBIcon, "BuffOverlay")
+                end
+                if LDBIcon and LDBIcon.Refresh and db then
+                    pcall(LDBIcon.Refresh, LDBIcon, "BuffOverlay", db)
+                end
+                local button = buffOverlayMinimapButton()
+                if button and button.Show then
+                    button:Show()
+                end
+            else
+                if LDBIcon and LDBIcon.Hide then
+                    pcall(LDBIcon.Hide, LDBIcon, "BuffOverlay")
+                end
+            end
+        else
+            if db and buffOverlay.minimapSavedHide == nil then
+                buffOverlay.minimapSavedHide = db.hide and true or false
+            end
+            if db then
+                db.hide = true
+            end
+            pinMinimapButton(buffOverlayMinimapButton(), true)
+            if LDBIcon and LDBIcon.Hide then
+                pcall(LDBIcon.Hide, LDBIcon, "BuffOverlay")
+            end
+            if LDBIcon and LDBIcon.Refresh and db then
+                pcall(LDBIcon.Refresh, LDBIcon, "BuffOverlay", db)
+            end
+        end
+    end
+
+    function buffOverlay:LockMinimap()
+        setBuffOverlayMinimapShown(false)
+        pinMinimapButtonWhenReady(self, "minimapWatcher", "LibDBIcon10_BuffOverlay", true)
+    end
+
+    function buffOverlay:UnlockMinimap()
+        setBuffOverlayMinimapShown(true)
+        if self.minimapWatcher then
+            self.minimapWatcher:UnregisterAllEvents()
+            self.minimapWatcher:SetScript("OnEvent", nil)
+            self.minimapWatcher = nil
+        end
+    end
+
+    function buffOverlay:OnEnable()
+        if NS:StandaloneIsOn("BuffOverlay") or not NS:ModuleEnabled("BuffOverlay") then
+            return
+        end
+        local addon = getBuffOverlay()
+        if self.didDisable and addon then
+            self.didDisable = nil
+            if not addon.enabledState and addon.Enable then
+                addon:Enable()
+            end
+            if addon.eventHandler and addon.eventHandler.RegisterEvent then
+                addon.eventHandler:RegisterEvent("PLAYER_LOGIN")
+                addon.eventHandler:RegisterEvent("PLAYER_ENTERING_WORLD")
+                addon.eventHandler:RegisterEvent("GROUP_ROSTER_UPDATE")
+                addon.eventHandler:RegisterEvent("UI_SCALE_CHANGED")
+            end
+        end
+        self:UnlockMinimap()
+        if self.savedSlash then
+            SlashCmdList.BuffOverlay = self.savedSlash
+        end
+    end
+
+    function buffOverlay:OnDisable()
+        if NS:StandaloneIsOn("BuffOverlay") then
+            return
+        end
+        local addon = getBuffOverlay()
+        if addon then
+            if addon.eventHandler and addon.eventHandler.UnregisterAllEvents then
+                addon.eventHandler:UnregisterAllEvents()
+            end
+            if addon.enabledState and addon.Disable then
+                addon:Disable()
+            elseif addon.SetEnabledState then
+                addon:SetEnabledState(false)
+            end
+        end
+        self:LockMinimap()
+        self.didDisable = true
+        if not self.savedSlash then
+            self.savedSlash = SlashCmdList.BuffOverlay
+        end
+        SlashCmdList.BuffOverlay = function()
+            print("|cff33ff99BuffOverlay|r is disabled in ArenaUI.")
+        end
+        if dialog and dialog.Close then
+            pcall(dialog.Close, dialog, "BuffOverlay")
+            pcall(dialog.Close, dialog, "BuffOverlayDialog")
+        end
+    end
+
+    if not NS:ModuleEnabled("BuffOverlay") and not NS:StandaloneIsOn("BuffOverlay") then
+        buffOverlay:LockMinimap()
+    end
+
+    local buffOverlayLogout = CreateFrame("Frame")
+    buffOverlayLogout:RegisterEvent("PLAYER_LOGOUT")
+    buffOverlayLogout:SetScript("OnEvent", function()
+        if buffOverlay.minimapSavedHide ~= nil then
+            local addon = getBuffOverlay()
+            local db = addon and addon.db and addon.db.profile and addon.db.profile.minimap
+            if db then
+                db.hide = buffOverlay.minimapSavedHide and true or false
+            end
+        end
+    end)
 end

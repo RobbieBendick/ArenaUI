@@ -619,7 +619,7 @@ local default_profile = {
 	window2_data = {},
 
 	--class icons and colors
-	class_icons_small = [[Interface\AddOns\Details\images\classes_small]],
+	class_icons_small = [[Interface\AddOns\ArenaUI\vendored\Details\images\classes_small]],
 	class_coords = {
 		["DEMONHUNTER"] = {
 			0.73828126 / 2, -- [1]
@@ -1564,7 +1564,7 @@ local default_global_data = {
 
 		statusbar_background_color = {.15, .15, .15},
 		statusbar_background_alpha = 0.7,
-		statusbar_texture = [[Interface\AddOns\Details\images\bar_skyline]],
+		statusbar_texture = [[Interface\AddOns\ArenaUI\vendored\Details\images\bar_skyline]],
 		statusbar_alpha = 0.70,
 
 		blockspell_height = 67,

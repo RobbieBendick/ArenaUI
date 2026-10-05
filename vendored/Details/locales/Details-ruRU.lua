@@ -1666,7 +1666,7 @@ L["STRING_WELCOME_31"] = [=[|cFFFFFF00ПКМ|r в любом месте окна
 
 |cFFFFFF00ПКМ|r в строке заголовка, чтобы открыть панель 'все дисплеи'.
 
-|TInterface\AddOns\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + ПКМ закрывает окно.]=]
+|TInterface\AddOns\ArenaUI\vendored\Details\images\key_ctrl:14:30:0:0:64:64:0:64:0:40|t + ПКМ закрывает окно.]=]
 L["STRING_WELCOME_32"] = "Использование интерфейса: Группирование окон"
 L["STRING_WELCOME_34"] = "Использование интерфейса: Расширение подсказок"
 L["STRING_WELCOME_36"] = "Использование интерфейса: Плагины"

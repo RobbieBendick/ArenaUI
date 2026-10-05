@@ -11,7 +11,7 @@ function Details:InitializePlaterIntegrationWindow()
     DetailsPlaterIntegrationPanel.Frame = DetailsPlaterIntegrationPanel
     DetailsPlaterIntegrationPanel.__name = "Plater Nameplates"
     DetailsPlaterIntegrationPanel.real_name = "DETAILS_PLATERWINDOW"
-    DetailsPlaterIntegrationPanel.__icon = [[Interface\AddOns\Details\images\plater_icon]]
+    DetailsPlaterIntegrationPanel.__icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\plater_icon]]
     DetailsPlaterIntegrationPanel.__iconcoords = {0, 1, 0, 1}
     DetailsPlaterIntegrationPanel.__iconcolor = "white"
     DetailsPluginContainerWindow.EmbedPlugin (DetailsPlaterIntegrationPanel, DetailsPlaterIntegrationPanel, true)
@@ -32,14 +32,14 @@ function Details.OpenPlaterIntegrationWindow()
         
         --background
         f.bg1 = f:CreateTexture(nil, "background")
-        f.bg1:SetTexture([[Interface\AddOns\Details\images\background]], true)
+        f.bg1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\background]], true)
         f.bg1:SetAlpha(0.8)
         f.bg1:SetVertexColor(0.27, 0.27, 0.27)
         f.bg1:SetVertTile(true)
         f.bg1:SetHorizTile(true)
         f.bg1:SetSize(790, 454)
         f.bg1:SetAllPoints()
-        f:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+        f:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
         f:SetBackdropColor(.5, .5, .5, .7)
         f:SetBackdropBorderColor(0, 0, 0, 1)
 
@@ -413,14 +413,14 @@ function Details.OpenPlaterIntegrationWindow()
         
         --background
         titleBackground.bg1 = titleBackground:CreateTexture(nil, "background")
-        titleBackground.bg1:SetTexture([[Interface\AddOns\Details\images\background]])
+        titleBackground.bg1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\background]])
         titleBackground.bg1:SetAlpha(0.8)
         titleBackground.bg1:SetVertexColor(0.27, 0.27, 0.27)
         titleBackground.bg1:SetVertTile(true)
         titleBackground.bg1:SetHorizTile(true)
         titleBackground.bg1:SetSize(790, 454)
         titleBackground.bg1:SetAllPoints()
-        titleBackground:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+        titleBackground:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
         titleBackground:SetBackdropColor(.5, .5, .5, .7)
         titleBackground:SetBackdropBorderColor(0, 0, 0, 1)
         
@@ -473,6 +473,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

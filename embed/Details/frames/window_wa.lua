@@ -1993,14 +1993,14 @@ function _detalhes:OpenAuraPanel (spellid, spellname, spellicon, encounterid, tr
         
         --background
         f.bg1 = f:CreateTexture(nil, "background")
-        f.bg1:SetTexture([[Interface\AddOns\Details\images\background]], true)
+        f.bg1:SetTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\background]], true)
         f.bg1:SetAlpha(0.8)
         f.bg1:SetVertexColor(0.27, 0.27, 0.27)
         f.bg1:SetVertTile(true)
         f.bg1:SetHorizTile(true)
         f.bg1:SetSize(790, 454)
         f.bg1:SetAllPoints()
-        f:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\Details\images\background]], tileSize = 64, tile = true})
+        f:SetBackdrop({edgeFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1, bgFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\background]], tileSize = 64, tile = true})
         f:SetBackdropColor(.5, .5, .5, .7)
         f:SetBackdropBorderColor(0, 0, 0, 1)
         
@@ -2080,13 +2080,13 @@ function _detalhes:OpenAuraPanel (spellid, spellname, spellicon, encounterid, tr
         aura_type:SetPoint("left", aura_type_label, "right", 2, 0)
         aura_type:Hide()
         
-        local Icon_IconAuraType = fw:CreateImage(f, [[Interface\AddOns\Details\images\icons2]], 32, 32, "overlay", {200/512, 232/512, 336/512, 368/512}, nil, nil)
+        local Icon_IconAuraType = fw:CreateImage(f, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], 32, 32, "overlay", {200/512, 232/512, 336/512, 368/512}, nil, nil)
         Icon_IconAuraType:SetPoint("topleft", aura_type_label, "bottomleft", 10, -16)
         
-        local Icon_StatusbarAuraType = fw:CreateImage(f, [[Interface\AddOns\Details\images\icons2]], 92, 12, "overlay", {235/512, 327/512, 336/512, 348/512}, nil, nil)
+        local Icon_StatusbarAuraType = fw:CreateImage(f, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], 92, 12, "overlay", {235/512, 327/512, 336/512, 348/512}, nil, nil)
         Icon_StatusbarAuraType:SetPoint("topleft", aura_type_label, "bottomleft", 60, -26)
         
-        local Icon_TextOnlyAuraType = fw:CreateImage(f, [[Interface\AddOns\Details\images\icons2]], 57, 8, "overlay", {250/512, 306/512, 360/512, 367/512}, nil, nil)
+        local Icon_TextOnlyAuraType = fw:CreateImage(f, [[Interface\AddOns\ArenaUI\vendored\Details\images\icons2]], 57, 8, "overlay", {250/512, 306/512, 360/512, 367/512}, nil, nil)
         Icon_TextOnlyAuraType:SetPoint("topleft", aura_type_label, "bottomleft", 170, -28)
         
         local AuraTypeSelectedColor = {1, 1, 1, 0.3}
@@ -2145,15 +2145,15 @@ function _detalhes:OpenAuraPanel (spellid, spellname, spellicon, encounterid, tr
         Icon_StatusbarAuraTypeButton:SetPoint("center", Icon_StatusbarAuraType, "center")
         Icon_TextOnlyAuraTypeButton:SetPoint("center", Icon_TextOnlyAuraType, "center")
         
-        Icon_IconAuraTypeButton:SetBackdrop({edgeFile = [[Interface\AddOns\Details\images\dotted]], edgeSize = 1, bgFile = [[Interface\Tooltips\UI-Tooltip-Background]], tileSize = 64, tile = true})
+        Icon_IconAuraTypeButton:SetBackdrop({edgeFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\dotted]], edgeSize = 1, bgFile = [[Interface\Tooltips\UI-Tooltip-Background]], tileSize = 64, tile = true})
         Icon_IconAuraTypeButton:SetBackdropColor(unpack(AuraTypeSelectedColor))
         Icon_IconAuraTypeButton:SetBackdropBorderColor(unpack(AuraTypeBorderColor))
         
-        Icon_StatusbarAuraTypeButton:SetBackdrop({edgeFile = [[Interface\AddOns\Details\images\dotted]], edgeSize = 1, bgFile = [[Interface\Tooltips\UI-Tooltip-Background]], tileSize = 64, tile = true})
+        Icon_StatusbarAuraTypeButton:SetBackdrop({edgeFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\dotted]], edgeSize = 1, bgFile = [[Interface\Tooltips\UI-Tooltip-Background]], tileSize = 64, tile = true})
         Icon_StatusbarAuraTypeButton:SetBackdropColor(0, 0, 0, 0.05)
         Icon_StatusbarAuraTypeButton:SetBackdropBorderColor(unpack(AuraTypeBorderColor))
         
-        Icon_TextOnlyAuraTypeButton:SetBackdrop({edgeFile = [[Interface\AddOns\Details\images\dotted]], edgeSize = 1, bgFile = [[Interface\Tooltips\UI-Tooltip-Background]], tileSize = 64, tile = true})
+        Icon_TextOnlyAuraTypeButton:SetBackdrop({edgeFile = [[Interface\AddOns\ArenaUI\vendored\Details\images\dotted]], edgeSize = 1, bgFile = [[Interface\Tooltips\UI-Tooltip-Background]], tileSize = 64, tile = true})
         Icon_TextOnlyAuraTypeButton:SetBackdropColor(0, 0, 0, 0.05)
         Icon_TextOnlyAuraTypeButton:SetBackdropBorderColor(unpack(AuraTypeBorderColor))
         
@@ -2472,7 +2472,7 @@ function _detalhes:OpenAuraPanel (spellid, spellname, spellicon, encounterid, tr
         
         --weakauras - group
         
-        local folder_icon = [[Interface\AddOns\Details\images\icons]]
+        local folder_icon = [[Interface\AddOns\ArenaUI\vendored\Details\images\icons]]
         local folder_texcoord = {435/512, 469/512, 189/512, 241/512}
         local folder_iconsize = {14, 14}
 
@@ -2809,6 +2809,18 @@ setfenv(__aui_chunk, setmetatable({
   end,
 }, {
   __index = function(_, key)
+    if key == "C_AddOns" and ArenaUI_VendoredC_AddOns then
+      return ArenaUI_VendoredC_AddOns
+    end
+    if key == "GetAddOnMetadata" and ArenaUI_VendoredGetAddOnMetadata then
+      return ArenaUI_VendoredGetAddOnMetadata
+    end
+    if key == "IsAddOnLoaded" and ArenaUI_VendoredIsAddOnLoaded then
+      return ArenaUI_VendoredIsAddOnLoaded
+    end
+    if key == "LoadAddOn" and ArenaUI_VendoredLoadAddOn then
+      return ArenaUI_VendoredLoadAddOn
+    end
     if __aui_frames and __aui_frames[key] then
       local frame = _G[__aui_frames[key]]
       if frame ~= nil then return frame end

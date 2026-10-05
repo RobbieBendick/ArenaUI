@@ -291,7 +291,7 @@ local getTooltipFrame = function() --~tooltip
         ---@cast statusBar statusbar
         --statusBar:SetAllPoints()
         --ponit and size update dynamically in the refresFunc
-        statusBar:SetStatusBarTexture([[Interface\AddOns\Details\images\bar_background_dark_withline]])
+        statusBar:SetStatusBarTexture([[Interface\AddOns\ArenaUI\vendored\Details\images\bar_background_dark_withline]])
 
         local background = statusBar:CreateTexture("$parentBackground", "background")
         background:SetAllPoints()
