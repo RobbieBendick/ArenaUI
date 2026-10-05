@@ -1,4 +1,5 @@
--- TBC guide pack. Copy this file for another expansion, give it a new id and interface range, and add it to ArenaUI.toc after Guides.lua.
+-- TBC guide pack. Lives in TBC/ with TalentTrees.lua and TalentBuilds.lua.
+-- Copy this folder for another expansion, give the guide a new id / interface range, and add its files to ArenaUI.toc after Guides.lua.
 
 local _, NS = ...
 
@@ -327,6 +328,15 @@ NS.RACES = {
 -- professions: { verdict?, list = { { name = "Enchanting", recommended = true, note = "optional override" } } }
 -- Names resolve through NS.PROFESSIONS. Spec list entries can override note, kind, icon, benefits, recommended.
 -- First Aid is always shown; healers can override its note via HEALER_FIRST_AID.
+-- talents: named builds for the Talents guide tab (painted on static trees).
+-- {
+--   name = "Standard",
+--   trees = "41/20/0",
+--   note = "...",
+--   recommended = true,  -- or { 1, 2 } season list (same rules as comps)
+--   ranks = { [talentId] = rank },  -- ids from TBC/TalentTrees.lua
+-- }
+-- trees can also be { 41, 20, 0 }. Without ranks the tree still renders at 0/0/0.
 -- exclude = true hides the spec from the guide list.
 -- icon: Interface\Icons texture name. color: { r, g, b } for the spec row.
 -- compositions: ["2s"] and ["3s"] lists of COMPS entries. See COMPS below.
@@ -502,7 +512,7 @@ local COMPS = {
         },
     },
     PHD = {
-        name = "PHD",
+        name = "Hunter/Disc/RDruid",
         meta = { 4, 4, 4, 4 },
         members = {
             { "Marksmanship Hunter", "Survival Hunter" },
@@ -649,7 +659,7 @@ NS.PROFESSIONS = {
     Engineering = {
         kind = "Primary",
         icon = "Trade_Engineering",
-        note = "Gives you Hyper-Vision Goggles — a helmet click that lights up stealth. In rogue mirrors that often decides who opens first.",
+        note = "Gives you Hyper-Vision Goggles â€” a helmet click that lights up stealth. In rogue mirrors that often decides who opens first.",
         benefits = {
             {
                 name = "Hyper-Vision Goggles",
@@ -661,7 +671,7 @@ NS.PROFESSIONS = {
     Blacksmithing = {
         kind = "Primary",
         icon = "Trade_BlackSmithing",
-        note = "Required to equip Deep Thunder in Season 1 — the stun mace that defines warrior arena. It upgrades to Stormherald later, so skill this immediately.",
+        note = "Required to equip Deep Thunder in Season 1 â€” the stun mace that defines warrior arena. It upgrades to Stormherald later, so skill this immediately.",
         benefits = {
             {
                 name = "Deep Thunder",
@@ -702,7 +712,7 @@ local HEALER_PROFESSIONS = {
         {
             name = "Enchanting",
             recommended = true,
-            note = "Each ring gets a healing enchant only Enchanters can use — +40 healing across both.",
+            note = "Each ring gets a healing enchant only Enchanters can use â€” +40 healing across both.",
             benefits = {
                 {
                     name = "Formula: Enchant Ring - Healing Power",
@@ -743,7 +753,7 @@ local HUNTER_PROFESSIONS = {
         {
             name = "Enchanting",
             recommended = true,
-            note = "Each ring gets +4 to all stats — +8 across both, Enchanter-only.",
+            note = "Each ring gets +4 to all stats â€” +8 across both, Enchanter-only.",
             benefits = {
                 {
                     name = "Enchant Ring - Stats",
@@ -775,7 +785,7 @@ local WARRIOR_PROFESSIONS = {
         {
             name = "Enchanting",
             recommended = true,
-            note = "Each ring gets +4 to all stats — +8 across both, Enchanter-only.",
+            note = "Each ring gets +4 to all stats â€” +8 across both, Enchanter-only.",
             benefits = {
                 {
                     name = "Enchant Ring - Stats",
@@ -794,7 +804,7 @@ local RET_PROFESSIONS = {
         {
             name = "Enchanting",
             recommended = true,
-            note = "Each ring gets +4 to all stats — +8 across both, Enchanter-only.",
+            note = "Each ring gets +4 to all stats â€” +8 across both, Enchanter-only.",
             benefits = {
                 {
                     name = "Enchant Ring - Stats",
@@ -831,7 +841,7 @@ NS.CLASS_SPECS = {
             icon = "Ability_Warrior_SavageBlow", color = { 0.82, 0.24, 0.20 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Resilience", "Stamina", "Strength", "Crit", "Attack Power" },
-            professions = WARRIOR_PROFESSIONS,
+            professions = WARRIOR_PROFESSIONS
         },
         {
             id = "fury", name = "Fury", exclude = true, skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 1, 1, 1, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
@@ -858,7 +868,7 @@ NS.CLASS_SPECS = {
             icon = "Spell_Holy_HolyBolt", color = { 0.95, 0.82, 0.35 },
             races = { alliance = "Dwarf", horde = "Blood Elf" },
             stats = { "Resilience", "Stamina", "Intellect", "Healing", "Mp5" },
-            professions = HEALER_PROFESSIONS,
+            professions = HEALER_PROFESSIONS
         },
         {
             id = "protection", name = "Protection", exclude = true, skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 2, 2, 2, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
@@ -871,7 +881,7 @@ NS.CLASS_SPECS = {
             icon = "Spell_Holy_AuraOfLight", color = { 0.90, 0.38, 0.28 },
             races = { alliance = "Dwarf", horde = "Blood Elf" },
             stats = { "Resilience", "Stamina", "Strength", "Crit", "Spell Damage" },
-            professions = RET_PROFESSIONS,
+            professions = RET_PROFESSIONS
         },
     },
     HUNTER = {
@@ -884,7 +894,7 @@ NS.CLASS_SPECS = {
             icon = "Ability_Hunter_BeastTaming", color = { 0.48, 0.72, 0.32 },
             races = { alliance = "Dwarf", horde = "Orc" },
             stats = { "Resilience", "Agility", "Stamina", "Hit", "Attack Power" },
-            professions = HUNTER_PROFESSIONS,
+            professions = HUNTER_PROFESSIONS
         },
         {
             id = "marksmanship", name = "Marksmanship", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = {
@@ -897,7 +907,7 @@ NS.CLASS_SPECS = {
             icon = "Ability_Marksmanship", color = { 0.86, 0.52, 0.22 },
             races = { alliance = "Dwarf", horde = "Orc" },
             stats = { "Resilience", "Agility", "Crit", "Stamina", "Hit" },
-            professions = HUNTER_PROFESSIONS,
+            professions = HUNTER_PROFESSIONS
         },
         {
             id = "survival", name = "Survival", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = {
@@ -910,7 +920,7 @@ NS.CLASS_SPECS = {
             icon = "Ability_Hunter_SwiftStrike", color = { 0.28, 0.66, 0.58 },
             races = { alliance = "Dwarf", horde = "Orc" },
             stats = { "Resilience", "Agility", "Stamina", "Hit", "Attack Power" },
-            professions = HUNTER_PROFESSIONS,
+            professions = HUNTER_PROFESSIONS
         },
     },
     ROGUE = {
@@ -952,16 +962,16 @@ NS.CLASS_SPECS = {
                     },
                     { name = "Engineering", recommended = true },
                 },
-            },
+            }
         },
     },
     PRIEST = {
         {
-            id = "discipline", name = "Discipline", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 5, 5, 4, 4 }, compositions = { ["2s"] = {{ comp = COMPS.PRIEST_ROGUE, recommended = true }, COMPS.PRIEST_MAGE, { comp = COMPS.HUNTER_PRIEST, recommended = { 1, 2 } }, COMPS.HUNTER_PRIEST_BM}, ["3s"] = { { comp = COMPS.RMP, recommended = true }, COMPS.PHD, COMPS.PHP_MM, COMPS.PHP_SV, COMPS.PHS, COMPS.WARR_MAGE_HEALER } },
+            id = "discipline", name = "Discipline", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 5, 5, 4, 4 }, compositions = { ["2s"] = {{ comp = COMPS.PRIEST_ROGUE, recommended = true }, COMPS.PRIEST_MAGE, COMPS.HUNTER_PRIEST, COMPS.HUNTER_PRIEST_BM}, ["3s"] = { { comp = COMPS.RMP, recommended = true }, COMPS.PHD, COMPS.PHP_MM, COMPS.PHP_SV, COMPS.PHS, COMPS.WARR_MAGE_HEALER } },
             icon = "Spell_Holy_PowerWordShield", color = { 0.72, 0.76, 0.88 },
             races = { alliance = "Dwarf", horde = "Undead" },
             stats = { "Resilience", "Stamina", "Spell Damage", "Intellect", "Healing" },
-            professions = HEALER_PROFESSIONS,
+            professions = HEALER_PROFESSIONS
         },
         {
             id = "holy", name = "Holy", exclude = true, skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 2, 2, 2, 2 }, meta = { 1, 1, 1, 1 }, compositions = { ["2s"] = {}, ["3s"] = {} },
@@ -974,7 +984,7 @@ NS.CLASS_SPECS = {
             icon = "Spell_Shadow_ShadowWordPain", color = { 0.52, 0.32, 0.72 },
             races = { alliance = "Dwarf", horde = "Undead" },
             stats = { "Spell Hit", "Spell Damage", "Resilience", "Stamina", "Crit" },
-            professions = SPELL_PROFESSIONS,
+            professions = SPELL_PROFESSIONS
         },
     },
     SHAMAN = {
@@ -982,20 +992,20 @@ NS.CLASS_SPECS = {
             id = "elemental", name = "Elemental", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 2, 3, 3, 3 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Nature_Lightning", color = { 0.30, 0.58, 0.95 },
             races = { alliance = "Draenei", horde = "Orc" },
-            stats = { "Spell Hit", "Spell Damage", "Crit", "Resilience", "Stamina" },
+            stats = { "Spell Hit", "Spell Damage", "Crit", "Resilience", "Stamina" }
         },
         {
             id = "enhancement", name = "Enhancement", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 2, 2, 2, 2 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Nature_LightningShield", color = { 0.88, 0.40, 0.22 },
             races = { alliance = "Draenei", horde = "Orc" },
-            stats = { "Resilience", "Hit", "Agility", "Strength", "Stamina" },
+            stats = { "Resilience", "Hit", "Agility", "Strength", "Stamina" }
         },
         {
-            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 3, 3, 5, 5 }, compositions = { ["2s"] = { COMPS.WARR_SHAM, { comp = COMPS.RET_SHAM, recommended = true }, { comp = COMPS.PYRO_SHAM, recommended = true } }, ["3s"] = { COMPS.RET_WARR_SHAM, { comp = COMPS.SHADOW_MAGE_RSHAM, recommended = true }, COMPS.PHS, COMPS.WARR_MAGE_HEALER } },
+            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 3, 3, 5, 5 }, compositions = { ["2s"] = { COMPS.WARR_SHAM, { comp = COMPS.RET_SHAM, recommended = true }, COMPS.PYRO_SHAM}, ["3s"] = { COMPS.RET_WARR_SHAM, { comp = COMPS.SHADOW_MAGE_RSHAM, recommended = true }, COMPS.PHS, COMPS.WARR_MAGE_HEALER } },
             icon = "Spell_Nature_MagicImmunity", color = { 0.28, 0.70, 0.52 },
             races = { alliance = "Draenei", horde = "Orc" },
             stats = { "Resilience", "Healing", "Stamina", "Intellect", "Mp5" },
-            professions = HEALER_PROFESSIONS,
+            professions = HEALER_PROFESSIONS
         },
     },
     MAGE = {
@@ -1014,7 +1024,7 @@ NS.CLASS_SPECS = {
             icon = "Spell_Fire_Fireball02", color = { 0.95, 0.38, 0.16 },
             races = { alliance = "Gnome", horde = "Undead" },
             stats = { "Crit", "Spell Damage", "Spell Hit", "Resilience", "Stamina" },
-            professions = SPELL_PROFESSIONS,
+            professions = SPELL_PROFESSIONS
         },
         {
             id = "frost", name = "Frost", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 5, 5, 5, 5 }, compositions = { ["2s"] = {
@@ -1023,7 +1033,7 @@ NS.CLASS_SPECS = {
             icon = "Spell_Frost_FrostBolt02", color = { 0.38, 0.72, 0.95 },
             races = { alliance = "Gnome", horde = "Undead" },
             stats = { "Resilience", "Stamina", "Spell Damage", "Spell Hit", "Crit" },
-            professions = SPELL_PROFESSIONS,
+            professions = SPELL_PROFESSIONS
         },
     },
     WARLOCK = {
@@ -1036,14 +1046,14 @@ NS.CLASS_SPECS = {
             icon = "Spell_Shadow_Requiem", color = { 0.58, 0.28, 0.72 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Stamina", "Spell Damage", "Resilience", "Spell Hit", "Crit" },
-            professions = SPELL_PROFESSIONS,
+            professions = SPELL_PROFESSIONS
         },
         {
             id = "affliction", name = "Affliction", skillFloor = { 2, 2, 2, 2 }, skillCeiling = { 4, 4, 4, 4 }, meta = { 4, 4, 4, 4 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Shadow_UnstableAffliction_3", color = { 0.58, 0.28, 0.72 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Stamina", "Spell Damage", "Resilience", "Spell Hit", "Crit" },
-            professions = SPELL_PROFESSIONS,
+            professions = SPELL_PROFESSIONS
         },
         {
             id = "demonology", name = "Demonology", exclude = true, skillFloor = { 1, 1, 1, 1 }, skillCeiling = { 3, 3, 3, 3 }, meta = { 2, 2, 2, 2 }, compositions = { ["2s"] = {}, ["3s"] = {} },
@@ -1057,7 +1067,7 @@ NS.CLASS_SPECS = {
             icon = "Spell_Shadow_RainOfFire", color = { 0.92, 0.42, 0.18 },
             races = { alliance = "Gnome", horde = "Orc" },
             stats = { "Spell Damage", "Crit", "Spell Hit", "Resilience", "Stamina" },
-            professions = SPELL_PROFESSIONS,
+            professions = SPELL_PROFESSIONS
         },
     },
     DRUID = {
@@ -1065,27 +1075,27 @@ NS.CLASS_SPECS = {
             id = "balance", name = "Balance", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 2, 3, 3, 3 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Spell_Nature_StarFall", color = { 0.72, 0.48, 0.90 },
             races = { alliance = "Night Elf", horde = "Tauren" },
-            stats = { "Spell Damage", "Spell Hit", "Resilience", "Stamina", "Crit" },
+            stats = { "Spell Damage", "Spell Hit", "Resilience", "Stamina", "Crit" }
         },
         {
             id = "feral", name = "Feral", skillFloor = { 4, 4, 4, 4 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 3, 4, 4, 4 }, compositions = { ["2s"] = {}, ["3s"] = {} },
             icon = "Ability_Druid_CatForm", color = { 0.90, 0.52, 0.18 },
             races = { alliance = "Night Elf", horde = "Tauren" },
-            stats = { "Resilience", "Agility", "Stamina", "Hit", "Crit" },
+            stats = { "Resilience", "Agility", "Stamina", "Hit", "Crit" }
         },
         {
-            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 4, 4, 5, 5 }, compositions = { ["2s"] = { { comp = COMPS.WARR_DRUID, recommended = { 1 } }, { comp = COMPS.ROGUE_DRUID, recommended = { 3, 4 } }, { comp = COMPS.LOCK_DRUID, recommended = { 2 } }, { comp = COMPS.HUNTER_DRUID, recommended = { 3, 4 } }, COMPS.HUNTER_DRUID_BM }, ["3s"] = { COMPS.RMD, { comp = COMPS.RLD, recommended = true }, COMPS.PHD, COMPS.WARR_MAGE_HEALER } },
+            id = "restoration", name = "Restoration", skillFloor = { 3, 3, 3, 3 }, skillCeiling = { 5, 5, 5, 5 }, meta = { 3, 4, 5, 5 }, compositions = { ["2s"] = { { comp = COMPS.WARR_DRUID, recommended = { 1 } }, { comp = COMPS.ROGUE_DRUID, recommended = { 3, 4 } }, { comp = COMPS.LOCK_DRUID, recommended = { 2 } }, { comp = COMPS.HUNTER_DRUID, recommended = { 3, 4 } }, COMPS.HUNTER_DRUID_BM }, ["3s"] = { COMPS.RMD, { comp = COMPS.RLD, recommended = true }, COMPS.PHD, COMPS.WARR_MAGE_HEALER } },
             icon = "Spell_Nature_HealingTouch", color = { 0.28, 0.72, 0.40 },
             races = { alliance = "Night Elf", horde = "Tauren" },
             stats = { "Resilience", "Healing", "Stamina", "Spirit", "Intellect" },
-            professions = HEALER_PROFESSIONS,
+            professions = HEALER_PROFESSIONS
         },
     },
 }
 
 -- Macro entries: { name, body, spellID?, itemID?, icon?, specs? }
--- spellID = Wowhead spell=ID  → spell icon (no collision with items)
--- itemID  = Wowhead item=ID   → item icon (no collision with spells)
+-- spellID = Wowhead spell=ID  â†’ spell icon (no collision with items)
+-- itemID  = Wowhead item=ID   â†’ item icon (no collision with spells)
 -- icon    = optional texture name/path only (not numeric IDs)
 
 NS.MACRO_SPELL_ICON_IDS = {

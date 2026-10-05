@@ -5,7 +5,7 @@ param(
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $vendored = Join-Path $root "vendored"
-$embed = Join-Path $root "embed"
+$embed = Join-Path $root "fixes"
 $utf8 = New-Object System.Text.UTF8Encoding $false
 
 function To-LongPath([string]$path) {
@@ -209,10 +209,22 @@ if (-not $incremental) {
         }
     }
 
-    if (Test-Path -LiteralPath $embed) {
-        cmd /c "rmdir /s /q `"$embed`""
+    # fixes/ also holds ArenaUI shim scripts; only clear generated package trees.
+    if (-not (Test-Path -LiteralPath $embed)) {
+        New-Item -ItemType Directory -Path $embed | Out-Null
     }
-    New-Item -ItemType Directory -Path $embed | Out-Null
+    foreach ($name in $addons) {
+        $pkg = Join-Path $embed $name
+        if (Test-Path -LiteralPath $pkg) {
+            cmd /c "rmdir /s /q `"$pkg`""
+        }
+    }
+    foreach ($generated in @("Metadata.lua", "TemplateMap.lua", "_incremental.toc")) {
+        $path = Join-Path $embed $generated
+        if (Test-Path -LiteralPath $path) {
+            Remove-Item -LiteralPath $path -Force
+        }
+    }
 }
 
 $saved = New-Object System.Collections.Generic.List[string]
@@ -464,31 +476,31 @@ $header += @"
 
 ## DefaultState: enabled
 
-VendoredLinks.lua
+fixes\VendoredLinks.lua
 Core.lua
 Frame.lua
 Tabs.lua
 
-embed\Metadata.lua
-embed\TemplateMap.lua
+fixes\Metadata.lua
+fixes\TemplateMap.lua
 
 "@
 foreach ($name in $addons) {
     $files = $bundles[$name]
     if (-not $files) { continue }
     foreach ($rel in $files) {
-        $header += "embed\$name\$rel`r`n"
+        $header += "fixes\$name\$rel`r`n"
     }
     $header += "`r`n"
 }
-$header += "VendoredFinish.lua`r`n"
+$header += "fixes\VendoredFinish.lua`r`n"
 if ($incremental) {
     $tocChunk = ""
     foreach ($name in $addons) {
         $files = $bundles[$name]
         if (-not $files) { continue }
         foreach ($rel in $files) {
-            $tocChunk += "embed\$name\$rel`r`n"
+            $tocChunk += "fixes\$name\$rel`r`n"
         }
         $tocChunk += "`r`n"
     }

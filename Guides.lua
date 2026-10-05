@@ -1,8 +1,8 @@
 local _, NS = ...
 
--- Shared guide loader. Expansion packs (GuidesTBC.lua, and later GuidesWrath.lua)
+-- Shared guide loader. Expansion packs (TBC/Guides.lua, and later Wrath/Guides.lua)
 -- call RegisterGuide, then ActivateGuide picks the pack for this client.
--- Copy GuidesTBC.lua for another expansion and list the new file after this one in the toc.
+-- Copy the TBC folder for another expansion and list its files after this one in the toc.
 
 NS.GUIDES = {}
 NS.GUIDE_LIST = {}
@@ -27,6 +27,7 @@ function NS:RegisterGuide(guide)
     if not guide or not guide.id then
         return
     end
+    self:AttachTalentBuilds(guide)
     self.GUIDES[guide.id] = guide
     for index, existing in ipairs(self.GUIDE_LIST) do
         if existing.id == guide.id then
@@ -35,6 +36,28 @@ function NS:RegisterGuide(guide)
         end
     end
     self.GUIDE_LIST[#self.GUIDE_LIST + 1] = guide
+end
+
+-- Merge NS.TALENT_BUILDS[guide.id][CLASS][specId] onto guide.specs[*].talents.
+function NS:AttachTalentBuilds(guide)
+    if not guide or type(guide.specs) ~= "table" then
+        return
+    end
+    local pack = self.TALENT_BUILDS and self.TALENT_BUILDS[guide.id]
+    if type(pack) ~= "table" then
+        return
+    end
+    for classToken, specs in pairs(guide.specs) do
+        local classBuilds = pack[classToken]
+        if type(classBuilds) == "table" and type(specs) == "table" then
+            for _, spec in ipairs(specs) do
+                local builds = classBuilds[spec.id]
+                if type(builds) == "table" and not spec.talents then
+                    spec.talents = builds
+                end
+            end
+        end
+    end
 end
 
 function NS:ApplyGuide(guide)
@@ -328,6 +351,39 @@ function NS:GetSpecProfessions(spec)
         verdict = professions and professions.verdict,
         list = list,
     }
+end
+
+-- Specs store talents as named builds painted onto the static class tree
+-- (see TBC/TalentBuilds.lua, merged onto specs at RegisterGuide):
+-- {
+--   name = "Standard",
+--   note = "...",
+--   recommended = true|{1,2},
+--   trees = "41/20/0",          -- optional display override
+--   ranks = { [talentId] = rank, ... },  -- Wowhead talent ids from TBC/TalentTrees.lua
+-- }
+function NS:FormatTalentTrees(trees)
+    if type(trees) == "string" then
+        return trees
+    end
+    if type(trees) == "table" then
+        local parts = {}
+        for index, value in ipairs(trees) do
+            parts[index] = tostring(value)
+        end
+        if #parts > 0 then
+            return table.concat(parts, "/")
+        end
+    end
+    return ""
+end
+
+function NS:GetSpecTalents(spec)
+    local talents = spec and spec.talents
+    if type(talents) ~= "table" then
+        return {}
+    end
+    return talents
 end
 
 function NS:MacroMatchesSpec(macro, specID)

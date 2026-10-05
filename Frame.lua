@@ -270,8 +270,16 @@ local function placeMinimapButton(button, angle)
     button:SetPoint("CENTER", Minimap, "CENTER", radius * cos(angle), radius * sin(angle))
 end
 
+function NS:PlaceMinimapButton()
+    local button = self.minimapButton
+    if button then
+        placeMinimapButton(button, minimapAngle())
+    end
+end
+
 function NS:CreateMinimapButton()
     if self.minimapButton then
+        self:PlaceMinimapButton()
         return self.minimapButton
     end
 
@@ -309,6 +317,7 @@ function NS:CreateMinimapButton()
             cursorX, cursorY = cursorX / scale, cursorY / scale
             local centerX, centerY = Minimap:GetCenter()
             local angle = math.deg(math.atan2(cursorY - centerY, cursorX - centerX))
+            ArenaUIDB = ArenaUIDB or {}
             ArenaUIDB.minimapAngle = angle
             placeMinimapButton(self, angle)
         end)
@@ -322,7 +331,15 @@ function NS:CreateMinimapButton()
     end)
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-        GameTooltip:AddLine("ArenaUI", accent[1], accent[2], accent[3])
+        local version = NS:AddonMeta("Version")
+        if version and version ~= "" then
+            if version:sub(1, 1) ~= "v" and version:sub(1, 1) ~= "V" then
+                version = "v" .. version
+            end
+            GameTooltip:AddDoubleLine("ArenaUI", version, accent[1], accent[2], accent[3], 0.62, 0.62, 0.62)
+        else
+            GameTooltip:AddLine("ArenaUI", accent[1], accent[2], accent[3])
+        end
         GameTooltip:AddLine("Left-click to open. Drag to move.", 1, 1, 1)
         GameTooltip:Show()
     end)
@@ -333,5 +350,3 @@ function NS:CreateMinimapButton()
     self.minimapButton = button
     return button
 end
-
-NS:CreateMinimapButton()

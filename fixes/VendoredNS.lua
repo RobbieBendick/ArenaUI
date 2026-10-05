@@ -1,4 +1,4 @@
--- Shared private tables for embed\* wrappers (BuildVendored.ps1).
+-- Shared private tables for fixes\* wrappers (BuildVendored.ps1).
 local _, ns = ...
 
 ArenaUI_VendoredNS = ArenaUI_VendoredNS or {}

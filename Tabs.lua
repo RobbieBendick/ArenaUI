@@ -557,17 +557,18 @@ local function BuildClassesPage(page)
     local ratingBar = CreateFrame("Frame", nil, page)
     ratingBar:SetPoint("TOPLEFT", nav, "BOTTOMLEFT", 0, -4)
     ratingBar:SetPoint("TOPRIGHT", nav, "BOTTOMRIGHT", 0, -4)
-    ratingBar:SetHeight(54)
+    ratingBar:SetHeight(36)
     ratingBar:Hide()
 
     local sectionBar = CreateFrame("Frame", nil, page)
-    sectionBar:SetPoint("TOPLEFT", ratingBar, "BOTTOMLEFT", 0, -8)
-    sectionBar:SetPoint("TOPRIGHT", ratingBar, "BOTTOMRIGHT", 0, -8)
+    sectionBar:SetPoint("TOPLEFT", ratingBar, "BOTTOMLEFT", 0, -6)
+    sectionBar:SetPoint("TOPRIGHT", ratingBar, "BOTTOMRIGHT", 0, -6)
     sectionBar:SetHeight(26)
     sectionBar:Hide()
 
     local GUIDE_SECTIONS = {
         { id = "comps", label = "Comps" },
+        { id = "talents", label = "Talents" },
         { id = "macros", label = "Macros" },
         { id = "professions", label = "Professions" },
         { id = "stats", label = "Stat Prio" },
@@ -591,7 +592,7 @@ local function BuildClassesPage(page)
         local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
         NS:ApplyBoxBackdrop(card, 0.28, 0.28, 0.28, 0.9)
         card:SetBackdropColor(0.08, 0.08, 0.08, 0.55)
-        card:SetHeight(54)
+        card:SetHeight(36)
 
         local bar = card:CreateTexture(nil, "ARTWORK")
         bar:SetColorTexture(accent[1], accent[2], accent[3], 0.95)
@@ -600,23 +601,23 @@ local function BuildClassesPage(page)
         bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
 
         local caption = card:CreateFontString(nil, "OVERLAY")
-        NS:ApplyFont(caption, 9)
-        caption:SetPoint("TOPLEFT", card, "TOPLEFT", 12, -6)
-        caption:SetPoint("TOPRIGHT", card, "TOPRIGHT", -8, -6)
+        NS:ApplyFont(caption, 8)
+        caption:SetPoint("TOPLEFT", card, "TOPLEFT", 8, -4)
+        caption:SetPoint("TOPRIGHT", card, "TOPRIGHT", -6, -4)
         caption:SetJustifyH("LEFT")
         caption:SetTextColor(muted[1], muted[2], muted[3])
 
         local value = card:CreateFontString(nil, "OVERLAY")
-        NS:ApplyFont(value, 13, "THINOUTLINE")
-        value:SetPoint("TOPLEFT", caption, "BOTTOMLEFT", 0, -1)
+        NS:ApplyFont(value, 11, "THINOUTLINE")
+        value:SetPoint("TOPLEFT", caption, "BOTTOMLEFT", 0, 0)
         value:SetJustifyH("LEFT")
         value:SetTextColor(1, 1, 1)
 
         local pips = {}
         for index = 1, 5 do
             local pip = card:CreateTexture(nil, "OVERLAY")
-            pip:SetSize(7, 7)
-            pip:SetPoint("TOPLEFT", value, "BOTTOMLEFT", (index - 1) * 10, -5)
+            pip:SetSize(5, 5)
+            pip:SetPoint("TOPLEFT", value, "BOTTOMLEFT", (index - 1) * 8, -3)
             pips[index] = pip
         end
 
@@ -645,6 +646,7 @@ local function BuildClassesPage(page)
     local raceHeader = NS:CreateHeader(detailChild, "Best Race")
     local statHeader = NS:CreateHeader(detailChild, "Stat Priority")
     local professionHeader = NS:CreateHeader(detailChild, "Professions")
+    local talentHeader = NS:CreateHeader(detailChild, "Talents")
     local compHeader = NS:CreateHeader(detailChild, "Compositions")
     local macroHeader = NS:CreateHeader(detailChild, "Macros")
 
@@ -1437,14 +1439,107 @@ local function BuildClassesPage(page)
         return card
     end
 
+    local function CreateTalentCard(parent)
+        local card = CreateFrame("Button", nil, parent, "BackdropTemplate")
+        NS:ApplyBoxBackdrop(card, 0.32, 0.32, 0.32, 0.9)
+        card:SetBackdropColor(0.07, 0.07, 0.07, 0.72)
+        card:RegisterForClicks("LeftButtonUp")
+
+        local bar = card:CreateTexture(nil, "ARTWORK")
+        bar:SetWidth(3)
+        bar:SetPoint("TOPLEFT", card, "TOPLEFT", 1, -1)
+        bar:SetPoint("BOTTOMLEFT", card, "BOTTOMLEFT", 1, 1)
+        bar:SetVertexColor(accent[1], accent[2], accent[3], 0.95)
+
+        local nameText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(nameText, 13)
+        nameText:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -10)
+        nameText:SetJustifyH("LEFT")
+        nameText:SetTextColor(0.95, 0.95, 0.95)
+
+        local treesText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(treesText, 12)
+        treesText:SetPoint("TOPRIGHT", card, "TOPRIGHT", -10, -11)
+        treesText:SetJustifyH("RIGHT")
+        treesText:SetTextColor(muted[1], muted[2], muted[3])
+
+        local recommended = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(recommended, 10)
+        recommended:SetPoint("TOPLEFT", nameText, "BOTTOMLEFT", 0, -2)
+        recommended:SetJustifyH("LEFT")
+        recommended:SetText("Recommended")
+        recommended:SetTextColor(accent[1], accent[2], accent[3])
+
+        local noteText = card:CreateFontString(nil, "OVERLAY")
+        NS:ApplyFont(noteText, 11)
+        noteText:SetJustifyH("LEFT")
+        noteText:SetJustifyV("TOP")
+        noteText:SetTextColor(0.88, 0.88, 0.88)
+
+        function card:Apply(entry, classToken, width, selected)
+            card:SetWidth(width)
+            card.entry = entry
+            nameText:SetText(entry.name or "Talent Build")
+            treesText:SetText(NS:FormatTalentBuildSummary(classToken, entry))
+            nameText:SetWidth(math.max(width - 24 - (treesText:GetStringWidth() or 0) - 12, 40))
+
+            if selected then
+                card:SetBackdropBorderColor(accent[1], accent[2], accent[3], 1)
+                card:SetBackdropColor(0.12, 0.09, 0.06, 0.9)
+            else
+                card:SetBackdropBorderColor(0.32, 0.32, 0.32, 0.9)
+                card:SetBackdropColor(0.07, 0.07, 0.07, 0.72)
+            end
+
+            local isRecommended = NS:IsCompRecommended(entry)
+            if isRecommended then
+                recommended:Show()
+            else
+                recommended:Hide()
+            end
+
+            local y = 10 + 16
+            if isRecommended then
+                y = y + 14
+            end
+
+            local note = entry.note
+            if note and note ~= "" then
+                noteText:Show()
+                noteText:ClearAllPoints()
+                noteText:SetPoint("TOPLEFT", card, "TOPLEFT", 14, -y - 4)
+                noteText:SetWidth(math.max(width - 28, 40))
+                noteText:SetText(note)
+                local noteHeight = noteText:GetStringHeight()
+                if not noteHeight or noteHeight < 12 then
+                    noteHeight = 12
+                end
+                y = y + 4 + noteHeight
+            else
+                noteText:Hide()
+                noteText:SetText("")
+            end
+
+            card:SetHeight(y + 12)
+            return y + 12
+        end
+
+        return card
+    end
+
     local raceCards = {}
     local professionCards = {}
+    local talentCards = {}
+    local talentTreeView = NS:CreateTalentTreeView(detailChild)
+    talentTreeView:Hide()
+    local selectedTalentBuild = 1
     local compCards = {}
     local statSteps = {}
     local raceEmpty = CreateGuideLine(detailChild, "No race selected yet.", muted[1], muted[2], muted[3])
     local statEmpty = CreateGuideLine(detailChild, "No stat priority selected yet.", muted[1], muted[2], muted[3])
     local professionVerdict = CreateGuideLine(detailChild)
     local professionEmpty = CreateGuideLine(detailChild, "No professions selected yet.", muted[1], muted[2], muted[3])
+    local talentEmpty = CreateGuideLine(detailChild, "No talent builds selected yet.", muted[1], muted[2], muted[3])
 
     local comp2Label = CreateGuideLine(detailChild, "2v2", accent[1], accent[2], accent[3])
     local comp3Label = CreateGuideLine(detailChild, "3v3", accent[1], accent[2], accent[3])
@@ -1561,12 +1656,14 @@ local function BuildClassesPage(page)
         raceHeader:Hide()
         statHeader:Hide()
         professionHeader:Hide()
+        talentHeader:Hide()
         compHeader:Hide()
         macroHeader:Hide()
         raceEmpty:Hide()
         statEmpty:Hide()
         professionVerdict:Hide()
         professionEmpty:Hide()
+        talentEmpty:Hide()
         comp2Label:Hide()
         comp3Label:Hide()
         comp2Empty:Hide()
@@ -1577,6 +1674,12 @@ local function BuildClassesPage(page)
         end
         for _, card in ipairs(professionCards) do
             card:Hide()
+        end
+        for _, card in ipairs(talentCards) do
+            card:Hide()
+        end
+        if talentTreeView then
+            talentTreeView:Hide()
         end
         for _, card in ipairs(compCards) do
             card:Hide()
@@ -1616,7 +1719,7 @@ local function BuildClassesPage(page)
         renderingSpec = true
 
         local width = ContentWidth()
-        local gap = 8
+        local gap = 6
         HideGuideSectionWidgets()
         PaintSectionBar()
 
@@ -1625,8 +1728,8 @@ local function BuildClassesPage(page)
             ratingWidth = width
         end
         local cardWidth = math.floor((ratingWidth - gap * 2) / 3)
-        if cardWidth < 80 then
-            cardWidth = 80
+        if cardWidth < 72 then
+            cardWidth = 72
         end
         skillFloorCard:Show()
         skillCeilingCard:Show()
@@ -1834,6 +1937,55 @@ local function BuildClassesPage(page)
             y, cardIndex = DrawCompGroup(comp2Label, "2v2", twos, comp2Empty, "No 2v2 selected yet.", y, 0)
             y = y - 8
             y, cardIndex = DrawCompGroup(comp3Label, "3v3", threes, comp3Empty, "No 3v3 selected yet.", y, cardIndex)
+        elseif section == "talents" then
+            y = PlaceHeader(talentHeader, y)
+            local talents = NS:GetSpecTalents(spec)
+            local classToken = classInfo and classInfo.token
+            local preferredTab = NS:GetPrimaryTalentTab(classToken, spec)
+
+            if #talents == 0 then
+                y = PlaceLine(talentEmpty, "No talent builds selected yet.", y)
+                y = y - 6
+                local height = talentTreeView:SetClassBuild(classToken, nil, preferredTab)
+                talentTreeView:ClearAllPoints()
+                talentTreeView:SetPoint("TOP", detailChild, "TOP", 0, y)
+                y = y - (height or talentTreeView:GetHeight() or 200) - 8
+            else
+                if selectedTalentBuild < 1 or selectedTalentBuild > #talents then
+                    selectedTalentBuild = 1
+                    for index, entry in ipairs(talents) do
+                        if NS:IsCompRecommended(entry) then
+                            selectedTalentBuild = index
+                            break
+                        end
+                    end
+                end
+
+                for index, entry in ipairs(talents) do
+                    local card = talentCards[index]
+                    if not card then
+                        card = CreateTalentCard(detailChild)
+                        talentCards[index] = card
+                    end
+                    local height = card:Apply(entry, classToken, width, index == selectedTalentBuild)
+                    card:Show()
+                    card:ClearAllPoints()
+                    card:SetPoint("TOPLEFT", detailChild, "TOPLEFT", 0, y)
+                    card:SetScript("OnClick", function()
+                        if selectedTalentBuild ~= index then
+                            selectedTalentBuild = index
+                            RenderSpec(classInfo, spec)
+                        end
+                    end)
+                    y = y - height - 8
+                end
+
+                local build = talents[selectedTalentBuild]
+                local height = talentTreeView:SetClassBuild(classToken, build, preferredTab)
+                talentTreeView:ClearAllPoints()
+                talentTreeView:SetPoint("TOP", detailChild, "TOP", 0, y)
+                y = y - (height or talentTreeView:GetHeight() or 200) - 8
+            end
         elseif section == "macros" then
             y = PlaceHeader(macroHeader, y)
             local macros = NS:GetClassMacros(classInfo.token, spec.id)
@@ -1888,6 +2040,7 @@ local function BuildClassesPage(page)
         view = "spec"
         currentClass = classInfo
         currentSpec = spec
+        selectedTalentBuild = 1
         list:Hide()
         specList:Hide()
         nav:Show()
@@ -3825,6 +3978,7 @@ loader:RegisterEvent("PLAYER_LOGIN")
 loader:SetScript("OnEvent", function(self)
     self:UnregisterEvent("PLAYER_LOGIN")
     NS:InitDB()
+    NS:CreateMinimapButton()
     NS:CaptureAddonState()
     NS:CreateMainFrame()
     print("|cFFFF8C33ArenaUI|r loaded. Type |cFFFF8C33/aui|r to open.")
